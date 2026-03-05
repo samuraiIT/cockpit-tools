@@ -1035,7 +1035,8 @@
       "comingSoon": "ميزة المثيلات المتعددة قادمة قريبًا",
       "comingSoonDesc": "تشغيل عدة مثيلات Codex.app بحسابات مختلفة في وقت واحد، ترقبوا.",
       "unsupported": {
-        "desc": "مثيلات Codex المتعددة متاحة حاليًا على macOS فقط."
+        "desc": "تعد ميزة تعدد مثيلات Codex غير مدعومة مؤقتًا لأن الحزمة الرسمية لسطح المكتب تفرض قفل مثيل واحد في العملية الرئيسية. المتاح حاليًا هو تشغيل وإيقاف وإعادة تشغيل مثيل واحد فقط (إغلاق ثم فتح من جديد).",
+        "title": "تعدد المثيلات غير متاح"
       },
       "quota": {
         "hourly": "5 ساعات",
@@ -1048,9 +1049,9 @@
           "commandWin": "Windows: taskkill /F /PID <pid> (جميع عمليات Codex)"
         },
         "force": {
-          "principle": "مطابقة العملية بواسطة CODEX_HOME والإنهاء القسري (SIGKILL / taskkill /F)، ثم تشغيل المثيل المستهدف.",
-          "commandMac": "ماك: pkill -9 -f \"CODEX_HOME=<dir>\"",
-          "commandWin": "Windows: taskkill /F /PID <pid> (مطابقة CODEX_HOME)"
+          "principle": "مطابقة العملية بواسطة --user-data-dir والإنهاء القسري (SIGKILL / taskkill /F)، ثم تشغيل المثيل المستهدف.",
+          "commandMac": "ماك: pkill -9 -f \"--user-data-dir=<dir>\"",
+          "commandWin": "Windows: taskkill /F /PID <pid> (مطابقة --user-data-dir)"
         }
       }
     },

@@ -3,7 +3,7 @@ use crate::modules::{
     codex_account, codex_oauth, codex_quota, config, logger, opencode_auth, process,
 };
 use tauri::AppHandle;
-#[cfg(target_os = "macos")]
+#[cfg(any(target_os = "macos", target_os = "windows"))]
 use tauri::Emitter;
 
 /// 列出所有 Codex 账号
@@ -74,7 +74,7 @@ pub async fn switch_codex_account(
         logger::log_info("已关闭 OpenCode 自动重启");
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "windows"))]
     {
         if user_config.codex_launch_on_switch {
             if process::is_codex_running() {

@@ -692,7 +692,13 @@ function App() {
           return;
         }
 
+        const platform = (navigator.platform || '').toLowerCase();
         const userAgent = navigator.userAgent.toLowerCase();
+        const isMacOrWindows =
+          platform.includes('mac') ||
+          platform.includes('win') ||
+          userAgent.includes('mac') ||
+          userAgent.includes('windows');
         const queue: Array<AppPathMissingDetail['app']> = [];
 
         if (!hasConfiguredPath(config.antigravity_app_path)) {
@@ -707,7 +713,7 @@ function App() {
         if (!hasConfiguredPath(config.kiro_app_path)) {
           queue.push('kiro');
         }
-        if (userAgent.includes('mac') && !hasConfiguredPath(config.codex_app_path)) {
+        if (isMacOrWindows && !hasConfiguredPath(config.codex_app_path)) {
           queue.push('codex');
         }
 

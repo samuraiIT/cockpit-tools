@@ -13,8 +13,14 @@ static CODEX_QUOTA_ALERT_LAST_SENT: std::sync::LazyLock<Mutex<HashMap<String, i6
     std::sync::LazyLock::new(|| Mutex::new(HashMap::new()));
 const CODEX_QUOTA_ALERT_COOLDOWN_SECONDS: i64 = 300;
 
-/// 获取 Codex 数据目录
+/// 获取 Codex 数据目录（优先读取 CODEX_HOME 环境变量）
 pub fn get_codex_home() -> PathBuf {
+    if let Ok(raw) = std::env::var("CODEX_HOME") {
+        let trimmed = raw.trim().trim_matches('"');
+        if !trimmed.is_empty() {
+            return PathBuf::from(trimmed);
+        }
+    }
     dirs::home_dir().expect("无法获取用户主目录").join(".codex")
 }
 
@@ -547,7 +553,10 @@ pub fn switch_account(account_id: &str) -> Result<CodexAccount, String> {
 pub fn import_from_local() -> Result<CodexAccount, String> {
     let auth_path = get_auth_json_path();
     if !auth_path.exists() {
-        return Err("未找到 ~/.codex/auth.json 文件".to_string());
+        return Err(format!(
+            "未找到本地 auth.json 文件: {}",
+            auth_path.to_string_lossy()
+        ));
     }
 
     let content =

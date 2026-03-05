@@ -1035,7 +1035,8 @@
       "comingSoon": "多开实例功能即将上线",
       "comingSoonDesc": "支持以不同账号同时运行多个 Codex.app 实例，敬请期待。",
       "unsupported": {
-        "desc": "Codex 多开实例仅支持 macOS，请在 macOS 上使用。"
+        "desc": "Codex 多开实例暂不支持：官方桌面包主进程存在单实例锁限制。当前仅支持单实例启动、关闭与重启（先关闭再打开）。",
+        "title": "暂不支持多开实例"
       },
       "quota": {
         "hourly": "5小时",
@@ -1044,13 +1045,13 @@
       "restartStrategy": {
         "safe": {
           "principle": "向目标 Codex 进程发送 SIGTERM，请求应用自行保存并退出，退出后再启动该实例（必要时会强制结束）。",
-          "commandMac": "macOS: kill -15 <pid> （匹配 CODEX_HOME）",
-          "commandWin": "Windows: taskkill /F /PID <pid> （匹配 CODEX_HOME）"
+          "commandMac": "macOS: kill -15 <pid> （匹配 --user-data-dir）",
+          "commandWin": "Windows: taskkill /F /PID <pid> （匹配 --user-data-dir）"
         },
         "force": {
-          "principle": "按 CODEX_HOME 匹配进程并强制终止（SIGKILL / taskkill /F），再启动目标实例。",
-          "commandMac": "macOS：pkill -9 -f“CODEX_HOME=<dir>”",
-          "commandWin": "Windows: taskkill /F /PID <pid> （匹配 CODEX_HOME）"
+          "principle": "按 --user-data-dir 匹配进程并强制终止（SIGKILL / taskkill /F），再启动目标实例。",
+          "commandMac": "macOS：pkill -9 -f“--user-data-dir=<dir>”",
+          "commandWin": "Windows: taskkill /F /PID <pid> （匹配 --user-data-dir）"
         }
       }
     },

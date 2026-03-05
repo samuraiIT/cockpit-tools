@@ -269,6 +269,12 @@ npm run tauri build
 
 ---
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=jlcodes99/cockpit-tools&type=Date)](https://star-history.com/#jlcodes99/cockpit-tools&Date)
+
+---
+
 ## Sponsor
 
 If you find this project useful, consider supporting it here: [☕ Donate](docs/DONATE.en.md)

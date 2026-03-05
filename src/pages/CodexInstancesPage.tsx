@@ -3,7 +3,6 @@ import { PlatformInstancesContent } from '../components/platform/PlatformInstanc
 import { useCodexInstanceStore } from '../stores/useCodexInstanceStore';
 import { useCodexAccountStore } from '../stores/useCodexAccountStore';
 import type { CodexAccount } from '../types/codex';
-import { usePlatformRuntimeSupport } from '../hooks/usePlatformRuntimeSupport';
 import {
   buildCodexAccountPresentation,
   buildQuotaPreviewLines,
@@ -22,7 +21,7 @@ export function CodexInstancesContent({ accountsForSelect }: CodexInstancesConte
   const instanceStore = useCodexInstanceStore();
   const { accounts: storeAccounts, fetchAccounts } = useCodexAccountStore();
   const accounts = accountsForSelect ?? storeAccounts;
-  const isSupportedPlatform = usePlatformRuntimeSupport('macos-only');
+  const isSupportedPlatform = false;
 
   const renderCodexQuotaPreview = (account: CodexAccount) => {
     const presentation = buildCodexAccountPresentation(account, t);
@@ -62,10 +61,10 @@ export function CodexInstancesContent({ accountsForSelect }: CodexInstancesConte
       }}
       appType="codex"
       isSupported={isSupportedPlatform}
-      unsupportedTitleKey="common.shared.instances.unsupported.title"
-      unsupportedTitleDefault="暂不支持当前系统"
+      unsupportedTitleKey="codex.instances.unsupported.title"
+      unsupportedTitleDefault="暂不支持多开实例"
       unsupportedDescKey="codex.instances.unsupported.desc"
-      unsupportedDescDefault="Codex 多开实例仅支持 macOS。"
+      unsupportedDescDefault="Codex 多开实例暂不支持：官方桌面包主进程存在单实例锁限制。当前仅支持单实例启动、关闭与重启（先关闭再打开）。"
     />
   );
 }
