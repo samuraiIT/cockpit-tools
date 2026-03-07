@@ -252,6 +252,10 @@
       "initMode": "Modo de inicialización",
       "initModeCopy": "Copiar instancia de origen (predeterminado)",
       "initModeEmpty": "Instancia en blanco (sin copiar)",
+      "initModeExistingDir": "Usar directorio existente",
+      "pathExistingDirHint": "La ruta se establece por selección y no se puede editar",
+      "existingDirHint": "Usar un directorio existente como directorio de la instancia; la ruta seleccionada es definitiva y no se puede editar.",
+      "bindExistingDirHint": "Opcional; puedes vincular una cuenta después de añadir el directorio a la lista",
       "emptyInitHint": "Si eliges no copiar, solo se creará un directorio vacío. Debes iniciarla una vez antes de vincular una cuenta.",
       "copySource": "Copiar instancia de origen",
       "copySourceDesc": "Copiar configuración y datos de inicio de sesión de la instancia seleccionada",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Instancia creada",
       "emptyCreated": "Se creó una instancia en blanco. Iníciala una vez antes de vincular una cuenta.",
+      "existingDirCreated": "Instancia creada usando el directorio seleccionado.",
       "updated": "Instancia actualizada",
       "deleted": "Instancia eliminada",
       "started": "Instancia iniciada",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Eliminar instancia",
       "message": "¿Eliminar instancia {{name}}? Esto eliminará la configuración y borrará la carpeta de la instancia."
+    },
+    "import": {
+      "btnTitle": "Importar directorio existente",
+      "title": "Importar directorio existente",
+      "dirLabel": "Seleccionar directorio de instancia",
+      "dirPlaceholder": "Haz clic para seleccionar un directorio",
+      "dirHint": "Registra un directorio local existente como instancia sin mover ni modificar archivos",
+      "changeDir": "Cambiar",
+      "bindLabel": "Vincular cuenta (opcional)",
+      "bindHint": "Puedes vincular una cuenta más tarde desde la lista de instancias",
+      "pathRequired": "Primero selecciona un directorio",
+      "submit": "Importar"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Ruta predeterminada",
       "kiroPathSelect": "Seleccionar",
       "kiroPathReset": "Restablecer los valores predeterminados",
+      "cursorPathReset": "Restablecer predeterminado",
       "codexLaunchOnSwitch": "Iniciar Codex App al cambiar Codex",
       "codexLaunchOnSwitchDesc": "Iniciar o reiniciar Codex App automáticamente después de cambiar de cuenta",
       "autoUpdate": "Actualización automática en segundo plano",
@@ -1296,7 +1314,12 @@
       "title": "Configuración de Kiro",
       "appPath": "Camino de Kiro"
     },
-    "kiroRefreshInterval": "Cuota de actualización automática"
+    "kiroRefreshInterval": "Cuota de actualización automática",
+    "cursor": {
+      "title": "Ajustes de Cursor",
+      "appPath": "Ruta de Cursor"
+    },
+    "cursorRefreshInterval": "Actualización automática de cuota"
   },
   "quotaAlert": {
     "bannerText": "Alerta de cuota para {{email}} (umbral {{threshold}}%, mínimo {{lowest}}%, modelos: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Importar desde Kiro local"
     },
     "injectToVSCode": "Cambiar a Kiro"
+  },
+  "cursor": {
+    "subscription": "Suscripción",
+    "injectToCursor": "Cambiar a Cursor",
+    "quota": {
+      "onDemand": "Bajo demanda"
+    },
+    "title": "Gestión de cuentas de Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Las múltiples instancias de Cursor solo son compatibles con macOS, Windows y Linux."
+      }
+    },
+    "empty": {
+      "description": "Haz clic en \"Añadir cuenta\" para comenzar a gestionar tus cuentas de Cursor"
+    },
+    "addModal": {
+      "title": "Añadir cuenta de Cursor"
+    },
+    "token": {
+      "desc": "Pega tu token de acceso de Cursor (JWT) o datos JSON exportados.",
+      "formatHint": "Campos obligatorios y ejemplos (clic para expandir)",
+      "formatRequired": "Token individual: pega el JWT directamente; importación masiva: usa formato de array JSON",
+      "singleExample": "Ejemplo individual (JWT)",
+      "batchExample": "Ejemplo masivo (JSON)"
+    },
+    "import": {
+      "localDesc": "Importar datos de cuenta desde el cliente local de Cursor o un archivo JSON.",
+      "localClient": "Importar desde Cursor local"
+    },
+    "flowNotice": {
+      "title": "Guía de cuenta de Cursor (clic para expandir/contraer)",
+      "desc": "Gestiona cuentas de Cursor importando desde la instalación local de Cursor o pegando tokens JWT. Los datos se procesan solo localmente.",
+      "reason": "Alcance de permisos: lectura del almacenamiento local de autenticación de Cursor para importación de cuentas e inyección de tokens.",
+      "storage": "Alcance de datos: solo se leen/actualizan las entradas de sesión de autenticación de Cursor; no se sube ninguna clave/token."
+    },
+    "oauth": {
+      "desc": "Haz clic en el botón de abajo y completa la autorización de Cursor en el navegador."
+    }
   },
   "breakout": {
     "gameOver": "Juego terminado",

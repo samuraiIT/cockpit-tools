@@ -252,6 +252,10 @@
       "initMode": "Režim inicializace",
       "initModeCopy": "Kopírovat ze zdrojové instance (výchozí)",
       "initModeEmpty": "Prázdná instance (bez kopírování)",
+      "initModeExistingDir": "Použít existující adresář",
+      "pathExistingDirHint": "Cesta je určena výběrem a nelze ji upravit",
+      "existingDirHint": "Použijte existující adresář jako adresář instance; vybraná cesta je konečná a nelze ji upravit.",
+      "bindExistingDirHint": "Volitelné; účet můžete navázat po přidání adresáře do seznamu instancí",
       "emptyInitHint": "Při volbě bez kopírování se vytvoří pouze prázdná složka. Před svázáním účtu je nutné instanci jednou spustit.",
       "copySource": "Kopírovat zdrojovou instanci",
       "copySourceDesc": "Kopírovat konfiguraci a přihlašovací údaje z vybrané instance",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Instance vytvořena",
       "emptyCreated": "Prázdná instance byla vytvořena. Před svázáním účtu ji nejprve jednou spusťte.",
+      "existingDirCreated": "Instance byla vytvořena pomocí vybraného adresáře.",
       "updated": "Instance aktualizována",
       "deleted": "Instance smazána",
       "started": "Instance spuštěna",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Smazat instanci",
       "message": "Smazat instanci {{name}}? Tím se odstraní konfigurace a smaže se složka instance."
+    },
+    "import": {
+      "btnTitle": "Importovat existující adresář",
+      "title": "Importovat existující adresář",
+      "dirLabel": "Vyberte adresář instance",
+      "dirPlaceholder": "Kliknutím vyberte adresář",
+      "dirHint": "Zaregistruje existující lokální adresář jako instanci bez přesunu nebo úpravy souborů",
+      "changeDir": "Změnit",
+      "bindLabel": "Svázat účet (volitelné)",
+      "bindHint": "Účet můžete svázat později ze seznamu instancí",
+      "pathRequired": "Nejprve vyberte adresář",
+      "submit": "Importovat"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Výchozí cesta",
       "kiroPathSelect": "Vybrat",
       "kiroPathReset": "Obnovit výchozí",
+      "cursorPathReset": "Obnovit výchozí",
       "codexLaunchOnSwitch": "Při přepnutí Codex automaticky spustit Codex App",
       "codexLaunchOnSwitchDesc": "Po přepnutí účtu automaticky spustit nebo restartovat Codex App",
       "autoUpdate": "Automatické aktualizace na pozadí",
@@ -1296,7 +1314,12 @@
       "title": "Nastavení Kiro",
       "appPath": "Kiro cesta"
     },
-    "kiroRefreshInterval": "Kvóta automatického obnovení"
+    "kiroRefreshInterval": "Kvóta automatického obnovení",
+    "cursor": {
+      "title": "Nastavení Cursor",
+      "appPath": "Cesta k Cursor"
+    },
+    "cursorRefreshInterval": "Automatická obnova kvóty"
   },
   "quotaAlert": {
     "bannerText": "Upozornění na kvótu pro {{email}} (práh {{threshold}} %, minimum {{lowest}} %, modely: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Dovoz z místní Kiro"
     },
     "injectToVSCode": "Přepněte na Kiro"
+  },
+  "cursor": {
+    "subscription": "Předplatné",
+    "injectToCursor": "Přepnout na Cursor",
+    "quota": {
+      "onDemand": "Na vyžádání"
+    },
+    "title": "Správa účtů Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Více instancí Cursor je podporováno pouze na macOS, Windows a Linuxu."
+      }
+    },
+    "empty": {
+      "description": "Klikněte na „Přidat účet“ a začněte spravovat své účty Cursor"
+    },
+    "addModal": {
+      "title": "Přidat účet Cursor"
+    },
+    "token": {
+      "desc": "Vložte svůj přístupový token Cursor (JWT) nebo exportovaná JSON data.",
+      "formatHint": "Povinná pole a příklady (klikněte pro rozbalení)",
+      "formatRequired": "Jeden token: vložte JWT přímo; hromadný import: použijte formát JSON pole",
+      "singleExample": "Příklad jednoho tokenu (JWT)",
+      "batchExample": "Příklad hromadného importu (JSON)"
+    },
+    "import": {
+      "localDesc": "Importujte data účtu z místního klienta Cursor nebo souboru JSON.",
+      "localClient": "Import z místního Cursor"
+    },
+    "flowNotice": {
+      "title": "Průvodce účtem Cursor (klikněte pro rozbalení/sbalení)",
+      "desc": "Spravujte účty Cursor importem z místní instalace Cursor nebo vložením tokenů JWT. Data jsou zpracovávána pouze lokálně.",
+      "reason": "Rozsah oprávnění: čtení místního úložiště autorizace Cursor pro import účtu a injekci tokenu.",
+      "storage": "Rozsah dat: čtou/aktualizují se pouze záznamy autorizačních relací Cursor; žádný klíč/token se neodesílá."
+    },
+    "oauth": {
+      "desc": "Klikněte na tlačítko níže a dokončete autorizaci Cursor v prohlížeči."
+    }
   },
   "breakout": {
     "gameOver": "Konec hry",

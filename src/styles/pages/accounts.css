@@ -229,42 +229,45 @@
 }
 
 .tier-badge.pro {
-  background: #2563eb; /* Royal Blue */
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--plan-pro-bg);
+  color: var(--plan-pro-color);
+  border: 1px solid var(--plan-pro-border);
 }
 
 .tier-badge.ultra {
-  background: #7c3aed; /* Violet */
-  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--plan-ultra-bg);
+  color: var(--plan-ultra-color);
+  border: 1px solid var(--plan-ultra-border);
 }
 
 .tier-badge.individual {
-  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--plan-individual-bg);
+  color: var(--plan-individual-color);
+  border: 1px solid var(--plan-individual-border);
 }
 
 .tier-badge.business {
-  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--plan-business-bg);
+  color: var(--plan-business-color);
+  border: 1px solid var(--plan-business-border);
 }
 
 .tier-badge.enterprise {
-  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #2b2111;
+  background: var(--plan-enterprise-bg);
+  color: var(--plan-enterprise-color);
+  border: 1px solid var(--plan-enterprise-border);
 }
 
 .tier-badge.free {
-  background: rgba(148, 163, 184, 0.18);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--plan-free-bg);
+  color: var(--plan-free-color);
+  border: 1px solid var(--plan-free-border);
 }
 
 .tier-badge.unknown {
-  background: rgba(239, 68, 68, 0.18);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #fecaca;
+  background: var(--plan-unknown-bg);
+  color: var(--plan-unknown-color);
+  border: 1px solid var(--plan-unknown-border);
 }
 
 /* Dark Mode Overrides */

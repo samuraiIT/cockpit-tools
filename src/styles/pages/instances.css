@@ -481,6 +481,79 @@
   font-size: 12px;
 }
 
+/* ─── Import existing dir picker ─────────────────────────────────── */
+.instances-page .instance-import-dir-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 16px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.instances-page .instance-import-dir-picker:hover {
+  border-color: var(--primary);
+  background: rgba(29, 78, 216, 0.05);
+  color: var(--text-primary);
+}
+
+.instances-page .instance-import-dir-picker.has-value {
+  padding: 12px 14px;
+  border-style: solid;
+  border-color: var(--border);
+  background: var(--bg-card);
+}
+
+.instances-page .instance-import-dir-picker.has-value:hover {
+  border-color: var(--primary);
+  background: rgba(29, 78, 216, 0.04);
+}
+
+.instances-page .instance-import-dir-picker .import-dir-icon {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.instances-page .instance-import-dir-picker:hover .import-dir-icon {
+  color: var(--primary);
+}
+
+.instances-page .instance-import-dir-picker .import-dir-placeholder {
+  flex: 1;
+  font-size: 14px;
+}
+
+.instances-page .instance-import-dir-picker .import-dir-path {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+  word-break: break-all;
+  font-family: var(--font-mono, monospace);
+}
+
+.instances-page .instance-import-dir-picker .import-dir-change {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--primary);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .instances-page .instance-import-dir-picker {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .instances-page .instance-import-dir-picker.has-value {
+  background: var(--bg-card);
+}
+
 .instances-page .restart-strategy-modal .modal-body {
   display: flex;
   flex-direction: column;
@@ -833,40 +906,63 @@
   flex-shrink: 0;
 }
 
+.instances-page .instance-plan-badge.cursor-plan-badge {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .instances-page .instance-plan-badge.free {
-  background: rgba(100, 116, 139, 0.18);
-  border-color: rgba(100, 116, 139, 0.35);
-  color: #475569;
+  background: var(--plan-free-bg);
+  border-color: var(--plan-free-border);
+  color: var(--plan-free-color);
+}
+
+.instances-page .instance-plan-badge.individual {
+  background: var(--plan-individual-bg);
+  border-color: var(--plan-individual-border);
+  color: var(--plan-individual-color);
+}
+
+.instances-page .instance-plan-badge.business {
+  background: var(--plan-business-bg);
+  border-color: var(--plan-business-border);
+  color: var(--plan-business-color);
 }
 
 .instances-page .instance-plan-badge.plus {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #059669;
+  background: var(--plan-plus-bg);
+  border-color: var(--plan-plus-border);
+  color: var(--plan-plus-color);
 }
 
 .instances-page .instance-plan-badge.team {
-  background: rgba(139, 92, 246, 0.15);
-  border-color: rgba(139, 92, 246, 0.35);
-  color: #7c3aed;
+  background: var(--plan-team-bg);
+  border-color: var(--plan-team-border);
+  color: var(--plan-team-color);
 }
 
 .instances-page .instance-plan-badge.enterprise {
-  background: rgba(245, 158, 11, 0.18);
-  border-color: rgba(245, 158, 11, 0.35);
-  color: #b45309;
+  background: var(--plan-enterprise-bg);
+  border-color: var(--plan-enterprise-border);
+  color: var(--plan-enterprise-color);
 }
 
 .instances-page .instance-plan-badge.pro {
-  background: rgba(29, 78, 216, 0.15);
-  border-color: rgba(29, 78, 216, 0.35);
-  color: #1d4ed8;
+  background: var(--plan-pro-bg);
+  border-color: var(--plan-pro-border);
+  color: var(--plan-pro-color);
+}
+
+.instances-page .instance-plan-badge.ultra {
+  background: var(--plan-ultra-bg);
+  border-color: var(--plan-ultra-border);
+  color: var(--plan-ultra-color);
 }
 
 .instances-page .instance-plan-badge.unknown {
-  background: rgba(148, 163, 184, 0.18);
-  border-color: rgba(148, 163, 184, 0.35);
-  color: #64748b;
+  background: var(--plan-unknown-bg);
+  border-color: var(--plan-unknown-border);
+  color: var(--plan-unknown-color);
 }
 
 .loading-state {

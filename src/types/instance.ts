@@ -13,7 +13,7 @@ export interface InstanceProfile {
   followLocalAccount?: boolean;
 }
 
-export type InstanceInitMode = 'copy' | 'empty';
+export type InstanceInitMode = 'copy' | 'empty' | 'existingDir';
 
 export interface InstanceDefaults {
   rootDir: string;

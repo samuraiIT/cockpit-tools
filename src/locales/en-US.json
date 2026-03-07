@@ -191,6 +191,18 @@
       "descTooltip": "Current: descending, click to switch to ascending",
       "toggleDirection": "Toggle sort direction"
     },
+    "import": {
+      "btnTitle": "Import existing directory",
+      "title": "Import Existing Directory",
+      "dirLabel": "Select instance directory",
+      "dirPlaceholder": "Click to select a directory",
+      "dirHint": "Registers an existing local directory as an instance without moving or modifying any files",
+      "changeDir": "Change",
+      "bindLabel": "Bind account (optional)",
+      "bindHint": "You can bind an account later from the instance list",
+      "pathRequired": "Please select a directory first",
+      "submit": "Import"
+    },
     "actions": {
       "create": "New Instance",
       "refresh": "Refresh",
@@ -252,6 +264,10 @@
       "initMode": "Initialization Mode",
       "initModeCopy": "Copy source instance (default)",
       "initModeEmpty": "Blank instance (no copy)",
+      "initModeExistingDir": "Use existing directory",
+      "pathExistingDirHint": "Path is set by selection and cannot be edited",
+      "existingDirHint": "Use an existing directory as the instance directory; the selected path is final and cannot be edited.",
+      "bindExistingDirHint": "Optional; you can bind an account after adding the directory to the instance list",
       "emptyInitHint": "Choosing no-copy will create an empty directory only. Start once before binding an account.",
       "copySource": "Copy source instance",
       "copySourceDesc": "Copy configuration and login data from the selected instance",
@@ -280,6 +296,7 @@
     "messages": {
       "created": "Instance created",
       "emptyCreated": "Blank instance created. Start it once before binding an account.",
+      "existingDirCreated": "Instance created using the selected directory.",
       "updated": "Instance updated",
       "deleted": "Instance deleted",
       "started": "Instance started",
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Default path",
       "kiroPathSelect": "Select",
       "kiroPathReset": "Reset to default",
+      "cursorPathReset": "Reset default",
       "codexLaunchOnSwitch": "Launch Codex App when switching Codex",
       "codexLaunchOnSwitchDesc": "Start or restart Codex App after switching accounts",
       "autoUpdate": "Background Auto Update",
@@ -1296,7 +1314,12 @@
       "title": "Kiro Settings",
       "appPath": "Kiro Path"
     },
-    "kiroRefreshInterval": "Auto refresh quota"
+    "kiroRefreshInterval": "Auto refresh quota",
+    "cursor": {
+      "title": "Cursor Settings",
+      "appPath": "Cursor Path"
+    },
+    "cursorRefreshInterval": "Quota Auto Refresh"
   },
   "quotaAlert": {
     "bannerText": "Quota alert for {{email}} (threshold {{threshold}}%, lowest {{lowest}}%, models: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Import from local Kiro"
     },
     "injectToVSCode": "Switch to Kiro"
+  },
+  "cursor": {
+    "subscription": "Subscription",
+    "injectToCursor": "Switch to Cursor",
+    "quota": {
+      "onDemand": "On-Demand"
+    },
+    "title": "Cursor Account Management",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Cursor multi-instance is supported on macOS, Windows, and Linux only."
+      }
+    },
+    "empty": {
+      "description": "Click \"Add Account\" to start managing your Cursor accounts"
+    },
+    "addModal": {
+      "title": "Add Cursor Account"
+    },
+    "oauth": {
+      "desc": "Click the button below and complete Cursor authorization in your browser."
+    },
+    "token": {
+      "desc": "Paste your Cursor Access Token (JWT) or exported JSON data.",
+      "formatHint": "Required fields & examples (click to expand)",
+      "formatRequired": "Single token: paste JWT directly; batch import: use JSON array format",
+      "singleExample": "Single example (JWT)",
+      "batchExample": "Batch example (JSON)"
+    },
+    "import": {
+      "localDesc": "Import account data from local Cursor client or a JSON file.",
+      "localClient": "Import from local Cursor"
+    },
+    "flowNotice": {
+      "title": "Cursor account guide (click to expand/collapse)",
+      "desc": "Manage Cursor accounts by importing from local Cursor installation, pasting a JWT token, or signing in via OAuth.",
+      "reason": "Permission scope: read and write Cursor local auth storage (state.vscdb) for account import and token injection (account switching).",
+      "storage": "Network scope: when refreshing quota, the JWT is sent to cursor.com official APIs to fetch usage, user info, and subscription data. No data is sent to any third-party server."
+    }
   },
   "breakout": {
     "gameOver": "Game Over",

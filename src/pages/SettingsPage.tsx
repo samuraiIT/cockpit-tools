@@ -34,6 +34,7 @@ interface GeneralConfig {
   ghcp_auto_refresh_minutes: number;
   windsurf_auto_refresh_minutes: number;
   kiro_auto_refresh_minutes: number;
+  cursor_auto_refresh_minutes: number;
   close_behavior: 'ask' | 'minimize' | 'quit';
   minimize_behavior?: 'dock_and_tray' | 'tray_only';
   hide_dock_icon?: boolean;
@@ -43,6 +44,7 @@ interface GeneralConfig {
   vscode_app_path: string;
   windsurf_app_path: string;
   kiro_app_path: string;
+  cursor_app_path: string;
   opencode_sync_on_switch: boolean;
   codex_launch_on_switch: boolean;
   auto_switch_enabled: boolean;
@@ -57,9 +59,11 @@ interface GeneralConfig {
   windsurf_quota_alert_threshold: number;
   kiro_quota_alert_enabled: boolean;
   kiro_quota_alert_threshold: number;
+  cursor_quota_alert_enabled: boolean;
+  cursor_quota_alert_threshold: number;
 }
 
-type AppPathTarget = 'antigravity' | 'codex' | 'vscode' | 'opencode' | 'windsurf' | 'kiro';
+type AppPathTarget = 'antigravity' | 'codex' | 'vscode' | 'opencode' | 'windsurf' | 'kiro' | 'cursor';
 const REFRESH_PRESET_VALUES = ['-1', '2', '5', '10', '15'];
 const THRESHOLD_PRESET_VALUES = ['0', '20', '40', '60'];
 const FALLBACK_PLATFORM_SETTINGS_ORDER: Record<PlatformId, number> = {
@@ -68,6 +72,7 @@ const FALLBACK_PLATFORM_SETTINGS_ORDER: Record<PlatformId, number> = {
   'github-copilot': 2,
   windsurf: 3,
   kiro: 4,
+  cursor: 5,
 };
 type UpdateCheckSource = 'auto' | 'manual';
 type UpdateCheckFinishedDetail = {
@@ -121,6 +126,7 @@ export function SettingsPage() {
   const [ghcpAutoRefresh, setGhcpAutoRefresh] = useState('10');
   const [windsurfAutoRefresh, setWindsurfAutoRefresh] = useState('10');
   const [kiroAutoRefresh, setKiroAutoRefresh] = useState('10');
+  const [cursorAutoRefresh, setCursorAutoRefresh] = useState('10');
   const [closeBehavior, setCloseBehavior] = useState<'ask' | 'minimize' | 'quit'>('ask');
   const [hideDockIcon, setHideDockIcon] = useState(false);
   const [opencodeAppPath, setOpencodeAppPath] = useState('');
@@ -129,6 +135,7 @@ export function SettingsPage() {
   const [vscodeAppPath, setVscodeAppPath] = useState('');
   const [windsurfAppPath, setWindsurfAppPath] = useState('');
   const [kiroAppPath, setKiroAppPath] = useState('');
+  const [cursorAppPath, setCursorAppPath] = useState('');
   const [appPathResetDetectingTargets, setAppPathResetDetectingTargets] = useState<Set<AppPathTarget>>(new Set());
   const [opencodeSyncOnSwitch, setOpencodeSyncOnSwitch] = useState(true);
   const [codexLaunchOnSwitch, setCodexLaunchOnSwitch] = useState(true);
@@ -144,17 +151,21 @@ export function SettingsPage() {
   const [windsurfQuotaAlertThreshold, setWindsurfQuotaAlertThreshold] = useState('20');
   const [kiroQuotaAlertEnabled, setKiroQuotaAlertEnabled] = useState(false);
   const [kiroQuotaAlertThreshold, setKiroQuotaAlertThreshold] = useState('20');
+  const [cursorQuotaAlertEnabled, setCursorQuotaAlertEnabled] = useState(false);
+  const [cursorQuotaAlertThreshold, setCursorQuotaAlertThreshold] = useState('20');
   const [autoRefreshCustomMode, setAutoRefreshCustomMode] = useState(false);
   const [codexAutoRefreshCustomMode, setCodexAutoRefreshCustomMode] = useState(false);
   const [ghcpAutoRefreshCustomMode, setGhcpAutoRefreshCustomMode] = useState(false);
   const [windsurfAutoRefreshCustomMode, setWindsurfAutoRefreshCustomMode] = useState(false);
   const [kiroAutoRefreshCustomMode, setKiroAutoRefreshCustomMode] = useState(false);
+  const [cursorAutoRefreshCustomMode, setCursorAutoRefreshCustomMode] = useState(false);
   const [autoSwitchThresholdCustomMode, setAutoSwitchThresholdCustomMode] = useState(false);
   const [quotaAlertThresholdCustomMode, setQuotaAlertThresholdCustomMode] = useState(false);
   const [codexQuotaAlertThresholdCustomMode, setCodexQuotaAlertThresholdCustomMode] = useState(false);
   const [ghcpQuotaAlertThresholdCustomMode, setGhcpQuotaAlertThresholdCustomMode] = useState(false);
   const [windsurfQuotaAlertThresholdCustomMode, setWindsurfQuotaAlertThresholdCustomMode] = useState(false);
   const [kiroQuotaAlertThresholdCustomMode, setKiroQuotaAlertThresholdCustomMode] = useState(false);
+  const [cursorQuotaAlertThresholdCustomMode, setCursorQuotaAlertThresholdCustomMode] = useState(false);
   const [generalLoaded, setGeneralLoaded] = useState(false);
   const generalSaveTimerRef = useRef<number | null>(null);
   const suppressGeneralSaveRef = useRef(false);
@@ -274,7 +285,8 @@ export function SettingsPage() {
       !codexAutoRefresh.trim() ||
       !ghcpAutoRefresh.trim() ||
       !windsurfAutoRefresh.trim() ||
-      !kiroAutoRefresh.trim()
+      !kiroAutoRefresh.trim() ||
+      !cursorAutoRefresh.trim()
     ) {
       return;
     }
@@ -284,12 +296,14 @@ export function SettingsPage() {
     const ghcpAutoRefreshNum = parseInt(ghcpAutoRefresh, 10) || -1;
     const windsurfAutoRefreshNum = parseInt(windsurfAutoRefresh, 10) || -1;
     const kiroAutoRefreshNum = parseInt(kiroAutoRefresh, 10) || -1;
+    const cursorAutoRefreshNum = parseInt(cursorAutoRefresh, 10) || -1;
     const parsedAutoSwitchThreshold = Number.parseInt(autoSwitchThreshold, 10);
     const parsedQuotaAlertThreshold = Number.parseInt(quotaAlertThreshold, 10);
     const parsedCodexQuotaAlertThreshold = Number.parseInt(codexQuotaAlertThreshold, 10);
     const parsedGhcpQuotaAlertThreshold = Number.parseInt(ghcpQuotaAlertThreshold, 10);
     const parsedWindsurfQuotaAlertThreshold = Number.parseInt(windsurfQuotaAlertThreshold, 10);
     const parsedKiroQuotaAlertThreshold = Number.parseInt(kiroQuotaAlertThreshold, 10);
+    const parsedCursorQuotaAlertThreshold = Number.parseInt(cursorQuotaAlertThreshold, 10);
 
     if (suppressGeneralSaveRef.current) {
       suppressGeneralSaveRef.current = false;
@@ -306,6 +320,7 @@ export function SettingsPage() {
           ghcpAutoRefreshMinutes: ghcpAutoRefreshNum,
           windsurfAutoRefreshMinutes: windsurfAutoRefreshNum,
           kiroAutoRefreshMinutes: kiroAutoRefreshNum,
+          cursorAutoRefreshMinutes: cursorAutoRefreshNum,
           closeBehavior,
           hideDockIcon,
           opencodeAppPath,
@@ -314,6 +329,7 @@ export function SettingsPage() {
           vscodeAppPath,
           windsurfAppPath,
           kiroAppPath,
+          cursorAppPath,
           opencodeSyncOnSwitch,
           codexLaunchOnSwitch,
           autoSwitchEnabled,
@@ -336,6 +352,10 @@ export function SettingsPage() {
           kiroQuotaAlertThreshold: Number.isNaN(parsedKiroQuotaAlertThreshold)
             ? 20
             : parsedKiroQuotaAlertThreshold,
+          cursorQuotaAlertEnabled,
+          cursorQuotaAlertThreshold: Number.isNaN(parsedCursorQuotaAlertThreshold)
+            ? 20
+            : parsedCursorQuotaAlertThreshold,
         });
         window.dispatchEvent(new Event('config-updated'));
       } catch (err) {
@@ -355,6 +375,7 @@ export function SettingsPage() {
     ghcpAutoRefresh,
     windsurfAutoRefresh,
     kiroAutoRefresh,
+    cursorAutoRefresh,
     closeBehavior,
     hideDockIcon,
     generalLoaded,
@@ -366,6 +387,7 @@ export function SettingsPage() {
     vscodeAppPath,
     windsurfAppPath,
     kiroAppPath,
+    cursorAppPath,
     opencodeSyncOnSwitch,
     codexLaunchOnSwitch,
     autoSwitchEnabled,
@@ -380,6 +402,8 @@ export function SettingsPage() {
     windsurfQuotaAlertThreshold,
     kiroQuotaAlertEnabled,
     kiroQuotaAlertThreshold,
+    cursorQuotaAlertEnabled,
+    cursorQuotaAlertThreshold,
     t,
   ]);
 
@@ -533,6 +557,7 @@ export function SettingsPage() {
       setGhcpAutoRefresh(String(config.ghcp_auto_refresh_minutes ?? 10));
       setWindsurfAutoRefresh(String(config.windsurf_auto_refresh_minutes ?? 10));
       setKiroAutoRefresh(String(config.kiro_auto_refresh_minutes ?? 10));
+      setCursorAutoRefresh(String(config.cursor_auto_refresh_minutes ?? 10));
       setCloseBehavior(config.close_behavior || 'ask');
       setHideDockIcon(Boolean(config.hide_dock_icon));
       setOpencodeAppPath(config.opencode_app_path || '');
@@ -541,6 +566,7 @@ export function SettingsPage() {
       setVscodeAppPath(config.vscode_app_path || '');
       setWindsurfAppPath(config.windsurf_app_path || '');
       setKiroAppPath(config.kiro_app_path || '');
+      setCursorAppPath(config.cursor_app_path || '');
       setOpencodeSyncOnSwitch(config.opencode_sync_on_switch ?? true);
       setCodexLaunchOnSwitch(config.codex_launch_on_switch ?? true);
       setAutoSwitchEnabled(config.auto_switch_enabled ?? false);
@@ -555,17 +581,21 @@ export function SettingsPage() {
       setWindsurfQuotaAlertThreshold(String(config.windsurf_quota_alert_threshold ?? 20));
       setKiroQuotaAlertEnabled(config.kiro_quota_alert_enabled ?? false);
       setKiroQuotaAlertThreshold(String(config.kiro_quota_alert_threshold ?? 20));
+      setCursorQuotaAlertEnabled(config.cursor_quota_alert_enabled ?? false);
+      setCursorQuotaAlertThreshold(String(config.cursor_quota_alert_threshold ?? 20));
       setAutoRefreshCustomMode(false);
       setCodexAutoRefreshCustomMode(false);
       setGhcpAutoRefreshCustomMode(false);
       setWindsurfAutoRefreshCustomMode(false);
       setKiroAutoRefreshCustomMode(false);
+      setCursorAutoRefreshCustomMode(false);
       setAutoSwitchThresholdCustomMode(false);
       setQuotaAlertThresholdCustomMode(false);
       setCodexQuotaAlertThresholdCustomMode(false);
       setGhcpQuotaAlertThresholdCustomMode(false);
       setWindsurfQuotaAlertThresholdCustomMode(false);
       setKiroQuotaAlertThresholdCustomMode(false);
+      setCursorQuotaAlertThresholdCustomMode(false);
       // 同步语言
       changeLanguage(config.language);
       applyTheme(config.theme);
@@ -628,6 +658,8 @@ export function SettingsPage() {
       setWindsurfAppPath(path);
     } else if (target === 'kiro') {
       setKiroAppPath(path);
+    } else if (target === 'cursor') {
+      setCursorAppPath(path);
     } else {
       setOpencodeAppPath(path);
     }
@@ -642,6 +674,9 @@ export function SettingsPage() {
     }
     if (target === 'kiro') {
       return t('settings.general.kiroPathReset', '重置默认');
+    }
+    if (target === 'cursor') {
+      return t('settings.general.cursorPathReset', '重置默认');
     }
     if (target === 'opencode') {
       return t('settings.general.opencodePathReset', '重置默认');
@@ -703,12 +738,14 @@ export function SettingsPage() {
   const ghcpAutoRefreshIsPreset = REFRESH_PRESET_VALUES.includes(ghcpAutoRefresh);
   const windsurfAutoRefreshIsPreset = REFRESH_PRESET_VALUES.includes(windsurfAutoRefresh);
   const kiroAutoRefreshIsPreset = REFRESH_PRESET_VALUES.includes(kiroAutoRefresh);
+  const cursorAutoRefreshIsPreset = REFRESH_PRESET_VALUES.includes(cursorAutoRefresh);
   const autoSwitchThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(autoSwitchThreshold);
   const quotaAlertThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(quotaAlertThreshold);
   const codexQuotaAlertThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(codexQuotaAlertThreshold);
   const ghcpQuotaAlertThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(ghcpQuotaAlertThreshold);
   const windsurfQuotaAlertThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(windsurfQuotaAlertThreshold);
   const kiroQuotaAlertThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(kiroQuotaAlertThreshold);
+  const cursorQuotaAlertThresholdIsPreset = THRESHOLD_PRESET_VALUES.includes(cursorQuotaAlertThreshold);
 
   // 检查更新
   const handleCheckUpdate = () => {
@@ -1963,6 +2000,190 @@ export function SettingsPage() {
                       >
                         {!kiroQuotaAlertThresholdIsPreset && (
                           <option value={kiroQuotaAlertThreshold}>{kiroQuotaAlertThreshold}%</option>
+                        )}
+                        <option value="0">0%</option>
+                        <option value="20">20%</option>
+                        <option value="40">40%</option>
+                        <option value="60">60%</option>
+                        <option value="custom">{t('settings.general.autoRefreshCustom')}</option>
+                      </select>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+              </div>
+
+              <div style={{ order: platformSettingsOrder.cursor }}>
+                <div className="group-title">{t('quickSettings.cursor.title', 'Cursor 设置')}</div>
+                <div className="settings-group">
+              <div className="settings-row">
+                <div className="row-label">
+                  <div className="row-title">{t('quickSettings.cursorRefreshInterval', '配额自动刷新')}</div>
+                  <div className="row-desc">{t('settings.general.windsurfAutoRefreshDesc', '后台自动更新频率')}</div>
+                </div>
+                <div className="row-control">
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {cursorAutoRefreshCustomMode ? (
+                      <div className="settings-inline-input" style={{ minWidth: '120px', width: 'auto' }}>
+                        <input
+                          type="number"
+                          min={1}
+                          max={999}
+                          className="settings-select settings-select--input-mode settings-select--with-unit"
+                          value={cursorAutoRefresh}
+                          placeholder={t('quickSettings.inputMinutes', '输入分钟数')}
+                          onChange={(e) => setCursorAutoRefresh(sanitizeNumberInput(e.target.value))}
+                          onBlur={() => {
+                            const normalized = normalizeNumberInput(cursorAutoRefresh, 1, 999);
+                            setCursorAutoRefresh(normalized);
+                            setCursorAutoRefreshCustomMode(false);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              const normalized = normalizeNumberInput(cursorAutoRefresh, 1, 999);
+                              setCursorAutoRefresh(normalized);
+                              setCursorAutoRefreshCustomMode(false);
+                            }
+                          }}
+                        />
+                        <span className="settings-input-unit">{t('settings.general.minutes')}</span>
+                      </div>
+                    ) : (
+                      <select
+                        className="settings-select"
+                        style={{ minWidth: '120px', width: 'auto' }}
+                        value={cursorAutoRefresh}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === 'custom') {
+                            setCursorAutoRefreshCustomMode(true);
+                            setCursorAutoRefresh(cursorAutoRefresh !== '-1' ? cursorAutoRefresh : '1');
+                            return;
+                          }
+                          setCursorAutoRefreshCustomMode(false);
+                          setCursorAutoRefresh(val);
+                        }}
+                      >
+                        {!cursorAutoRefreshIsPreset && (
+                          <option value={cursorAutoRefresh}>
+                            {cursorAutoRefresh} {t('settings.general.minutes')}
+                          </option>
+                        )}
+                        <option value="-1">{t('settings.general.autoRefreshDisabled')}</option>
+                        <option value="2">2 {t('settings.general.minutes')}</option>
+                        <option value="5">5 {t('settings.general.minutes')}</option>
+                        <option value="10">10 {t('settings.general.minutes')}</option>
+                        <option value="15">15 {t('settings.general.minutes')}</option>
+                        <option value="custom">{t('settings.general.autoRefreshCustom')}</option>
+                      </select>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="settings-row">
+                <div className="row-label">
+                  <div className="row-title">{t('quickSettings.cursor.appPath', 'Cursor 路径')}</div>
+                  <div className="row-desc">{t('settings.general.codexAppPathDesc', '留空则使用默认路径')}</div>
+                </div>
+                <div className="row-control row-control--grow">
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flex: 1 }}>
+                    <input
+                      type="text"
+                      className="settings-input settings-input--path"
+                      value={cursorAppPath}
+                      placeholder={t('settings.general.codexAppPathPlaceholder', '默认路径')}
+                      onChange={(e) => setCursorAppPath(e.target.value)}
+                    />
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => handlePickAppPath('cursor')}
+                      disabled={isAppPathResetDetecting('cursor')}
+                    >
+                      {t('settings.general.codexPathSelect', '选择')}
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => handleResetAppPath('cursor')}
+                      disabled={isAppPathResetDetecting('cursor')}
+                    >
+                      <RefreshCw size={16} className={isAppPathResetDetecting('cursor') ? 'spin' : undefined} />
+                      {isAppPathResetDetecting('cursor')
+                        ? t('common.loading', '加载中...')
+                        : getResetLabelByTarget('cursor')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="settings-row">
+                <div className="row-label">
+                  <div className="row-title">{t('quickSettings.quotaAlert.enable', '超额预警')}</div>
+                  <div className="row-desc">{t('quickSettings.quotaAlert.hint', '当当前账号任意模型配额低于阈值时，发送原生通知并在页面提示快捷切号。')}</div>
+                </div>
+                <div className="row-control">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={cursorQuotaAlertEnabled}
+                      onChange={(e) => setCursorQuotaAlertEnabled(e.target.checked)}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+              </div>
+              {cursorQuotaAlertEnabled && (
+                <div className="settings-row" style={{ animation: 'fadeUp 0.3s ease both' }}>
+                  <div className="row-label">
+                    <div className="row-title">{t('quickSettings.quotaAlert.threshold', '预警阈值')}</div>
+                    <div className="row-desc">{t('quickSettings.quotaAlert.thresholdDesc', '任意模型配额低于此百分比时触发预警')}</div>
+                  </div>
+                  <div className="row-control">
+                    {cursorQuotaAlertThresholdCustomMode ? (
+                      <div className="settings-inline-input">
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          className="settings-select settings-select--input-mode settings-select--with-unit"
+                          value={cursorQuotaAlertThreshold}
+                          placeholder={t('quickSettings.inputPercent', '输入百分比')}
+                          onChange={(e) => setCursorQuotaAlertThreshold(sanitizeNumberInput(e.target.value))}
+                          onBlur={() => {
+                            const normalized = normalizeNumberInput(cursorQuotaAlertThreshold, 0, 100);
+                            setCursorQuotaAlertThreshold(normalized);
+                            setCursorQuotaAlertThresholdCustomMode(false);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              const normalized = normalizeNumberInput(cursorQuotaAlertThreshold, 0, 100);
+                              setCursorQuotaAlertThreshold(normalized);
+                              setCursorQuotaAlertThresholdCustomMode(false);
+                            }
+                          }}
+                        />
+                        <span className="settings-input-unit">%</span>
+                      </div>
+                    ) : (
+                      <select
+                        className="settings-select"
+                        value={cursorQuotaAlertThreshold}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === 'custom') {
+                            setCursorQuotaAlertThresholdCustomMode(true);
+                            setCursorQuotaAlertThreshold(cursorQuotaAlertThreshold || '20');
+                            return;
+                          }
+                          setCursorQuotaAlertThresholdCustomMode(false);
+                          setCursorQuotaAlertThreshold(val);
+                        }}
+                      >
+                        {!cursorQuotaAlertThresholdIsPreset && (
+                          <option value={cursorQuotaAlertThreshold}>{cursorQuotaAlertThreshold}%</option>
                         )}
                         <option value="0">0%</option>
                         <option value="20">20%</option>

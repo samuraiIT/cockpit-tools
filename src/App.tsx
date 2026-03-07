@@ -19,6 +19,7 @@ import { useCodexAccountStore } from './stores/useCodexAccountStore';
 import { useGitHubCopilotAccountStore } from './stores/useGitHubCopilotAccountStore';
 import { useWindsurfAccountStore } from './stores/useWindsurfAccountStore';
 import { useKiroAccountStore } from './stores/useKiroAccountStore';
+import { useCursorAccountStore } from './stores/useCursorAccountStore';
 import type { UpdateCheckResult } from './components/UpdateNotification';
 import type { Update as UpdaterUpdate } from '@tauri-apps/plugin-updater';
 import { parseUpdaterReleaseNotes } from './utils/updaterReleaseNotes';
@@ -51,6 +52,9 @@ const WindsurfAccountsPage = lazy(() =>
 );
 const KiroAccountsPage = lazy(() =>
   import('./pages/KiroAccountsPage').then((module) => ({ default: module.KiroAccountsPage })),
+);
+const CursorAccountsPage = lazy(() =>
+  import('./pages/CursorAccountsPage').then((module) => ({ default: module.CursorAccountsPage })),
 );
 const FingerprintsPage = lazy(() =>
   import('./pages/FingerprintsPage').then((module) => ({ default: module.FingerprintsPage })),
@@ -101,10 +105,11 @@ interface GeneralConfig extends GeneralConfigTheme {
   vscode_app_path: string;
   windsurf_app_path: string;
   kiro_app_path: string;
+  cursor_app_path: string;
 }
 
 type AppPathMissingDetail = {
-  app: 'antigravity' | 'codex' | 'vscode' | 'windsurf' | 'kiro';
+  app: 'antigravity' | 'codex' | 'vscode' | 'windsurf' | 'kiro' | 'cursor';
   retry?:
     | { kind: 'default' }
     | { kind: 'instance'; instanceId?: string }
@@ -147,7 +152,7 @@ type QuotaAlertPayload = {
   triggered_at: number;
 };
 
-type QuotaAlertPlatform = 'antigravity' | 'codex' | 'github_copilot' | 'windsurf' | 'kiro';
+type QuotaAlertPlatform = 'antigravity' | 'codex' | 'github_copilot' | 'windsurf' | 'kiro' | 'cursor';
 type UpdateCheckSource = 'auto' | 'manual';
 type UpdateActionState = 'hidden' | 'available' | 'downloading' | 'ready';
 
@@ -168,6 +173,8 @@ function normalizeQuotaAlertPlatform(platform: string | undefined): QuotaAlertPl
       return 'windsurf';
     case 'kiro':
       return 'kiro';
+    case 'cursor':
+      return 'cursor';
     default:
       return 'antigravity';
   }
@@ -186,6 +193,8 @@ function getQuotaAlertPlatformLabel(
       return 'Windsurf';
     case 'kiro':
       return 'Kiro';
+    case 'cursor':
+      return 'Cursor';
     default:
       return t('nav.overview', 'Antigravity');
   }
@@ -201,6 +210,8 @@ function getQuotaAlertTargetPage(platform: QuotaAlertPlatform): Page {
       return 'windsurf';
     case 'kiro':
       return 'kiro';
+    case 'cursor':
+      return 'cursor';
     default:
       return 'overview';
   }
@@ -216,6 +227,8 @@ function getQuotaAlertQuickSettingsType(platform: QuotaAlertPlatform): QuickSett
       return 'windsurf';
     case 'kiro':
       return 'kiro';
+    case 'cursor':
+      return 'cursor';
     default:
       return 'antigravity';
   }
@@ -1076,6 +1089,9 @@ function App() {
                     } else if (platform === 'kiro') {
                       await useKiroAccountStore.getState().switchAccount(targetAccountId);
                       setPage('kiro');
+                    } else if (platform === 'cursor') {
+                      await useCursorAccountStore.getState().switchAccount(targetAccountId);
+                      setPage('cursor');
                     } else {
                       await useAccountStore.getState().switchAccount(targetAccountId);
                       setPage('overview');
@@ -1232,6 +1248,10 @@ function App() {
         command: 'refresh_all_kiro_tokens',
         errorMessage: 'Failed to refresh Kiro quotas:',
       },
+      {
+        command: 'refresh_all_cursor_tokens',
+        errorMessage: 'Failed to refresh Cursor:',
+      },
     ] as const;
 
     listen('tray:refresh_quota', async () => {
@@ -1270,7 +1290,8 @@ function App() {
         detail.app !== 'codex' &&
         detail.app !== 'vscode' &&
         detail.app !== 'windsurf' &&
-        detail.app !== 'kiro'
+        detail.app !== 'kiro' &&
+        detail.app !== 'cursor'
       ) {
         return;
       }
@@ -1318,6 +1339,8 @@ function App() {
                 ? config.windsurf_app_path
               : appPathMissing.app === 'kiro'
                 ? config.kiro_app_path
+              : appPathMissing.app === 'cursor'
+                ? config.cursor_app_path
               : config.antigravity_app_path;
         if (active) {
           setAppPathDraft(currentPath || '');
@@ -1373,6 +1396,8 @@ function App() {
           await invoke('windsurf_start_instance', { instanceId: retry.instanceId });
         } else if (app === 'kiro') {
           await invoke('kiro_start_instance', { instanceId: retry.instanceId });
+        } else if (app === 'cursor') {
+          await invoke('cursor_start_instance', { instanceId: retry.instanceId });
         } else {
           await invoke('start_instance', { instanceId: retry.instanceId });
         }
@@ -1385,6 +1410,8 @@ function App() {
           await invoke('windsurf_start_instance', { instanceId: '__default__' });
         } else if (app === 'kiro') {
           await invoke('kiro_start_instance', { instanceId: '__default__' });
+        } else if (app === 'cursor') {
+          await invoke('cursor_start_instance', { instanceId: '__default__' });
         } else {
           await invoke('start_instance', { instanceId: '__default__' });
         }
@@ -1441,6 +1468,7 @@ function App() {
             case 'github-copilot':
             case 'windsurf':
             case 'kiro':
+            case 'cursor':
             case 'manual':
             case 'settings':
               setPage(target as Page);
@@ -1489,7 +1517,9 @@ function App() {
           ? 'Windsurf'
           : appPathMissing.app === 'kiro'
             ? 'Kiro'
-            : 'Antigravity'
+            : appPathMissing.app === 'cursor'
+              ? 'Cursor'
+              : 'Antigravity'
     : '';
 
   const appPathMissingPathLabel = appPathMissing
@@ -1501,7 +1531,9 @@ function App() {
           ? t('quickSettings.windsurf.appPath', 'Windsurf 路径')
           : appPathMissing.app === 'kiro'
             ? t('quickSettings.kiro.appPath', 'Kiro 路径')
-            : t('quickSettings.antigravity.appPath', '启动路径')
+            : appPathMissing.app === 'cursor'
+              ? t('quickSettings.cursor.appPath', 'Cursor 路径')
+              : t('quickSettings.antigravity.appPath', '启动路径')
     : t('quickSettings.antigravity.appPath', '启动路径');
 
   return (
@@ -1656,7 +1688,9 @@ function App() {
                                 ? t('settings.general.windsurfPathReset', '重置默认')
                                 : appPathMissing.app === 'kiro'
                                   ? t('settings.general.kiroPathReset', '重置默认')
-                                  : t('settings.general.codexPathReset', '重置默认')
+                                  : appPathMissing.app === 'cursor'
+                                    ? t('settings.general.cursorPathReset', '重置默认')
+                                    : t('settings.general.codexPathReset', '重置默认')
                           )
                       }
                     >
@@ -1731,6 +1765,7 @@ function App() {
           {page === 'github-copilot' && <GitHubCopilotAccountsPage />}
           {page === 'windsurf' && <WindsurfAccountsPage />}
           {page === 'kiro' && <KiroAccountsPage />}
+          {page === 'cursor' && <CursorAccountsPage />}
           {page === 'instances' && <InstancesPage onNavigate={setPage} />}
           {page === 'fingerprints' && <FingerprintsPage onNavigate={setPage} />}
           {page === 'wakeup' && <WakeupTasksPage onNavigate={setPage} />}

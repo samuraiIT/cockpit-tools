@@ -252,6 +252,10 @@
       "initMode": "Başlatma modu",
       "initModeCopy": "Kaynak örnekten kopyala (varsayılan)",
       "initModeEmpty": "Boş örnek (kopyalama yok)",
+      "initModeExistingDir": "Mevcut dizini kullan",
+      "pathExistingDirHint": "Yol seçimle belirlenir ve düzenlenemez",
+      "existingDirHint": "Mevcut bir dizini örnek dizini olarak kullanın; seçilen yol kesindir ve düzenlenemez.",
+      "bindExistingDirHint": "İsteğe bağlı; dizini listeye ekledikten sonra hesap bağlayabilirsiniz",
       "emptyInitHint": "Kopyalama olmadan seçildiğinde yalnızca boş bir dizin oluşturulur. Hesap bağlamadan önce bir kez başlatmanız gerekir.",
       "copySource": "Kaynak oturumu kopyala",
       "copySourceDesc": "Yapılandırma ve giriş verilerini seçilen oturumdan kopyala",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Oturum oluşturuldu",
       "emptyCreated": "Boş örnek oluşturuldu. Hesap bağlamadan önce bir kez başlatın.",
+      "existingDirCreated": "Seçilen dizin kullanılarak örnek oluşturuldu.",
       "updated": "Oturum güncellendi",
       "deleted": "Oturum silindi",
       "started": "Oturum başlatıldı",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Oturumu sil",
       "message": "{{name}} oturumu silinsin mi? Bu işlem yapılandırmayı kaldıracak ve oturum klasörünü silecektir."
+    },
+    "import": {
+      "btnTitle": "Mevcut dizini içe aktar",
+      "title": "Mevcut dizini içe aktar",
+      "dirLabel": "Örnek dizini seçin",
+      "dirPlaceholder": "Dizin seçmek için tıklayın",
+      "dirHint": "Mevcut yerel bir dizini dosyaları taşımadan veya değiştirmeden örnek olarak kaydeder",
+      "changeDir": "Değiştir",
+      "bindLabel": "Hesap bağla (isteğe bağlı)",
+      "bindHint": "Hesabı daha sonra örnek listesinden bağlayabilirsiniz",
+      "pathRequired": "Önce bir dizin seçin",
+      "submit": "İçe aktar"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Varsayılan yol",
       "kiroPathSelect": "Seçme",
       "kiroPathReset": "Varsayılana sıfırla",
+      "cursorPathReset": "Varsayılana sıfırla",
       "codexLaunchOnSwitch": "Codex değiştirirken Codex App'i otomatik başlat",
       "codexLaunchOnSwitchDesc": "Hesap değişiminden sonra Codex App'i otomatik başlat veya yeniden başlat",
       "autoUpdate": "Arka planda otomatik güncelleme",
@@ -1296,7 +1314,12 @@
       "title": "Kiro Ayarları",
       "appPath": "Kiro Yolu"
     },
-    "kiroRefreshInterval": "Otomatik yenileme kotası"
+    "kiroRefreshInterval": "Otomatik yenileme kotası",
+    "cursor": {
+      "title": "Cursor Ayarları",
+      "appPath": "Cursor Yolu"
+    },
+    "cursorRefreshInterval": "Kota otomatik yenileme"
   },
   "quotaAlert": {
     "bannerText": "{{email}} için kota uyarısı (eşik {{threshold}}%, en düşük {{lowest}}%, modeller: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Yerel Kiro'dan ithalat"
     },
     "injectToVSCode": "Kiro'ya geç"
+  },
+  "cursor": {
+    "subscription": "Abonelik",
+    "injectToCursor": "Cursor'a geç",
+    "quota": {
+      "onDemand": "İsteğe bağlı"
+    },
+    "title": "Cursor Hesap Yönetimi",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Cursor çoklu örnek yalnızca macOS, Windows ve Linux'ta desteklenir."
+      }
+    },
+    "empty": {
+      "description": "Cursor hesaplarınızı yönetmeye başlamak için \"Hesap Ekle\"ye tıklayın"
+    },
+    "addModal": {
+      "title": "Cursor Hesabı Ekle"
+    },
+    "token": {
+      "desc": "Cursor erişim jetonunuzu (JWT) veya dışa aktarılmış JSON verilerini yapıştırın.",
+      "formatHint": "Gerekli alanlar ve örnekler (genişletmek için tıklayın)",
+      "formatRequired": "Tekli jeton: JWT'yi doğrudan yapıştırın; toplu içe aktarma: JSON dizi formatı kullanın",
+      "singleExample": "Tekli örnek (JWT)",
+      "batchExample": "Toplu örnek (JSON)"
+    },
+    "import": {
+      "localDesc": "Yerel Cursor istemcisinden veya bir JSON dosyasından hesap verilerini içe aktarın.",
+      "localClient": "Yerel Cursor'dan içe aktar"
+    },
+    "flowNotice": {
+      "title": "Cursor hesap kılavuzu (genişletmek/daraltmak için tıklayın)",
+      "desc": "Yerel Cursor kurulumundan içe aktararak veya JWT jetonları yapıştırarak Cursor hesaplarını yönetin. Veriler yalnızca yerel olarak işlenir.",
+      "reason": "İzin kapsamı: Hesap içe aktarma ve jeton enjeksiyonu için Cursor yerel kimlik doğrulama deposunu okuma.",
+      "storage": "Veri kapsamı: Yalnızca Cursor kimlik doğrulama oturumu ile ilgili kayıtlar okunur/güncellenir; hiçbir anahtar/jeton yüklenmez."
+    },
+    "oauth": {
+      "desc": "Aşağıdaki düğmeye tıklayın ve tarayıcıda Cursor yetkilendirmesini tamamlayın."
+    }
   },
   "breakout": {
     "gameOver": "Oyun bitti",

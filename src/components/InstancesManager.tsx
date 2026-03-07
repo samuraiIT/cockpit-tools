@@ -41,7 +41,7 @@ interface InstancesManagerProps<TAccount extends AccountLike> {
   renderAccountQuotaPreview: (account: TAccount) => ReactNode;
   renderAccountBadge?: (account: TAccount) => ReactNode;
   getAccountSearchText?: (account: TAccount) => string;
-  appType?: 'antigravity' | 'codex' | 'vscode' | 'windsurf' | 'kiro';
+  appType?: 'antigravity' | 'codex' | 'vscode' | 'windsurf' | 'kiro' | 'cursor';
 }
 
 const INSTANCE_AUTO_REFRESH_INTERVAL_MS = 10_000;
@@ -114,6 +114,7 @@ export function InstancesManager<TAccount extends AccountLike>({
   const [formErrorTick, setFormErrorTick] = useState(0);
   const [pathAuto, setPathAuto] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
   const [startingInstanceIds, setStartingInstanceIds] = useState<string[]>([]);
   const [stoppingInstanceIds, setStoppingInstanceIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -267,12 +268,12 @@ export function InstancesManager<TAccount extends AccountLike>({
   };
 
   useEffect(() => {
-    if (editing || !pathAuto || !defaultRoot) return;
+    if (editing || !pathAuto || !defaultRoot || formInitMode === 'existingDir') return;
     const nextPath = buildDefaultPath(formName);
     if (nextPath && nextPath !== formPath) {
       setFormPath(nextPath);
     }
-  }, [defaultRoot, editing, formName, pathAuto]);
+  }, [defaultRoot, editing, formName, pathAuto, formInitMode]);
 
   const resetForm = (showRoot = false) => {
     setFormName('');
@@ -329,7 +330,7 @@ export function InstancesManager<TAccount extends AccountLike>({
 
   const handleNameChange = (value: string) => {
     setFormName(value);
-    if (!editing && defaultRoot) {
+    if (!editing && defaultRoot && formInitMode !== 'existingDir') {
       const nextPath = buildDefaultPath(value);
       if (nextPath) {
         setFormPath(nextPath);
@@ -371,13 +372,15 @@ export function InstancesManager<TAccount extends AccountLike>({
       }
     }
 
-    if (!editing && !isCreateEmpty && !formCopySourceInstanceId) {
+    const isExistingDir = !editing && formInitMode === 'existingDir';
+
+    if (!editing && !isCreateEmpty && !isExistingDir && !formCopySourceInstanceId) {
       setFormError(t('instances.form.copySourceRequired', '请选择复制来源实例'));
       setFormErrorTick((prev) => prev + 1);
       return;
     }
 
-    if (!editing && !isCreateEmpty && !formBindAccountId) {
+    if (!editing && !isCreateEmpty && !isExistingDir && !formBindAccountId) {
       setFormError(t('instances.form.bindRequired', '请选择要绑定的账号'));
       setFormErrorTick((prev) => prev + 1);
       return;
@@ -1559,31 +1562,6 @@ export function InstancesManager<TAccount extends AccountLike>({
                 />
               </div>
 
-              <div className="form-group">
-                <label>{t('instances.form.path', '实例目录')}</label>
-                <div className="instance-path-row">
-                  <input
-                    className="form-input"
-                    value={formPath}
-                    onChange={(e) => setFormPath(e.target.value)}
-                    placeholder={t('instances.form.pathPlaceholder', '选择实例目录')}
-                    disabled={Boolean(editing)}
-                  />
-                  {!editing && (
-                    <button className="btn btn-secondary" onClick={handleSelectPath}>
-                      <FolderOpen size={16} />
-                      {t('instances.actions.selectPath', '选择目录')}
-                    </button>
-                  )}
-                </div>
-                {!editing && (
-                  <p className="form-hint">{t('instances.form.pathAutoHint', '修改名称时自动更新路径，也可手动选择')}</p>
-                )}
-                {editing && (
-                  <p className="form-hint">{t('instances.form.pathReadOnly', '编辑时不可修改路径')}</p>
-                )}
-              </div>
-
               {!editing && (
                 <div className="form-group">
                   <label>{t('instances.form.initMode', '初始化方式')}</label>
@@ -1606,6 +1584,18 @@ export function InstancesManager<TAccount extends AccountLike>({
                       />
                       <span>{t('instances.form.initModeEmpty', '空白实例（不复制）')}</span>
                     </label>
+                    <label className={`instance-init-mode-option ${formInitMode === 'existingDir' ? 'active' : ''}`}>
+                      <input
+                        type="radio"
+                        name="instance-init-mode"
+                        checked={formInitMode === 'existingDir'}
+                        onChange={() => {
+                          setFormInitMode('existingDir');
+                          setFormPath('');
+                        }}
+                      />
+                      <span>{t('instances.form.initModeExistingDir', '使用已存在目录')}</span>
+                    </label>
                   </div>
                   {formInitMode === 'empty' && (
                     <div className="instance-init-note">
@@ -1617,6 +1607,31 @@ export function InstancesManager<TAccount extends AccountLike>({
                   )}
                 </div>
               )}
+
+              <div className="form-group">
+                <label>{t('instances.form.path', '实例目录')}</label>
+                <div className="instance-path-row">
+                  <input
+                    className="form-input"
+                    value={formPath}
+                    onChange={(e) => setFormPath(e.target.value)}
+                    placeholder={t('instances.form.pathPlaceholder', '选择实例目录')}
+                    disabled={Boolean(editing)}
+                  />
+                  {!editing && (
+                    <button className="btn btn-secondary" onClick={handleSelectPath}>
+                      <FolderOpen size={16} />
+                      {t('instances.actions.selectPath', '选择目录')}
+                    </button>
+                  )}
+                </div>
+                {!editing && formInitMode !== 'existingDir' && (
+                  <p className="form-hint">{t('instances.form.pathAutoHint', '修改名称时自动更新路径，也可手动选择')}</p>
+                )}
+                {editing && (
+                  <p className="form-hint">{t('instances.form.pathReadOnly', '编辑时不可修改路径')}</p>
+                )}
+              </div>
 
               {!editing && formInitMode === 'copy' && (
                 <div className="form-group">
@@ -1639,7 +1654,7 @@ export function InstancesManager<TAccount extends AccountLike>({
 
               {!editing ? (
                 <div className="form-group">
-                  <label>{t('instances.form.bindInject', '绑定账号')}</label>
+                  <label>{t('instances.form.bindInject', '绑定账号')}{formInitMode === 'existingDir' ? `（${t('instances.form.optional', '可选')}）` : ''}</label>
                   {formInitMode === 'empty' ? (
                     <>
                       <FormAccountSelect
@@ -1721,6 +1736,7 @@ export function InstancesManager<TAccount extends AccountLike>({
           </div>
         </div>
       )}
+
     </>
   );
 }

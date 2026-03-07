@@ -4,9 +4,10 @@ import { Github, Layers, HelpCircle } from 'lucide-react';
 import { CodexIcon } from '../icons/CodexIcon';
 import { WindsurfIcon } from '../icons/WindsurfIcon';
 import { KiroIcon } from '../icons/KiroIcon';
+import { CursorIcon } from '../icons/CursorIcon';
 
 export type PlatformOverviewTab = 'overview' | 'instances';
-export type PlatformOverviewHeaderId = 'codex' | 'github-copilot' | 'windsurf' | 'kiro';
+export type PlatformOverviewHeaderId = 'codex' | 'github-copilot' | 'windsurf' | 'kiro' | 'cursor';
 
 interface PlatformOverviewTabsHeaderProps {
   platform: PlatformOverviewHeaderId;
@@ -46,6 +47,11 @@ const CONFIGS: Record<PlatformOverviewHeaderId, PlatformOverviewConfig> = {
     titleKey: 'kiro.title',
     titleDefault: 'Kiro 账号管理',
     overviewIcon: <KiroIcon className="tab-icon" />,
+  },
+  cursor: {
+    titleKey: 'cursor.title',
+    titleDefault: 'Cursor 账号管理',
+    overviewIcon: <CursorIcon className="tab-icon" />,
   },
 };
 

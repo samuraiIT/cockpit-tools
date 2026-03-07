@@ -25,16 +25,18 @@ enum PlatformId {
     GitHubCopilot,
     Windsurf,
     Kiro,
+    Cursor,
 }
 
 impl PlatformId {
-    fn default_order() -> [Self; 5] {
+    fn default_order() -> [Self; 6] {
         [
             Self::Antigravity,
             Self::Codex,
             Self::GitHubCopilot,
             Self::Windsurf,
             Self::Kiro,
+            Self::Cursor,
         ]
     }
 
@@ -45,6 +47,7 @@ impl PlatformId {
             crate::modules::tray_layout::PLATFORM_GITHUB_COPILOT => Some(Self::GitHubCopilot),
             crate::modules::tray_layout::PLATFORM_WINDSURF => Some(Self::Windsurf),
             crate::modules::tray_layout::PLATFORM_KIRO => Some(Self::Kiro),
+            crate::modules::tray_layout::PLATFORM_CURSOR => Some(Self::Cursor),
             _ => None,
         }
     }
@@ -56,6 +59,7 @@ impl PlatformId {
             Self::GitHubCopilot => crate::modules::tray_layout::PLATFORM_GITHUB_COPILOT,
             Self::Windsurf => crate::modules::tray_layout::PLATFORM_WINDSURF,
             Self::Kiro => crate::modules::tray_layout::PLATFORM_KIRO,
+            Self::Cursor => crate::modules::tray_layout::PLATFORM_CURSOR,
         }
     }
 
@@ -66,6 +70,7 @@ impl PlatformId {
             Self::GitHubCopilot => "GitHub Copilot",
             Self::Windsurf => "Windsurf",
             Self::Kiro => "Kiro",
+            Self::Cursor => "Cursor",
         }
     }
 
@@ -76,18 +81,10 @@ impl PlatformId {
             Self::GitHubCopilot => "github-copilot",
             Self::Windsurf => "windsurf",
             Self::Kiro => "kiro",
+            Self::Cursor => "cursor",
         }
     }
 
-    fn stable_rank(self) -> usize {
-        match self {
-            Self::Antigravity => 0,
-            Self::Codex => 1,
-            Self::GitHubCopilot => 2,
-            Self::Windsurf => 3,
-            Self::Kiro => 4,
-        }
-    }
 }
 
 /// 菜单项 ID
@@ -313,11 +310,7 @@ fn resolve_tray_platforms() -> Vec<PlatformId> {
         return Vec::new();
     }
 
-    let ordered = if layout.sort_mode == crate::modules::tray_layout::SORT_MODE_MANUAL {
-        normalize_platform_order(&layout.ordered_platform_ids)
-    } else {
-        auto_sort_platforms_by_account_count()
-    };
+    let ordered = normalize_platform_order(&layout.ordered_platform_ids);
 
     ordered
         .into_iter()
@@ -352,48 +345,6 @@ fn normalize_platform_order(ids: &[String]) -> Vec<PlatformId> {
     }
 
     result
-}
-
-fn auto_sort_platforms_by_account_count() -> Vec<PlatformId> {
-    let counts = collect_platform_account_counts();
-    let mut platforms = PlatformId::default_order().to_vec();
-
-    platforms.sort_by(|a, b| {
-        let a_count = counts.get(a).copied().unwrap_or(0);
-        let b_count = counts.get(b).copied().unwrap_or(0);
-        b_count
-            .cmp(&a_count)
-            .then_with(|| a.stable_rank().cmp(&b.stable_rank()))
-    });
-
-    platforms
-}
-
-fn collect_platform_account_counts() -> HashMap<PlatformId, usize> {
-    let mut counts = HashMap::new();
-    counts.insert(
-        PlatformId::Antigravity,
-        crate::modules::account::list_accounts()
-            .map(|accounts| accounts.len())
-            .unwrap_or(0),
-    );
-    counts.insert(
-        PlatformId::Codex,
-        crate::modules::codex_account::list_accounts().len(),
-    );
-    counts.insert(
-        PlatformId::GitHubCopilot,
-        crate::modules::github_copilot_account::list_accounts().len(),
-    );
-    counts.insert(
-        PlatformId::Windsurf,
-        crate::modules::windsurf_account::list_accounts().len(),
-    );
-    counts.insert(
-        PlatformId::Kiro,
-        crate::modules::kiro_account::list_accounts().len(),
-    );
-    counts
 }
 
 fn build_platform_submenu<R: Runtime>(
@@ -443,6 +394,7 @@ fn get_account_display_info(platform: PlatformId, lang: &str) -> AccountDisplayI
         PlatformId::GitHubCopilot => build_github_copilot_display_info(lang),
         PlatformId::Windsurf => build_windsurf_display_info(lang),
         PlatformId::Kiro => build_kiro_display_info(lang),
+        PlatformId::Cursor => build_cursor_display_info(lang),
     }
 }
 
@@ -772,6 +724,273 @@ fn build_kiro_display_info(lang: &str) -> AccountDisplayInfo {
     }
 }
 
+fn build_cursor_display_info(lang: &str) -> AccountDisplayInfo {
+    let accounts = crate::modules::cursor_account::list_accounts();
+    let Some(account) = resolve_cursor_current_account(&accounts) else {
+        return AccountDisplayInfo {
+            account: format!("📧 {}", get_text("not_logged_in", lang)),
+            quota_lines: vec!["—".to_string()],
+        };
+    };
+
+    let mut quota_lines = Vec::new();
+    let usage = read_cursor_tray_usage(&account);
+    let reset_text = format_reset_time_from_ts(lang, usage.reset_ts);
+
+    if let Some(total_used) = usage.total_used_percent {
+        quota_lines.push(format_quota_line(
+            lang,
+            "Total",
+            &format_percent_text(total_used),
+            Some(&reset_text),
+        ));
+    }
+
+    if let Some(auto_used) = usage.auto_used_percent {
+        quota_lines.push(format_quota_line(
+            lang,
+            "Auto + Composer",
+            &format_percent_text(auto_used),
+            None,
+        ));
+    }
+
+    if let Some(api_used) = usage.api_used_percent {
+        quota_lines.push(format_quota_line(
+            lang,
+            "API",
+            &format_percent_text(api_used),
+            None,
+        ));
+    }
+
+    if let Some(on_demand_text) = usage.on_demand_text {
+        quota_lines.push(format!("On-Demand: {}", on_demand_text));
+    }
+
+    if quota_lines.is_empty() {
+        quota_lines.push(get_text("loading", lang));
+    }
+
+    AccountDisplayInfo {
+        account: format!(
+            "📧 {}",
+            first_non_empty(&[Some(account.email.as_str()), Some(account.id.as_str())])
+                .unwrap_or("—")
+        ),
+        quota_lines,
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+struct CursorTrayUsage {
+    total_used_percent: Option<i32>,
+    auto_used_percent: Option<i32>,
+    api_used_percent: Option<i32>,
+    reset_ts: Option<i64>,
+    on_demand_text: Option<String>,
+}
+
+fn clamp_cursor_percent(value: f64) -> i32 {
+    if !value.is_finite() {
+        return 0;
+    }
+    if value <= 0.0 {
+        return 0;
+    }
+    if value >= 100.0 {
+        return 100;
+    }
+    value.round() as i32
+}
+
+fn pick_cursor_number(value: Option<&serde_json::Value>, keys: &[&str]) -> Option<f64> {
+    let obj = value?.as_object()?;
+    for key in keys {
+        let Some(raw) = obj.get(*key) else {
+            continue;
+        };
+        if let Some(v) = raw.as_f64() {
+            if v.is_finite() {
+                return Some(v);
+            }
+            continue;
+        }
+        if let Some(text) = raw.as_str() {
+            if let Ok(parsed) = text.trim().parse::<f64>() {
+                if parsed.is_finite() {
+                    return Some(parsed);
+                }
+            }
+        }
+    }
+    None
+}
+
+fn pick_cursor_bool(value: Option<&serde_json::Value>, keys: &[&str]) -> Option<bool> {
+    let obj = value?.as_object()?;
+    for key in keys {
+        let Some(raw) = obj.get(*key) else {
+            continue;
+        };
+        if let Some(flag) = raw.as_bool() {
+            return Some(flag);
+        }
+        if let Some(text) = raw.as_str() {
+            let normalized = text.trim().to_ascii_lowercase();
+            if normalized == "true" {
+                return Some(true);
+            }
+            if normalized == "false" {
+                return Some(false);
+            }
+        }
+    }
+    None
+}
+
+fn format_cursor_dollars(cents: f64) -> String {
+    format!("${:.2}", (cents / 100.0).max(0.0))
+}
+
+fn read_cursor_tray_usage(account: &crate::models::cursor::CursorAccount) -> CursorTrayUsage {
+    let Some(raw) = account.cursor_usage_raw.as_ref() else {
+        return CursorTrayUsage::default();
+    };
+    let raw_obj = match raw.as_object() {
+        Some(obj) => obj,
+        None => return CursorTrayUsage::default(),
+    };
+
+    let plan = raw_obj
+        .get("individualUsage")
+        .and_then(|value| value.as_object())
+        .and_then(|value| value.get("plan"))
+        .or_else(|| {
+            raw_obj
+                .get("individual_usage")
+                .and_then(|value| value.as_object())
+                .and_then(|value| value.get("plan"))
+        })
+        .or_else(|| raw_obj.get("planUsage"))
+        .or_else(|| raw_obj.get("plan_usage"));
+
+    let total_direct = pick_cursor_number(plan, &["totalPercentUsed", "total_percent_used"]);
+    let auto_direct = pick_cursor_number(plan, &["autoPercentUsed", "auto_percent_used"]);
+    let api_direct = pick_cursor_number(plan, &["apiPercentUsed", "api_percent_used"]);
+
+    let plan_used = pick_cursor_number(plan, &["used", "totalSpend", "total_spend"]);
+    let plan_limit = pick_cursor_number(plan, &["limit"]);
+    let total_ratio = match (plan_used, plan_limit) {
+        (Some(used), Some(limit)) if limit > 0.0 => Some((used / limit) * 100.0),
+        _ => None,
+    };
+
+    let individual_on_demand = raw_obj
+        .get("individualUsage")
+        .and_then(|value| value.as_object())
+        .and_then(|value| value.get("onDemand"))
+        .or_else(|| {
+            raw_obj
+                .get("individual_usage")
+                .and_then(|value| value.as_object())
+                .and_then(|value| value.get("onDemand"))
+        });
+    let team_on_demand = raw_obj
+        .get("teamUsage")
+        .and_then(|value| value.as_object())
+        .and_then(|value| value.get("onDemand"))
+        .or_else(|| {
+            raw_obj
+                .get("team_usage")
+                .and_then(|value| value.as_object())
+                .and_then(|value| value.get("onDemand"))
+        });
+    let spend_limit_usage = raw_obj
+        .get("spendLimitUsage")
+        .or_else(|| raw_obj.get("spend_limit_usage"));
+
+    let on_demand_obj = individual_on_demand.or(spend_limit_usage);
+    let on_demand_limit = pick_cursor_number(
+        on_demand_obj,
+        &[
+            "limit",
+            "individualLimit",
+            "individual_limit",
+            "pooledLimit",
+            "pooled_limit",
+        ],
+    );
+    let on_demand_used = pick_cursor_number(
+        on_demand_obj,
+        &[
+            "used",
+            "totalSpend",
+            "total_spend",
+            "individualUsed",
+            "individual_used",
+        ],
+    );
+    let team_on_demand_used = pick_cursor_number(team_on_demand, &["used"]);
+    let on_demand_enabled = pick_cursor_bool(individual_on_demand, &["enabled"]);
+
+    let limit_type = raw_obj
+        .get("limitType")
+        .or_else(|| raw_obj.get("limit_type"))
+        .or_else(|| {
+            spend_limit_usage
+                .and_then(|value| value.as_object())
+                .and_then(|value| value.get("limitType").or_else(|| value.get("limit_type")))
+        })
+        .and_then(|value| value.as_str())
+        .map(|value| value.trim().to_ascii_lowercase());
+    let is_team_limit = matches!(limit_type.as_deref(), Some("team"));
+
+    let on_demand_effective_used = if on_demand_used.unwrap_or(0.0) > 0.0 {
+        on_demand_used.unwrap_or(0.0)
+    } else if is_team_limit {
+        team_on_demand_used.unwrap_or(0.0)
+    } else {
+        on_demand_used.unwrap_or(0.0)
+    };
+
+    let has_on_demand_hint =
+        on_demand_obj.is_some() || on_demand_enabled.is_some() || is_team_limit || on_demand_limit.is_some();
+    let on_demand_text = if !has_on_demand_hint {
+        None
+    } else if let Some(limit) = on_demand_limit {
+        if limit > 0.0 {
+            let percent = clamp_cursor_percent((on_demand_effective_used / limit) * 100.0);
+            Some(format!(
+                "{} ({})",
+                format_percent_text(percent),
+                format_cursor_dollars(on_demand_effective_used)
+            ))
+        } else {
+            None
+        }
+    } else if on_demand_enabled == Some(true) && !is_team_limit {
+        Some("Unlimited".to_string())
+    } else {
+        Some("Disabled".to_string())
+    };
+
+    let reset_ts = raw_obj
+        .get("billingCycleEnd")
+        .or_else(|| raw_obj.get("billing_cycle_end"))
+        .and_then(|value| value.as_str())
+        .and_then(|text| chrono::DateTime::parse_from_rfc3339(text).ok())
+        .map(|value| value.timestamp());
+
+    CursorTrayUsage {
+        total_used_percent: total_direct.or(total_ratio).map(clamp_cursor_percent),
+        auto_used_percent: auto_direct.map(clamp_cursor_percent),
+        api_used_percent: api_direct.map(clamp_cursor_percent),
+        reset_ts,
+        on_demand_text,
+    }
+}
+
 fn resolve_github_copilot_current_account(
     accounts: &[crate::models::github_copilot::GitHubCopilotAccount],
 ) -> Option<crate::models::github_copilot::GitHubCopilotAccount> {
@@ -816,6 +1035,26 @@ fn resolve_kiro_current_account(
     accounts: &[crate::models::kiro::KiroAccount],
 ) -> Option<crate::models::kiro::KiroAccount> {
     if let Ok(settings) = crate::modules::kiro_instance::load_default_settings() {
+        if let Some(bind_id) = settings.bind_account_id {
+            let bind_id = bind_id.trim();
+            if !bind_id.is_empty() {
+                if let Some(account) = accounts.iter().find(|account| account.id == bind_id) {
+                    return Some(account.clone());
+                }
+            }
+        }
+    }
+
+    accounts
+        .iter()
+        .max_by_key(|account| account.last_used)
+        .cloned()
+}
+
+fn resolve_cursor_current_account(
+    accounts: &[crate::models::cursor::CursorAccount],
+) -> Option<crate::models::cursor::CursorAccount> {
+    if let Ok(settings) = crate::modules::cursor_instance::load_default_settings() {
         if let Some(bind_id) = settings.bind_account_id {
             let bind_id = bind_id.trim();
             if !bind_id.is_empty() {

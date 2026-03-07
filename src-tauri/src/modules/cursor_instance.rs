@@ -6,39 +6,35 @@ use std::process::{Command, Stdio};
 use std::sync::Mutex;
 
 use chrono::Utc;
-use rusqlite::{Connection, OptionalExtension};
-use serde_json::{json, Value};
 use sysinfo::{ProcessRefreshKind, System, UpdateKind};
 use uuid::Uuid;
 
-use crate::models::kiro::KiroAccount;
 use crate::models::{DefaultInstanceSettings, InstanceProfile, InstanceStore};
 use crate::modules;
+use crate::modules::cursor_account;
 use crate::modules::instance::InstanceDefaults;
 use crate::modules::instance_store;
-use crate::modules::kiro_account;
 
 pub use crate::modules::instance_store::{CreateInstanceParams, UpdateInstanceParams};
 
-static KIRO_INSTANCE_STORE_LOCK: std::sync::LazyLock<Mutex<()>> =
+static CURSOR_INSTANCE_STORE_LOCK: std::sync::LazyLock<Mutex<()>> =
     std::sync::LazyLock::new(|| Mutex::new(()));
 
-const KIRO_INSTANCES_FILE: &str = "kiro_instances.json";
-const KIRO_USAGE_DB_KEY: &str = "kiro.kiroAgent";
+const CURSOR_INSTANCES_FILE: &str = "cursor_instances.json";
 
 fn instances_path() -> Result<PathBuf, String> {
     let data_dir = modules::account::get_data_dir()?;
-    Ok(data_dir.join(KIRO_INSTANCES_FILE))
+    Ok(data_dir.join(CURSOR_INSTANCES_FILE))
 }
 
 pub fn load_instance_store() -> Result<InstanceStore, String> {
     let path = instances_path()?;
-    instance_store::load_instance_store(&path, KIRO_INSTANCES_FILE)
+    instance_store::load_instance_store(&path, CURSOR_INSTANCES_FILE)
 }
 
 pub fn save_instance_store(store: &InstanceStore) -> Result<(), String> {
     let path = instances_path()?;
-    instance_store::save_instance_store(&path, KIRO_INSTANCES_FILE, store)
+    instance_store::save_instance_store(&path, CURSOR_INSTANCES_FILE, store)
 }
 
 pub fn load_default_settings() -> Result<DefaultInstanceSettings, String> {
@@ -51,13 +47,13 @@ pub fn update_default_settings(
     extra_args: Option<String>,
     follow_local_account: Option<bool>,
 ) -> Result<DefaultInstanceSettings, String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
     let settings = &mut store.default_settings;
 
-    // Kiro 实例不支持“跟随当前账号”，直接忽略 follow_local_account。
+    // Cursor 实例不支持“跟随当前账号”，直接忽略 follow_local_account。
     if follow_local_account == Some(true) {
         settings.follow_local_account = false;
     }
@@ -76,37 +72,37 @@ pub fn update_default_settings(
     Ok(updated)
 }
 
-pub fn get_default_kiro_user_data_dir() -> Result<PathBuf, String> {
-    kiro_account::get_default_kiro_data_dir()
+pub fn get_default_cursor_user_data_dir() -> Result<PathBuf, String> {
+    cursor_account::get_default_cursor_data_dir()
 }
 
 pub fn get_default_instances_root_dir() -> Result<PathBuf, String> {
     #[cfg(target_os = "macos")]
     {
         let home = dirs::home_dir().ok_or("无法获取用户主目录")?;
-        return Ok(home.join(".antigravity_cockpit/instances/kiro"));
+        return Ok(home.join(".antigravity_cockpit/instances/cursor"));
     }
 
     #[cfg(target_os = "windows")]
     {
         let appdata =
             std::env::var("APPDATA").map_err(|_| "无法获取 APPDATA 环境变量".to_string())?;
-        return Ok(PathBuf::from(appdata).join(".antigravity_cockpit\\instances\\kiro"));
+        return Ok(PathBuf::from(appdata).join(".antigravity_cockpit\\instances\\cursor"));
     }
 
     #[cfg(target_os = "linux")]
     {
         let home = dirs::home_dir().ok_or("无法获取用户主目录")?;
-        return Ok(home.join(".antigravity_cockpit/instances/kiro"));
+        return Ok(home.join(".antigravity_cockpit/instances/cursor"));
     }
 
     #[allow(unreachable_code)]
-    Err("Kiro 多开实例仅支持 macOS、Windows 和 Linux".to_string())
+    Err("Cursor 多开实例仅支持 macOS、Windows 和 Linux".to_string())
 }
 
 pub fn get_instance_defaults() -> Result<InstanceDefaults, String> {
     let root_dir = get_default_instances_root_dir()?;
-    let default_user_data_dir = get_default_kiro_user_data_dir()?;
+    let default_user_data_dir = get_default_cursor_user_data_dir()?;
     Ok(InstanceDefaults {
         root_dir: root_dir.to_string_lossy().to_string(),
         default_user_data_dir: default_user_data_dir.to_string_lossy().to_string(),
@@ -114,7 +110,7 @@ pub fn get_instance_defaults() -> Result<InstanceDefaults, String> {
 }
 
 pub fn create_instance(params: CreateInstanceParams) -> Result<InstanceProfile, String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -160,7 +156,7 @@ pub fn create_instance(params: CreateInstanceParams) -> Result<InstanceProfile, 
         fs::create_dir_all(&user_dir_path).map_err(|e| format!("创建实例目录失败: {}", e))?;
     } else {
         let source_dir = match params.copy_source_instance_id.as_deref() {
-            Some("__default__") | None => get_default_kiro_user_data_dir()?,
+            Some("__default__") | None => get_default_cursor_user_data_dir()?,
             Some(source_id) => {
                 let source_instance = store
                     .instances
@@ -198,6 +194,8 @@ pub fn create_instance(params: CreateInstanceParams) -> Result<InstanceProfile, 
         extra_args: params.extra_args.trim().to_string(),
         bind_account_id: if create_empty {
             None
+        } else if use_existing_dir {
+            params.bind_account_id
         } else {
             params.bind_account_id
         },
@@ -212,7 +210,7 @@ pub fn create_instance(params: CreateInstanceParams) -> Result<InstanceProfile, 
 }
 
 pub fn update_instance(params: UpdateInstanceParams) -> Result<InstanceProfile, String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -251,7 +249,7 @@ pub fn update_instance(params: UpdateInstanceParams) -> Result<InstanceProfile, 
 }
 
 pub fn delete_instance(instance_id: &str) -> Result<(), String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -273,7 +271,7 @@ pub fn delete_instance(instance_id: &str) -> Result<(), String> {
 }
 
 pub fn update_instance_after_start(instance_id: &str, pid: u32) -> Result<InstanceProfile, String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -292,7 +290,7 @@ pub fn update_instance_after_start(instance_id: &str, pid: u32) -> Result<Instan
 }
 
 pub fn update_instance_pid(instance_id: &str, pid: Option<u32>) -> Result<InstanceProfile, String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -310,7 +308,7 @@ pub fn update_instance_pid(instance_id: &str, pid: Option<u32>) -> Result<Instan
 }
 
 pub fn update_default_pid(pid: Option<u32>) -> Result<DefaultInstanceSettings, String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -321,7 +319,7 @@ pub fn update_default_pid(pid: Option<u32>) -> Result<DefaultInstanceSettings, S
 }
 
 pub fn clear_all_pids() -> Result<(), String> {
-    let _lock = KIRO_INSTANCE_STORE_LOCK
+    let _lock = CURSOR_INSTANCE_STORE_LOCK
         .lock()
         .map_err(|_| "无法获取实例锁")?;
     let mut store = load_instance_store()?;
@@ -540,20 +538,20 @@ fn format_command_preview(command: &Command) -> String {
 fn spawn_command_with_trace(cmd: &mut Command) -> std::io::Result<std::process::Child> {
     let preview = format_command_preview(cmd);
     if command_trace_enabled() {
-        modules::logger::log_info(&format!("[CmdTrace][Kiro] EXEC {}", preview));
+        modules::logger::log_info(&format!("[CmdTrace][Cursor] EXEC {}", preview));
     }
     let start = std::time::Instant::now();
     let result = cmd.spawn();
     if command_trace_enabled() {
         match &result {
             Ok(child) => modules::logger::log_info(&format!(
-                "[CmdTrace][Kiro] SPAWN elapsed={}ms pid={} cmd={}",
+                "[CmdTrace][Cursor] SPAWN elapsed={}ms pid={} cmd={}",
                 start.elapsed().as_millis(),
                 child.id(),
                 preview
             )),
             Err(err) => modules::logger::log_warn(&format!(
-                "[CmdTrace][Kiro] SPAWN_ERROR elapsed={}ms cmd={} err={}",
+                "[CmdTrace][Cursor] SPAWN_ERROR elapsed={}ms cmd={} err={}",
                 start.elapsed().as_millis(),
                 preview,
                 err
@@ -624,12 +622,12 @@ fn collect_running_process_exe_by_pid() -> HashMap<u32, String> {
     map
 }
 
-fn resolve_expected_kiro_launch_path_for_match() -> Option<String> {
-    let launch_path = match resolve_kiro_launch_path() {
+fn resolve_expected_cursor_launch_path_for_match() -> Option<String> {
+    let launch_path = match resolve_cursor_launch_path() {
         Ok(path) => path,
         Err(err) => {
             modules::logger::log_warn(&format!(
-                "[Kiro Resolve] 启动路径未配置或无效，跳过 PID 匹配: {}",
+                "[Cursor Resolve] 启动路径未配置或无效，跳过 PID 匹配: {}",
                 err
             ));
             return None;
@@ -637,13 +635,13 @@ fn resolve_expected_kiro_launch_path_for_match() -> Option<String> {
     };
     let normalized = normalize_path_for_compare(launch_path.to_string_lossy().as_ref());
     if normalized.is_empty() {
-        modules::logger::log_warn("[Kiro Resolve] 启动路径为空，跳过 PID 匹配");
+        modules::logger::log_warn("[Cursor Resolve] 启动路径为空，跳过 PID 匹配");
         return None;
     }
     Some(normalized)
 }
 
-fn filter_kiro_entries_by_launch_path(
+fn filter_cursor_entries_by_launch_path(
     entries: Vec<(u32, Option<String>)>,
     expected: Option<String>,
 ) -> Vec<(u32, Option<String>)> {
@@ -666,15 +664,15 @@ fn filter_kiro_entries_by_launch_path(
     }
     if result.is_empty() {
         modules::logger::log_warn(&format!(
-            "[Kiro Resolve] 启动路径硬匹配未命中：expected={}, path_mismatch={}, missing_exe={}",
+            "[Cursor Resolve] 启动路径硬匹配未命中：expected={}, path_mismatch={}, missing_exe={}",
             expected, path_mismatch, missing_exe
         ));
     }
     result
 }
 
-pub fn collect_kiro_process_entries() -> Vec<(u32, Option<String>)> {
-    let expected_launch = resolve_expected_kiro_launch_path_for_match();
+pub fn collect_cursor_process_entries() -> Vec<(u32, Option<String>)> {
+    let expected_launch = resolve_expected_cursor_launch_path_for_match();
     if expected_launch.is_none() {
         return Vec::new();
     }
@@ -714,13 +712,13 @@ pub fn collect_kiro_process_entries() -> Vec<(u32, Option<String>)> {
                 .join(" ");
 
             #[cfg(target_os = "windows")]
-            let is_kiro = name == "kiro.exe"
-                || exe_path.ends_with("\\kiro.exe")
-                || (name == "electron.exe" && exe_path.contains("\\kiro\\"));
+            let is_cursor = name == "cursor.exe"
+                || exe_path.ends_with("\\cursor.exe")
+                || (name == "electron.exe" && exe_path.contains("\\cursor\\"));
             #[cfg(target_os = "linux")]
-            let is_kiro = name.contains("kiro") || exe_path.contains("/kiro");
+            let is_cursor = name.contains("cursor") || exe_path.contains("/cursor");
 
-            if !is_kiro || is_helper_process(&name, &args_line) {
+            if !is_cursor || is_helper_process(&name, &args_line) {
                 continue;
             }
 
@@ -753,7 +751,7 @@ pub fn collect_kiro_process_entries() -> Vec<(u32, Option<String>)> {
                     Err(_) => continue,
                 };
                 let lower = cmdline.to_lowercase();
-                if !lower.contains("kiro.app/contents/") || lower.contains("--type=") {
+                if !lower.contains("cursor.app/contents/") || lower.contains("--type=") {
                     continue;
                 }
                 let dir = extract_user_data_dir_from_command_line(cmdline).and_then(|value| {
@@ -771,7 +769,7 @@ pub fn collect_kiro_process_entries() -> Vec<(u32, Option<String>)> {
 
     let mut result: Vec<(u32, Option<String>)> = entries.into_iter().collect();
     result.sort_by_key(|(pid, _)| *pid);
-    filter_kiro_entries_by_launch_path(result, expected_launch)
+    filter_cursor_entries_by_launch_path(result, expected_launch)
 }
 
 fn pick_preferred_pid(mut pids: Vec<u32>) -> Option<u32> {
@@ -783,12 +781,12 @@ fn pick_preferred_pid(mut pids: Vec<u32>) -> Option<u32> {
     pids.first().copied()
 }
 
-pub fn resolve_kiro_pid_from_entries(
+pub fn resolve_cursor_pid_from_entries(
     last_pid: Option<u32>,
     user_data_dir: Option<&str>,
     entries: &[(u32, Option<String>)],
 ) -> Option<u32> {
-    let default_dir = get_default_kiro_user_data_dir()
+    let default_dir = get_default_cursor_user_data_dir()
         .ok()
         .map(|dir| normalize_path_for_compare(&dir.to_string_lossy()));
     let target = normalize_non_empty_path(user_data_dir).or(default_dir.clone());
@@ -820,7 +818,7 @@ pub fn resolve_kiro_pid_from_entries(
         }
         if modules::process::is_pid_running(pid) {
             modules::logger::log_warn(&format!(
-                "[Kiro Resolve] 忽略不匹配的 last_pid={}，target={}，matched_pids={:?}",
+                "[Cursor Resolve] 忽略不匹配的 last_pid={}，target={}，matched_pids={:?}",
                 pid, target, matches
             ));
         }
@@ -829,9 +827,9 @@ pub fn resolve_kiro_pid_from_entries(
     pick_preferred_pid(matches)
 }
 
-pub fn resolve_kiro_pid(last_pid: Option<u32>, user_data_dir: Option<&str>) -> Option<u32> {
-    let entries = collect_kiro_process_entries();
-    resolve_kiro_pid_from_entries(last_pid, user_data_dir, &entries)
+pub fn resolve_cursor_pid(last_pid: Option<u32>, user_data_dir: Option<&str>) -> Option<u32> {
+    let entries = collect_cursor_process_entries();
+    resolve_cursor_pid_from_entries(last_pid, user_data_dir, &entries)
 }
 
 #[cfg(target_os = "macos")]
@@ -848,7 +846,7 @@ fn focus_window_by_pid(pid: u32) -> Result<(), String> {
         return Ok(());
     }
     let stderr = String::from_utf8_lossy(&output.stderr);
-    Err(format!("定位 Kiro 窗口失败: {}", stderr.trim()))
+    Err(format!("定位 Cursor 窗口失败: {}", stderr.trim()))
 }
 
 #[cfg(target_os = "windows")]
@@ -874,7 +872,7 @@ public class Win32 {{
         Ok(())
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        Err(format!("定位 Kiro 窗口失败: {}", stderr.trim()))
+        Err(format!("定位 Cursor 窗口失败: {}", stderr.trim()))
     }
 }
 
@@ -888,15 +886,15 @@ fn focus_window_by_pid(pid: u32) -> Result<(), String> {
         Ok(())
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        Err(format!("定位 Kiro 窗口失败: {}", stderr.trim()))
+        Err(format!("定位 Cursor 窗口失败: {}", stderr.trim()))
     }
 }
 
-pub fn focus_kiro_instance(
+pub fn focus_cursor_instance(
     last_pid: Option<u32>,
     user_data_dir: Option<&str>,
 ) -> Result<u32, String> {
-    let pid = resolve_kiro_pid(last_pid, user_data_dir)
+    let pid = resolve_cursor_pid(last_pid, user_data_dir)
         .ok_or_else(|| "实例未运行，无法定位窗口".to_string())?;
     focus_window_by_pid(pid)?;
     Ok(pid)
@@ -924,12 +922,12 @@ fn normalize_macos_app_root(path: &Path) -> Option<String> {
 fn resolve_macos_exec_path(path_str: &str) -> Option<PathBuf> {
     let path = PathBuf::from(path_str);
     if let Some(app_root) = normalize_macos_app_root(&path) {
-        let kiro_exec = PathBuf::from(&app_root)
+        let cursor_exec = PathBuf::from(&app_root)
             .join("Contents")
             .join("MacOS")
-            .join("Kiro");
-        if kiro_exec.exists() {
-            return Some(kiro_exec);
+            .join("Cursor");
+        if cursor_exec.exists() {
+            return Some(cursor_exec);
         }
         let electron_exec = PathBuf::from(&app_root)
             .join("Contents")
@@ -955,13 +953,13 @@ fn resolve_macos_exec_path(path_str: &str) -> Option<PathBuf> {
     }
 }
 
-fn detect_kiro_exec_path() -> Option<PathBuf> {
+fn detect_cursor_exec_path() -> Option<PathBuf> {
     #[cfg(target_os = "macos")]
     {
         // On macOS, check well-known paths first to avoid sysinfo TCC dialogs
         let candidates = [
-            "/Applications/Kiro.app/Contents/MacOS/Kiro",
-            "/Applications/Kiro.app/Contents/MacOS/Electron",
+            "/Applications/Cursor.app/Contents/MacOS/Cursor",
+            "/Applications/Cursor.app/Contents/MacOS/Electron",
         ];
         for candidate in candidates {
             let path = PathBuf::from(candidate);
@@ -970,7 +968,7 @@ fn detect_kiro_exec_path() -> Option<PathBuf> {
             }
         }
         // Fallback: try to find from running processes via ps
-        for (pid, _) in collect_kiro_process_entries() {
+        for (pid, _) in collect_cursor_process_entries() {
             if let Ok(output) = Command::new("ps")
                 .args(["-p", &pid.to_string(), "-o", "command="])
                 .output()
@@ -990,7 +988,7 @@ fn detect_kiro_exec_path() -> Option<PathBuf> {
 
     #[cfg(not(target_os = "macos"))]
     {
-        for (pid, _) in collect_kiro_process_entries() {
+        for (pid, _) in collect_cursor_process_entries() {
             let mut system = System::new();
             system.refresh_processes_specifics(
                 sysinfo::ProcessesToUpdate::All,
@@ -1012,13 +1010,13 @@ fn detect_kiro_exec_path() -> Option<PathBuf> {
             candidates.push(
                 Path::new(&local_appdata)
                     .join("Programs")
-                    .join("Kiro")
-                    .join("Kiro.exe"),
+                    .join("Cursor")
+                    .join("Cursor.exe"),
             );
             candidates.push(
                 Path::new(&local_appdata)
                     .join("Programs")
-                    .join("Kiro")
+                    .join("Cursor")
                     .join("Electron.exe"),
             );
         }
@@ -1028,11 +1026,11 @@ fn detect_kiro_exec_path() -> Option<PathBuf> {
             }
         }
         if let Some(path) = modules::process::detect_windows_exec_path_by_signatures(
-            "kiro",
-            &["Kiro.exe", "Electron.exe"],
-            &["kiro"],
-            &["kiro"],
-            &["kiro"],
+            "cursor",
+            &["Cursor.exe", "Electron.exe"],
+            &["cursor"],
+            &["cursor"],
+            &["cursor"],
         ) {
             return Some(path);
         }
@@ -1040,7 +1038,7 @@ fn detect_kiro_exec_path() -> Option<PathBuf> {
 
     #[cfg(target_os = "linux")]
     {
-        let candidates = ["/usr/bin/kiro", "/opt/kiro/kiro"];
+        let candidates = ["/usr/bin/cursor", "/opt/cursor/cursor"];
         for candidate in candidates {
             let path = PathBuf::from(candidate);
             if path.exists() {
@@ -1052,12 +1050,12 @@ fn detect_kiro_exec_path() -> Option<PathBuf> {
     None
 }
 
-fn path_looks_like_kiro(path: &Path) -> bool {
+fn path_looks_like_cursor(path: &Path) -> bool {
     let text = path.to_string_lossy().to_lowercase();
-    text.contains("kiro")
+    text.contains("cursor")
 }
 
-fn normalize_kiro_path_for_config(path: &Path) -> String {
+fn normalize_cursor_path_for_config(path: &Path) -> String {
     #[cfg(target_os = "macos")]
     {
         return normalize_macos_app_root(path)
@@ -1069,44 +1067,44 @@ fn normalize_kiro_path_for_config(path: &Path) -> String {
     }
 }
 
-pub fn detect_and_save_kiro_launch_path(force: bool) -> Option<String> {
+pub fn detect_and_save_cursor_launch_path(force: bool) -> Option<String> {
     let current = modules::config::get_user_config();
-    if !force && normalize_custom_path(&current.kiro_app_path).is_some() {
-        return Some(current.kiro_app_path);
+    if !force && normalize_custom_path(&current.cursor_app_path).is_some() {
+        return Some(current.cursor_app_path);
     }
 
-    let detected = detect_kiro_exec_path()?;
-    let normalized = normalize_kiro_path_for_config(&detected);
-    if current.kiro_app_path != normalized {
+    let detected = detect_cursor_exec_path()?;
+    let normalized = normalize_cursor_path_for_config(&detected);
+    if current.cursor_app_path != normalized {
         let mut next = current.clone();
-        next.kiro_app_path = normalized.clone();
+        next.cursor_app_path = normalized.clone();
         if let Err(err) = modules::config::save_user_config(&next) {
-            modules::logger::log_warn(&format!("保存 Kiro 启动路径失败（已忽略）: {}", err));
+            modules::logger::log_warn(&format!("保存 Cursor 启动路径失败（已忽略）: {}", err));
         }
     }
     Some(normalized)
 }
 
-fn resolve_kiro_launch_path() -> Result<PathBuf, String> {
+fn resolve_cursor_launch_path() -> Result<PathBuf, String> {
     let config = modules::config::get_user_config();
-    if let Some(custom) = normalize_custom_path(&config.kiro_app_path) {
+    if let Some(custom) = normalize_custom_path(&config.cursor_app_path) {
         if let Some(exec) = resolve_macos_exec_path(&custom) {
-            if path_looks_like_kiro(&exec) {
+            if path_looks_like_cursor(&exec) {
                 return Ok(exec);
             }
             modules::logger::log_warn(&format!(
-                "忽略非 Kiro 启动路径配置: {}",
+                "忽略非 Cursor 启动路径配置: {}",
                 exec.to_string_lossy()
             ));
         }
-        return Err("APP_PATH_NOT_FOUND:kiro".to_string());
+        return Err("APP_PATH_NOT_FOUND:cursor".to_string());
     }
 
-    Err("APP_PATH_NOT_FOUND:kiro".to_string())
+    Err("APP_PATH_NOT_FOUND:cursor".to_string())
 }
 
-pub fn ensure_kiro_launch_path_configured() -> Result<(), String> {
-    resolve_kiro_launch_path().map(|_| ())
+pub fn ensure_cursor_launch_path_configured() -> Result<(), String> {
+    resolve_cursor_launch_path().map(|_| ())
 }
 
 #[cfg(target_os = "macos")]
@@ -1120,7 +1118,7 @@ fn sanitize_macos_gui_launch_env(cmd: &mut Command) {
 fn sanitize_macos_gui_launch_env(_cmd: &mut Command) {}
 
 #[cfg(target_os = "windows")]
-fn spawn_kiro_windows(
+fn spawn_cursor_windows(
     launch_path: &Path,
     user_data_dir: &str,
     extra_args: &[String],
@@ -1144,12 +1142,12 @@ fn spawn_kiro_windows(
             cmd.arg(arg.trim());
         }
     }
-    let child = spawn_command_with_trace(&mut cmd).map_err(|e| format!("启动 Kiro 失败: {}", e))?;
+    let child = spawn_command_with_trace(&mut cmd).map_err(|e| format!("启动 Cursor 失败: {}", e))?;
     Ok(child.id())
 }
 
 #[cfg(any(target_os = "macos", target_os = "linux"))]
-fn spawn_kiro_unix(
+fn spawn_cursor_unix(
     launch_path: &Path,
     user_data_dir: &str,
     extra_args: &[String],
@@ -1171,11 +1169,11 @@ fn spawn_kiro_unix(
             cmd.arg(arg.trim());
         }
     }
-    let child = spawn_command_with_trace(&mut cmd).map_err(|e| format!("启动 Kiro 失败: {}", e))?;
+    let child = spawn_command_with_trace(&mut cmd).map_err(|e| format!("启动 Cursor 失败: {}", e))?;
     Ok(child.id())
 }
 
-pub fn start_kiro_with_args_with_new_window(
+pub fn start_cursor_with_args_with_new_window(
     user_data_dir: &str,
     extra_args: &[String],
     use_new_window: bool,
@@ -1184,34 +1182,34 @@ pub fn start_kiro_with_args_with_new_window(
     if target.is_empty() {
         return Err("实例目录为空，无法启动".to_string());
     }
-    let launch_path = resolve_kiro_launch_path()?;
+    let launch_path = resolve_cursor_launch_path()?;
 
     #[cfg(target_os = "windows")]
     {
-        return spawn_kiro_windows(&launch_path, target, extra_args, use_new_window);
+        return spawn_cursor_windows(&launch_path, target, extra_args, use_new_window);
     }
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
     {
-        return spawn_kiro_unix(&launch_path, target, extra_args, use_new_window);
+        return spawn_cursor_unix(&launch_path, target, extra_args, use_new_window);
     }
 
     #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
     {
         let _ = (target, extra_args, use_new_window);
-        Err("Kiro 多开实例仅支持 macOS、Windows 和 Linux".to_string())
+        Err("Cursor 多开实例仅支持 macOS、Windows 和 Linux".to_string())
     }
 }
 
-pub fn start_kiro_default_with_args_with_new_window(
+pub fn start_cursor_default_with_args_with_new_window(
     extra_args: &[String],
     use_new_window: bool,
 ) -> Result<u32, String> {
-    let default_dir = get_default_kiro_user_data_dir()?;
-    start_kiro_with_args_with_new_window(&default_dir.to_string_lossy(), extra_args, use_new_window)
+    let default_dir = get_default_cursor_user_data_dir()?;
+    start_cursor_with_args_with_new_window(&default_dir.to_string_lossy(), extra_args, use_new_window)
 }
 
-pub fn close_kiro(user_data_dirs: &[String], timeout_secs: u64) -> Result<(), String> {
+pub fn close_cursor(user_data_dirs: &[String], timeout_secs: u64) -> Result<(), String> {
     let target_dirs: HashSet<String> = user_data_dirs
         .iter()
         .map(|value| normalize_path_for_compare(value))
@@ -1221,7 +1219,7 @@ pub fn close_kiro(user_data_dirs: &[String], timeout_secs: u64) -> Result<(), St
         return Ok(());
     }
 
-    let default_dir = get_default_kiro_user_data_dir()
+    let default_dir = get_default_cursor_user_data_dir()
         .ok()
         .map(|value| normalize_path_for_compare(&value.to_string_lossy()))
         .filter(|value| !value.is_empty());
@@ -1230,7 +1228,7 @@ pub fn close_kiro(user_data_dirs: &[String], timeout_secs: u64) -> Result<(), St
         .map(|value| target_dirs.contains(value))
         .unwrap_or(false);
 
-    let entries = collect_kiro_process_entries();
+    let entries = collect_cursor_process_entries();
     let mut pids = Vec::new();
     for (pid, dir) in entries {
         match dir.as_ref() {
@@ -1260,7 +1258,7 @@ pub fn close_kiro(user_data_dirs: &[String], timeout_secs: u64) -> Result<(), St
         .collect();
     if !still_running.is_empty() {
         return Err(format!(
-            "无法关闭 Kiro 实例进程，请手动关闭后重试: {:?}",
+            "无法关闭 Cursor 实例进程，请手动关闭后重试: {:?}",
             still_running
         ));
     }
@@ -1268,391 +1266,57 @@ pub fn close_kiro(user_data_dirs: &[String], timeout_secs: u64) -> Result<(), St
     Ok(())
 }
 
-fn ensure_kiro_profile_dir(profile_dir: &Path) -> Result<PathBuf, String> {
-    let dir = profile_dir
-        .join("User")
-        .join("globalStorage")
-        .join("kiro.kiroagent");
-    if !dir.exists() {
-        fs::create_dir_all(&dir).map_err(|e| format!("创建 Kiro profile 目录失败: {}", e))?;
+fn ensure_profile_global_storage(profile_dir: &Path) -> Result<PathBuf, String> {
+    let global_storage = profile_dir.join("User").join("globalStorage");
+    if !global_storage.exists() {
+        fs::create_dir_all(&global_storage).map_err(|e| format!("创建 globalStorage 失败: {}", e))?;
     }
-    Ok(dir)
+    Ok(global_storage)
 }
 
-fn normalize_non_empty_value(value: Option<&str>) -> Option<String> {
-    value.and_then(|raw| {
-        let trimmed = raw.trim();
-        if trimmed.is_empty() {
-            None
-        } else {
-            Some(trimmed.to_string())
-        }
-    })
-}
-
-fn value_by_path<'a>(root: Option<&'a Value>, path: &[&str]) -> Option<&'a Value> {
-    let mut current = root?;
-    for key in path {
-        current = current.as_object()?.get(*key)?;
-    }
-    Some(current)
-}
-
-fn pick_string_by_paths(root: Option<&Value>, paths: &[&[&str]]) -> Option<String> {
-    for path in paths {
-        if let Some(text) = value_by_path(root, path)
-            .and_then(|value| value.as_str())
-            .and_then(|text| normalize_non_empty_value(Some(text)))
-        {
-            return Some(text);
-        }
-    }
-    None
-}
-
-fn normalize_provider_name(value: &str) -> String {
-    match value.trim().to_ascii_lowercase().as_str() {
-        "google" => "Google".to_string(),
-        "github" => "Github".to_string(),
-        "builderid" => "BuilderId".to_string(),
-        "enterprise" => "Enterprise".to_string(),
-        "internal" => "Internal".to_string(),
-        other => normalize_non_empty_value(Some(other)).unwrap_or_default(),
-    }
-}
-
-fn is_social_provider(provider: &str) -> bool {
-    matches!(
-        provider.trim().to_ascii_lowercase().as_str(),
-        "google" | "github"
-    )
-}
-
-fn is_idc_provider(provider: &str) -> bool {
-    matches!(
-        provider.trim().to_ascii_lowercase().as_str(),
-        "enterprise" | "builderid" | "internal"
-    )
-}
-
-fn account_profile_arn(account: &KiroAccount) -> Option<String> {
-    pick_string_by_paths(
-        account.kiro_profile_raw.as_ref(),
-        &[
-            &["arn"],
-            &["profileArn"],
-            &["profile", "arn"],
-            &["account", "arn"],
-        ],
-    )
-    .or_else(|| {
-        pick_string_by_paths(
-            account.kiro_auth_token_raw.as_ref(),
-            &[&["profileArn"], &["profile_arn"], &["arn"]],
-        )
-    })
-}
-
-fn account_profile_name(account: &KiroAccount) -> Option<String> {
-    pick_string_by_paths(
-        account.kiro_profile_raw.as_ref(),
-        &[
-            &["name"],
-            &["profileName"],
-            &["provider"],
-            &["loginProvider"],
-        ],
-    )
-    .or_else(|| {
-        pick_string_by_paths(
-            account.kiro_auth_token_raw.as_ref(),
-            &[&["provider"], &["loginProvider"]],
-        )
-    })
-    .or_else(|| {
-        account
-            .login_provider
-            .as_deref()
-            .and_then(|v| normalize_non_empty_value(Some(v)))
-    })
-}
-
-fn account_provider(account: &KiroAccount) -> Option<String> {
-    pick_string_by_paths(
-        account.kiro_auth_token_raw.as_ref(),
-        &[&["provider"], &["loginProvider"], &["login_option"]],
-    )
-    .or_else(|| {
-        account
-            .login_provider
-            .as_deref()
-            .and_then(|v| normalize_non_empty_value(Some(v)))
-    })
-    .map(|provider| normalize_provider_name(&provider))
-}
-
-fn account_auth_method(account: &KiroAccount, provider: Option<&str>) -> Option<String> {
-    if let Some(provider) = provider {
-        if is_social_provider(provider) {
-            return Some("social".to_string());
-        }
-        if is_idc_provider(provider) {
-            return Some("IdC".to_string());
-        }
-    }
-
-    pick_string_by_paths(account.kiro_auth_token_raw.as_ref(), &[&["authMethod"]])
-}
-
-fn account_expires_at_iso(account: &KiroAccount) -> Option<String> {
-    if let Some(raw_iso) = pick_string_by_paths(
-        account.kiro_auth_token_raw.as_ref(),
-        &[&["expiresAt"], &["expires_at"]],
-    ) {
-        return Some(raw_iso);
-    }
-
-    let mut expires_at = account.expires_at?;
-    if expires_at > 10_000_000_000 {
-        expires_at /= 1000;
-    }
-    chrono::DateTime::from_timestamp(expires_at, 0).map(|dt| dt.to_rfc3339())
-}
-
-fn write_local_auth_token_file(account: &KiroAccount) -> Result<(), String> {
-    let token_path = kiro_account::get_default_kiro_auth_token_path()?;
-    if let Some(parent) = token_path.parent() {
-        if !parent.exists() {
-            fs::create_dir_all(parent).map_err(|e| format!("创建 token 缓存目录失败: {}", e))?;
-        }
-    }
-
-    let mut raw = account
-        .kiro_auth_token_raw
-        .clone()
-        .unwrap_or_else(|| json!({}));
-    if !raw.is_object() {
-        raw = json!({});
-    }
-    let obj = raw
-        .as_object_mut()
-        .ok_or_else(|| "Kiro 授权快照结构异常".to_string())?;
-    let provider = account_provider(account);
-    let auth_method = account_auth_method(account, provider.as_deref());
-    let profile_arn = account_profile_arn(account);
-    obj.insert(
-        "accessToken".to_string(),
-        Value::String(account.access_token.clone()),
-    );
-    if let Some(value) = account
-        .refresh_token
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("refreshToken".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(value) = account
-        .token_type
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("tokenType".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(expires_at_iso) = account_expires_at_iso(account) {
-        obj.insert("expiresAt".to_string(), Value::String(expires_at_iso));
-    }
-    if let Some(value) = profile_arn.as_ref() {
-        obj.insert("profileArn".to_string(), Value::String(value.clone()));
-    }
-    if let Some(value) = provider.as_ref() {
-        obj.insert("provider".to_string(), Value::String(value.clone()));
-        obj.insert("loginProvider".to_string(), Value::String(value.clone()));
-    }
-    if let Some(value) = auth_method.as_ref() {
-        obj.insert("authMethod".to_string(), Value::String(value.clone()));
-    }
-    if let Some(value) = account
-        .idc_region
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("idc_region".to_string(), Value::String(value.to_string()));
-        obj.insert("idcRegion".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(value) = account
-        .issuer_url
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("issuer_url".to_string(), Value::String(value.to_string()));
-        obj.insert("issuerUrl".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(value) = account
-        .client_id
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("client_id".to_string(), Value::String(value.to_string()));
-        obj.insert("clientId".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(value) = account
-        .scopes
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("scopes".to_string(), Value::String(value.to_string()));
-        obj.insert("scope".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(value) = account
-        .login_hint
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("login_hint".to_string(), Value::String(value.to_string()));
-        obj.insert("loginHint".to_string(), Value::String(value.to_string()));
-    }
-    if !account.email.trim().is_empty() {
-        obj.insert("email".to_string(), Value::String(account.email.clone()));
-    }
-    if let Some(value) = account
-        .user_id
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("userId".to_string(), Value::String(value.to_string()));
-        obj.insert("user_id".to_string(), Value::String(value.to_string()));
-    }
-
-    let content =
-        serde_json::to_string_pretty(&raw).map_err(|e| format!("序列化本地 token 失败: {}", e))?;
-    fs::write(&token_path, content)
-        .map_err(|e| format!("写入本地 token 文件失败({}): {}", token_path.display(), e))
-}
-
-fn write_profile_file(profile_dir: &Path, account: &KiroAccount) -> Result<(), String> {
-    let dir = ensure_kiro_profile_dir(profile_dir)?;
-    let profile_path = dir.join("profile.json");
-
-    let mut raw = account
-        .kiro_profile_raw
-        .clone()
-        .unwrap_or_else(|| json!({}));
-    if !raw.is_object() {
-        raw = json!({});
-    }
-
-    let obj = raw
-        .as_object_mut()
-        .ok_or_else(|| "Kiro profile 快照结构异常".to_string())?;
-    let profile_arn = account_profile_arn(account)
-        .or_else(|| account.user_id.clone())
-        .or_else(|| Some(account.email.clone()))
-        .and_then(|value| normalize_non_empty_value(Some(value.as_str())));
-    let profile_name = account_profile_name(account)
-        .or_else(|| account_provider(account))
-        .or_else(|| Some(account.email.clone()))
-        .and_then(|value| normalize_non_empty_value(Some(value.as_str())));
-    if let Some(value) = profile_arn.as_ref() {
-        obj.insert("arn".to_string(), Value::String(value.clone()));
-    }
-    if let Some(value) = profile_name.as_ref() {
-        obj.insert("name".to_string(), Value::String(value.clone()));
-    }
-    if let Some(value) = normalize_non_empty_value(Some(account.email.as_str())) {
-        obj.insert("email".to_string(), Value::String(value));
-    }
-    if let Some(value) = account
-        .user_id
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert("userId".to_string(), Value::String(value.to_string()));
-    }
-    if let Some(value) = account
-        .login_provider
-        .as_ref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty())
-    {
-        obj.insert(
-            "loginProvider".to_string(),
-            Value::String(value.to_string()),
-        );
-    }
-
-    let content = serde_json::to_string_pretty(&raw)
-        .map_err(|e| format!("序列化 profile.json 失败: {}", e))?;
-    fs::write(&profile_path, content)
-        .map_err(|e| format!("写入 profile.json 失败({}): {}", profile_path.display(), e))
-}
-
-fn write_usage_snapshot_if_exists(profile_dir: &Path, account: &KiroAccount) -> Result<(), String> {
-    let Some(usage_raw) = account.kiro_usage_raw.as_ref() else {
-        return Ok(());
-    };
-
+fn ensure_state_db_for_injection(profile_dir: &Path) -> Result<PathBuf, String> {
     let db_path = profile_dir
         .join("User")
         .join("globalStorage")
         .join("state.vscdb");
+    if db_path.exists() {
+        return Ok(db_path);
+    }
+
+    let default_db = cursor_account::get_default_cursor_state_db_path()?;
+    if default_db.exists() {
+        let _ = ensure_profile_global_storage(profile_dir)?;
+        fs::copy(&default_db, &db_path).map_err(|e| format!("复制 state.vscdb 失败: {}", e))?;
+    }
+
     if !db_path.exists() {
-        return Ok(());
+        return Err("未找到 state.vscdb，请先勾选复制当前登录状态或先启动实例一次".to_string());
     }
 
-    let conn = Connection::open(&db_path)
-        .map_err(|e| format!("打开 state.vscdb 失败({}): {}", db_path.display(), e))?;
-
-    // 兼容首次注入时缺表的场景。
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS ItemTable (key TEXT PRIMARY KEY, value TEXT)",
-        [],
-    )
-    .map_err(|e| format!("初始化 ItemTable 失败: {}", e))?;
-
-    let value = serde_json::to_string(usage_raw)
-        .map_err(|e| format!("序列化 Kiro usage 快照失败: {}", e))?;
-
-    let exists: Option<String> = conn
-        .query_row(
-            "SELECT key FROM ItemTable WHERE key = ?1",
-            [KIRO_USAGE_DB_KEY],
-            |row| row.get(0),
-        )
-        .optional()
-        .map_err(|e| format!("查询 Kiro usage key 失败: {}", e))?;
-
-    if exists.is_some() {
-        conn.execute(
-            "UPDATE ItemTable SET value = ?1 WHERE key = ?2",
-            (&value, KIRO_USAGE_DB_KEY),
-        )
-        .map_err(|e| format!("更新 Kiro usage 快照失败: {}", e))?;
-    } else {
-        conn.execute(
-            "INSERT INTO ItemTable (key, value) VALUES (?1, ?2)",
-            (KIRO_USAGE_DB_KEY, &value),
-        )
-        .map_err(|e| format!("写入 Kiro usage 快照失败: {}", e))?;
+    let default_storage = cursor_account::get_default_cursor_data_dir()?
+        .join("User")
+        .join("globalStorage")
+        .join("storage.json");
+    let target_storage = profile_dir
+        .join("User")
+        .join("globalStorage")
+        .join("storage.json");
+    if default_storage.exists() && !target_storage.exists() {
+        let _ = fs::copy(&default_storage, &target_storage);
     }
 
-    Ok(())
+    Ok(db_path)
 }
 
 pub fn inject_account_to_profile(profile_dir: &Path, account_id: &str) -> Result<(), String> {
-    let account = kiro_account::load_account(account_id)
+    let account = cursor_account::load_account(account_id)
         .ok_or_else(|| format!("绑定账号不存在: {}", account_id))?;
-
-    write_local_auth_token_file(&account)?;
-    write_profile_file(profile_dir, &account)?;
-    let _ = write_usage_snapshot_if_exists(profile_dir, &account);
+    let db_path = ensure_state_db_for_injection(profile_dir)?;
+    cursor_account::inject_to_cursor_at_path(&db_path, account_id)?;
+    modules::logger::log_info(&format!(
+        "Cursor 账号注入完成: email={}, db={}",
+        account.email,
+        db_path.to_string_lossy()
+    ));
     Ok(())
 }

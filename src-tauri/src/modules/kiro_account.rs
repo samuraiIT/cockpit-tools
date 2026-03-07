@@ -266,6 +266,10 @@ fn account_matches_payload_identity(
 
     if let (Some(existing), Some(incoming)) = (existing_email, incoming_email) {
         if existing == incoming {
+            // 已有账号有 user_id 而 payload 无时，不按邮箱合并（按唯一标识区分）
+            if existing_user.is_some() && incoming_user_id.is_none() {
+                return false;
+            }
             return true;
         }
     }
@@ -322,10 +326,14 @@ fn accounts_are_duplicates(left: &KiroAccount, right: &KiroAccount) -> bool {
         (left_user.as_ref(), right_user.as_ref()),
         (Some(left), Some(right)) if left == right
     );
-    let email_match = matches!(
+    let email_same = matches!(
         (left_email.as_ref(), right_email.as_ref()),
         (Some(left), Some(right)) if left == right
     );
+    // 一方有 user_id 另一方无时，不单凭邮箱合并（按唯一标识区分）
+    let email_match = email_same
+        && !((left_user.is_some() && right_user.is_none())
+            || (left_user.is_none() && right_user.is_some()));
     let refresh_match = matches!(
         (left_refresh.as_ref(), right_refresh.as_ref()),
         (Some(left), Some(right)) if left == right

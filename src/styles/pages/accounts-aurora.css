@@ -657,44 +657,45 @@
 }
 
 .accounts-page .tier-badge.pro {
-  background: linear-gradient(135deg, #1d4ed8, #0ea5a5);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--plan-pro-bg);
+  color: var(--plan-pro-color);
+  border-color: var(--plan-pro-border);
 }
 
 .accounts-page .tier-badge.ultra {
-  background: linear-gradient(135deg, #f97316, #f59e0b);
-  color: #3f1d00;
-  border-color: rgba(249, 115, 22, 0.4);
+  background: var(--plan-ultra-bg);
+  color: var(--plan-ultra-color);
+  border-color: var(--plan-ultra-border);
 }
 
 .accounts-page .tier-badge.individual {
-  background: rgba(16, 185, 129, 0.14);
-  color: #047857;
-  border-color: rgba(16, 185, 129, 0.3);
+  background: var(--plan-individual-bg);
+  color: var(--plan-individual-color);
+  border-color: var(--plan-individual-border);
 }
 
 .accounts-page .tier-badge.business {
-  background: rgba(59, 130, 246, 0.14);
-  color: #1d4ed8;
-  border-color: rgba(59, 130, 246, 0.28);
+  background: var(--plan-business-bg);
+  color: var(--plan-business-color);
+  border-color: var(--plan-business-border);
 }
 
 .accounts-page .tier-badge.enterprise {
-  background: rgba(245, 158, 11, 0.16);
-  color: #b45309;
-  border-color: rgba(245, 158, 11, 0.35);
+  background: var(--plan-enterprise-bg);
+  color: var(--plan-enterprise-color);
+  border-color: var(--plan-enterprise-border);
 }
 
 .accounts-page .tier-badge.free {
-  background: rgba(148, 163, 184, 0.2);
-  color: var(--text-secondary);
+  background: var(--plan-free-bg);
+  color: var(--plan-free-color);
+  border-color: var(--plan-free-border);
 }
 
 .accounts-page .tier-badge.unknown {
-  background: rgba(239, 68, 68, 0.16);
-  color: #b91c1c;
-  border-color: rgba(239, 68, 68, 0.35);
+  background: var(--plan-unknown-bg);
+  color: var(--plan-unknown-color);
+  border-color: var(--plan-unknown-border);
 }
 
 .accounts-page .status-pill {

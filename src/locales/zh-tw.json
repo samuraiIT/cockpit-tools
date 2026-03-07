@@ -252,6 +252,10 @@
       "initMode": "初始化方式",
       "initModeCopy": "複製來源實例（預設）",
       "initModeEmpty": "空白實例（不複製）",
+      "initModeExistingDir": "使用已存在目錄",
+      "pathExistingDirHint": "以所選目錄為準，不可編輯",
+      "existingDirHint": "選擇已有目錄作為實例目錄，以所選路徑為準，不可編輯。",
+      "bindExistingDirHint": "可選，將已有目錄加入實例列表後可綁定帳號",
       "emptyInitHint": "選擇不複製實例時，只會建立空白目錄。需先啟動一次後，才可綁定帳號。",
       "copySource": "複製來源實例",
       "copySourceDesc": "從選中實例複製配置和登錄數據",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "實例已創建",
       "emptyCreated": "空白實例已建立，請先啟動一次後再綁定帳號",
+      "existingDirCreated": "已使用所選目錄建立實例",
       "updated": "實例已更新",
       "deleted": "實例已刪除",
       "started": "實例已啟動",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "刪除實例",
       "message": "是否刪除實例 {{name}}？這將移除配置並刪除實例目錄。"
+    },
+    "import": {
+      "btnTitle": "匯入已存在目錄",
+      "title": "匯入已存在目錄",
+      "dirLabel": "選擇實例目錄",
+      "dirPlaceholder": "點擊選擇目錄",
+      "dirHint": "將本地已有目錄註冊為實例，不會移動或修改任何檔案",
+      "changeDir": "重新選擇",
+      "bindLabel": "綁定帳號（可選）",
+      "bindHint": "可稍後在實例列表中綁定",
+      "pathRequired": "請先選擇目錄",
+      "submit": "匯入"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "預設路徑",
       "kiroPathSelect": "選擇",
       "kiroPathReset": "重設為預設值",
+      "cursorPathReset": "重設預設值",
       "codexLaunchOnSwitch": "切換 Codex 時自動啟動 Codex App",
       "codexLaunchOnSwitchDesc": "切換帳號後自動啟動或重新啟動 Codex App",
       "autoUpdate": "背景自動更新",
@@ -1296,7 +1314,12 @@
       "title": "基羅設定",
       "appPath": "基羅之路"
     },
-    "kiroRefreshInterval": "自動刷新配額"
+    "kiroRefreshInterval": "自動刷新配額",
+    "cursor": {
+      "title": "Cursor 設定",
+      "appPath": "Cursor 路徑"
+    },
+    "cursorRefreshInterval": "配額自動更新"
   },
   "quotaAlert": {
     "bannerText": "帳號 {{email}} 觸發配額預警（閾值 {{threshold}}%，最低 {{lowest}}%，模型：{{models}}）",
@@ -1438,6 +1461,45 @@
       "localClient": "從當地Kiro進口"
     },
     "injectToVSCode": "切換到基羅"
+  },
+  "cursor": {
+    "subscription": "訂閱方案",
+    "injectToCursor": "切換至 Cursor",
+    "quota": {
+      "onDemand": "按需使用"
+    },
+    "title": "Cursor 帳號管理",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Cursor 多開實例僅支援 macOS、Windows 和 Linux。"
+      }
+    },
+    "empty": {
+      "description": "點擊「新增帳號」開始管理您的 Cursor 帳號"
+    },
+    "addModal": {
+      "title": "新增 Cursor 帳號"
+    },
+    "token": {
+      "desc": "貼上您的 Cursor 存取權杖（JWT）或匯出的 JSON 資料。",
+      "formatHint": "必填欄位與範例（點擊展開）",
+      "formatRequired": "單一權杖：直接貼上 JWT；批次匯入：使用 JSON 陣列格式",
+      "singleExample": "單一範例（JWT）",
+      "batchExample": "批次範例（JSON）"
+    },
+    "import": {
+      "localDesc": "從本機 Cursor 用戶端或 JSON 檔案匯入帳號資料。",
+      "localClient": "從本機 Cursor 匯入"
+    },
+    "flowNotice": {
+      "title": "Cursor 帳號指南（點擊展開/收合）",
+      "desc": "透過從本機 Cursor 安裝匯入或貼上 JWT 權杖來管理 Cursor 帳號。資料僅在本機處理。",
+      "reason": "權限範圍：讀取 Cursor 本機驗證儲存以進行帳號匯入和權杖注入。",
+      "storage": "資料範圍：僅讀取/更新 Cursor 驗證工作階段相關項目；不會上傳任何金鑰/權杖。"
+    },
+    "oauth": {
+      "desc": "點擊下方按鈕，在瀏覽器中完成 Cursor 授權登入。"
+    }
   },
   "breakout": {
     "gameOver": "本局結束",

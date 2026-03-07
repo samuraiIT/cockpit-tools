@@ -252,6 +252,10 @@
       "initMode": "Mode d'initialisation",
       "initModeCopy": "Copier depuis l'instance source (par défaut)",
       "initModeEmpty": "Instance vide (sans copie)",
+      "initModeExistingDir": "Utiliser un répertoire existant",
+      "pathExistingDirHint": "Le chemin est défini par la sélection et ne peut pas être modifié",
+      "existingDirHint": "Utiliser un répertoire existant comme répertoire d'instance ; le chemin choisi est définitif et ne peut pas être modifié.",
+      "bindExistingDirHint": "Optionnel ; vous pouvez lier un compte après avoir ajouté le répertoire à la liste",
       "emptyInitHint": "Si vous choisissez sans copie, seul un dossier vide sera créé. Démarrez une fois avant de lier un compte.",
       "copySource": "Copier une instance source",
       "copySourceDesc": "Copier la configuration et les données de connexion de l'instance sélectionnée",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Instance créée",
       "emptyCreated": "Instance vide créée. Démarrez-la une fois avant de lier un compte.",
+      "existingDirCreated": "Instance créée en utilisant le répertoire sélectionné.",
       "updated": "Instance mise à jour",
       "deleted": "Instance supprimée",
       "started": "Instance démarrée",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Supprimer l'instance",
       "message": "Supprimer l'instance {{name}} ? Cela supprimera la configuration et le dossier de l'instance."
+    },
+    "import": {
+      "btnTitle": "Importer un répertoire existant",
+      "title": "Importer un répertoire existant",
+      "dirLabel": "Sélectionner le répertoire d'instance",
+      "dirPlaceholder": "Cliquez pour sélectionner un répertoire",
+      "dirHint": "Enregistre un répertoire local existant comme instance sans déplacer ni modifier de fichiers",
+      "changeDir": "Changer",
+      "bindLabel": "Lier un compte (optionnel)",
+      "bindHint": "Vous pouvez lier un compte plus tard depuis la liste des instances",
+      "pathRequired": "Veuillez d'abord sélectionner un répertoire",
+      "submit": "Importer"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Chemin par défaut",
       "kiroPathSelect": "Sélectionner",
       "kiroPathReset": "Réinitialiser aux valeurs par défaut",
+      "cursorPathReset": "Réinitialiser par défaut",
       "codexLaunchOnSwitch": "Lancer Codex App lors du changement de Codex",
       "codexLaunchOnSwitchDesc": "Démarrer ou redémarrer automatiquement Codex App après un changement de compte",
       "autoUpdate": "Mise à jour automatique en arrière-plan",
@@ -1296,7 +1314,12 @@
       "title": "Paramètres Kiro",
       "appPath": "Chemin Kiro"
     },
-    "kiroRefreshInterval": "Quota de rafraîchissement automatique"
+    "kiroRefreshInterval": "Quota de rafraîchissement automatique",
+    "cursor": {
+      "title": "Paramètres Cursor",
+      "appPath": "Chemin Cursor"
+    },
+    "cursorRefreshInterval": "Actualisation auto du quota"
   },
   "quotaAlert": {
     "bannerText": "Alerte de quota pour {{email}} (seuil {{threshold}} %, minimum {{lowest}} %, modèles : {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Importer depuis Kiro local"
     },
     "injectToVSCode": "Passer à Kiro"
+  },
+  "cursor": {
+    "subscription": "Abonnement",
+    "injectToCursor": "Basculer vers Cursor",
+    "quota": {
+      "onDemand": "À la demande"
+    },
+    "title": "Gestion des comptes Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Les instances multiples de Cursor sont prises en charge uniquement sur macOS, Windows et Linux."
+      }
+    },
+    "empty": {
+      "description": "Cliquez sur « Ajouter un compte » pour commencer à gérer vos comptes Cursor"
+    },
+    "addModal": {
+      "title": "Ajouter un compte Cursor"
+    },
+    "token": {
+      "desc": "Collez votre jeton d'accès Cursor (JWT) ou des données JSON exportées.",
+      "formatHint": "Champs obligatoires et exemples (cliquer pour développer)",
+      "formatRequired": "Jeton unique : collez le JWT directement ; import en lot : utilisez le format tableau JSON",
+      "singleExample": "Exemple unique (JWT)",
+      "batchExample": "Exemple en lot (JSON)"
+    },
+    "import": {
+      "localDesc": "Importer les données de compte depuis le client Cursor local ou un fichier JSON.",
+      "localClient": "Importer depuis Cursor local"
+    },
+    "flowNotice": {
+      "title": "Guide du compte Cursor (cliquer pour développer/réduire)",
+      "desc": "Gérez les comptes Cursor en important depuis l'installation locale de Cursor ou en collant des jetons JWT. Les données sont traitées uniquement en local.",
+      "reason": "Portée des autorisations : lecture du stockage d'authentification local de Cursor pour l'import de compte et l'injection de jeton.",
+      "storage": "Portée des données : seuls les enregistrements de session d'authentification Cursor sont lus/mis à jour ; aucune clé/jeton n'est téléversée."
+    },
+    "oauth": {
+      "desc": "Cliquez sur le bouton ci-dessous et terminez l'autorisation Cursor dans le navigateur."
+    }
   },
   "breakout": {
     "gameOver": "Partie terminée",

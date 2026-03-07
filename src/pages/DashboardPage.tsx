@@ -5,6 +5,7 @@ import { useCodexAccountStore } from '../stores/useCodexAccountStore';
 import { useGitHubCopilotAccountStore } from '../stores/useGitHubCopilotAccountStore';
 import { useWindsurfAccountStore } from '../stores/useWindsurfAccountStore';
 import { useKiroAccountStore } from '../stores/useKiroAccountStore';
+import { useCursorAccountStore } from '../stores/useCursorAccountStore';
 import { usePlatformLayoutStore } from '../stores/usePlatformLayoutStore';
 import { Page } from '../types/navigation';
 import { Users, CheckCircle2, Sparkles, RotateCw, Play, Github, HelpCircle } from 'lucide-react';
@@ -20,12 +21,14 @@ import {
   getKiroCreditsSummary,
   isKiroAccountBanned,
 } from '../types/kiro';
+import { CursorAccount, getCursorUsage } from '../types/cursor';
 import './DashboardPage.css';
 import { AnnouncementCenter } from '../components/AnnouncementCenter';
 import { RobotIcon } from '../components/icons/RobotIcon';
 import { CodexIcon } from '../components/icons/CodexIcon';
 import { WindsurfIcon } from '../components/icons/WindsurfIcon';
 import { KiroIcon } from '../components/icons/KiroIcon';
+import { CursorIcon } from '../components/icons/CursorIcon';
 import { PlatformId, PLATFORM_PAGE_MAP } from '../types/platform';
 import { getPlatformLabel, renderPlatformIcon } from '../utils/platformMeta';
 import { isPrivacyModeEnabledByDefault, maskSensitiveValue } from '../utils/privacy';
@@ -34,6 +37,7 @@ import {
   buildAntigravityAccountPresentation,
   buildCodexAccountPresentation,
   buildGitHubCopilotAccountPresentation,
+  buildCursorAccountPresentation,
   buildKiroAccountPresentation,
   buildWindsurfAccountPresentation,
 } from '../presentation/platformAccountPresentation';
@@ -47,6 +51,7 @@ interface DashboardPageProps {
 const GHCP_CURRENT_ACCOUNT_ID_KEY = 'agtools.github_copilot.current_account_id';
 const WINDSURF_CURRENT_ACCOUNT_ID_KEY = 'agtools.windsurf.current_account_id';
 const KIRO_CURRENT_ACCOUNT_ID_KEY = 'agtools.kiro.current_account_id';
+const CURSOR_CURRENT_ACCOUNT_ID_KEY = 'agtools.cursor.current_account_id';
 const DASHBOARD_DEFERRED_PREFETCH_DELAY_MS = 1200;
 let dashboardStartupPrefetched = false;
 
@@ -131,6 +136,13 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
     switchAccount: switchKiroAccount,
   } = useKiroAccountStore();
 
+  // Cursor Data
+  const {
+    accounts: cursorAccounts,
+    fetchAccounts: fetchCursorAccounts,
+    switchAccount: switchCursorAccount,
+  } = useCursorAccountStore();
+
   const agCurrentId = agCurrent?.id;
   const codexCurrentId = codexCurrent?.id;
 
@@ -174,6 +186,7 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
         fetchGitHubCopilotAccounts(),
         fetchWindsurfAccounts(),
         fetchKiroAccounts(),
+        fetchCursorAccounts(),
       ]);
     };
 
@@ -200,14 +213,16 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
         codexAccounts.length +
         githubCopilotAccounts.length +
         windsurfAccounts.length +
-        kiroAccounts.length,
+        kiroAccounts.length +
+        cursorAccounts.length,
       antigravity: agAccounts.length,
       codex: codexAccounts.length,
       githubCopilot: githubCopilotAccounts.length,
       windsurf: windsurfAccounts.length,
       kiro: kiroAccounts.length,
+      cursor: cursorAccounts.length,
     };
-  }, [agAccounts, codexAccounts, githubCopilotAccounts, windsurfAccounts, kiroAccounts]);
+  }, [agAccounts, codexAccounts, githubCopilotAccounts, windsurfAccounts, kiroAccounts, cursorAccounts]);
 
   // Refresh States
   const [refreshing, setRefreshing] = React.useState<Set<string>>(new Set());
@@ -233,18 +248,27 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
       return null;
     }
   });
+  const [cursorCurrentId, setCursorCurrentId] = React.useState<string | null>(() => {
+    try {
+      return localStorage.getItem(CURSOR_CURRENT_ACCOUNT_ID_KEY);
+    } catch {
+      return null;
+    }
+  });
   const [cardRefreshing, setCardRefreshing] = React.useState<{
     ag: boolean;
     codex: boolean;
     githubCopilot: boolean;
     windsurf: boolean;
     kiro: boolean;
+    cursor: boolean;
   }>({
     ag: false,
     codex: false,
     githubCopilot: false,
     windsurf: false,
     kiro: false,
+    cursor: false,
   });
 
   // Refresh Handlers
@@ -317,6 +341,22 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
     setRefreshing((prev) => new Set(prev).add(accountId));
     try {
       await useKiroAccountStore.getState().refreshToken(accountId);
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    } finally {
+      setRefreshing((prev) => {
+        const next = new Set(prev);
+        next.delete(accountId);
+        return next;
+      });
+    }
+  };
+
+  const handleRefreshCursor = async (accountId: string) => {
+    if (refreshing.has(accountId)) return;
+    setRefreshing((prev) => new Set(prev).add(accountId));
+    try {
+      await useCursorAccountStore.getState().refreshToken(accountId);
     } catch (error) {
       console.error('Refresh failed:', error);
     } finally {
@@ -403,6 +443,21 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
     }
   };
 
+  const handleRefreshCursorCard = async () => {
+    if (cardRefreshing.cursor) return;
+    setCardRefreshing((prev) => ({ ...prev, cursor: true }));
+    const idsToRefresh = [cursorCurrent?.id, cursorRecommended?.id].filter(Boolean) as string[];
+    try {
+      for (const id of idsToRefresh) {
+        await useCursorAccountStore.getState().refreshToken(id);
+      }
+    } catch (error) {
+      console.error('Card refresh failed:', error);
+    } finally {
+      setCardRefreshing((prev) => ({ ...prev, cursor: false }));
+    }
+  };
+
   const handleSwitchGitHubCopilot = async (accountId: string) => {
     if (switching.has(accountId)) return;
     setSwitching((prev) => new Set(prev).add(accountId));
@@ -446,6 +501,24 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
       await switchKiroAccount(accountId);
       setKiroCurrentId(accountId);
       localStorage.setItem(KIRO_CURRENT_ACCOUNT_ID_KEY, accountId);
+    } catch (error) {
+      console.error('Switch failed:', error);
+    } finally {
+      setSwitching((prev) => {
+        const next = new Set(prev);
+        next.delete(accountId);
+        return next;
+      });
+    }
+  };
+
+  const handleSwitchCursor = async (accountId: string) => {
+    if (switching.has(accountId)) return;
+    setSwitching((prev) => new Set(prev).add(accountId));
+    try {
+      await switchCursorAccount(accountId);
+      setCursorCurrentId(accountId);
+      localStorage.setItem(CURSOR_CURRENT_ACCOUNT_ID_KEY, accountId);
     } catch (error) {
       console.error('Switch failed:', error);
     } finally {
@@ -542,6 +615,27 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
       return currScore > prevScore ? curr : prev;
     });
   }, [kiroAccounts, kiroCurrentId]);
+
+  const cursorCurrent = useMemo(() => {
+    if (cursorAccounts.length === 0) return null;
+    if (cursorCurrentId) {
+      const current = cursorAccounts.find((account) => account.id === cursorCurrentId);
+      if (current) return current;
+    }
+    return cursorAccounts.reduce((prev, curr) => {
+      const prevScore = prev.last_used || prev.created_at || 0;
+      const currScore = curr.last_used || curr.created_at || 0;
+      return currScore > prevScore ? curr : prev;
+    });
+  }, [cursorAccounts, cursorCurrentId]);
+
+  React.useEffect(() => {
+    if (!cursorCurrentId) return;
+    const exists = cursorAccounts.some((account) => account.id === cursorCurrentId);
+    if (exists) return;
+    setCursorCurrentId(null);
+    localStorage.removeItem(CURSOR_CURRENT_ACCOUNT_ID_KEY);
+  }, [cursorAccounts, cursorCurrentId]);
 
   React.useEffect(() => {
     if (!githubCopilotCurrentId) return;
@@ -643,6 +737,72 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
 
     return others.reduce((prev, curr) => (getScore(curr) > getScore(prev) ? curr : prev));
   }, [kiroAccounts, kiroCurrent?.id]);
+
+  const cursorRecommended = useMemo(() => {
+    if (cursorAccounts.length <= 1) return null;
+    const currentId = cursorCurrent?.id;
+    const others = cursorAccounts.filter((a) => a.id !== currentId);
+    if (others.length === 0) return null;
+
+    const getScore = (account: CursorAccount) => {
+      const usage = getCursorUsage(account);
+      const planLimit = toFiniteNumber(usage.planLimitCents);
+      const planUsedRaw = toFiniteNumber(usage.planUsedCents);
+      const hasPlanBudget = planLimit != null && planLimit > 0;
+      const planUsed = planUsedRaw != null ? Math.max(planUsedRaw, 0) : null;
+      const remainingBudget = hasPlanBudget
+        ? Math.max((planLimit ?? 0) - (planUsed ?? 0), 0)
+        : -1;
+
+      const totalUsedPercent = toFiniteNumber(
+        usage.totalPercentUsed ??
+          (hasPlanBudget && planUsed != null && planLimit != null && planLimit > 0
+            ? (planUsed / planLimit) * 100
+            : null),
+      );
+      const usedPercentList = [
+        totalUsedPercent,
+        toFiniteNumber(usage.autoPercentUsed),
+        toFiniteNumber(usage.apiPercentUsed),
+      ].filter((value): value is number => value != null);
+      const avgUsedPercent = usedPercentList.length > 0
+        ? usedPercentList.reduce((sum, value) => sum + value, 0) / usedPercentList.length
+        : 101;
+
+      return {
+        hasPlanBudget,
+        remainingBudget,
+        avgUsedPercent,
+        freshness: account.last_used || account.created_at || 0,
+      };
+    };
+
+    return others.reduce((best, candidate) => {
+      const bestScore = getScore(best);
+      const candidateScore = getScore(candidate);
+
+      // 优先推荐有明确套餐额度（limit > 0）的账号，避免 0/0 FREE 抢占推荐位。
+      if (bestScore.hasPlanBudget !== candidateScore.hasPlanBudget) {
+        return candidateScore.hasPlanBudget ? candidate : best;
+      }
+
+      // 主排序：按剩余额度（limit - used）降序。
+      if (bestScore.remainingBudget !== candidateScore.remainingBudget) {
+        return candidateScore.remainingBudget > bestScore.remainingBudget
+          ? candidate
+          : best;
+      }
+
+      // 兜底：同剩余额度时，已用百分比更低优先；再按最近使用时间。
+      if (bestScore.avgUsedPercent !== candidateScore.avgUsedPercent) {
+        return candidateScore.avgUsedPercent < bestScore.avgUsedPercent
+          ? candidate
+          : best;
+      }
+
+      return candidateScore.freshness > bestScore.freshness ? candidate : best;
+    });
+  }, [cursorAccounts, cursorCurrent?.id]);
 
   // Render Helpers
   const renderAgAccountContent = (account: Account | null) => {
@@ -1044,12 +1204,95 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
     );
   };
 
+  const renderCursorAccountContent = (account: CursorAccount | null) => {
+    if (!account) return <div className="empty-slot">{t('dashboard.noAccount', '无账号')}</div>;
+
+    const presentation = buildCursorAccountPresentation(account, t);
+    const totalMetric = presentation.quotaItems.find((item) => item.key === 'total') || null;
+    const secondaryMetrics = presentation.quotaItems.filter((item) =>
+      item.key === 'auto' || item.key === 'api' || item.key === 'on_demand',
+    );
+    const isRefreshing = refreshing.has(account.id);
+    const isSwitching = switching.has(account.id);
+
+    return (
+      <div className="account-mini-card">
+        <div className="account-mini-header">
+          <div className="account-info-row">
+            <span className="account-email" title={maskAccountText(presentation.displayName)}>
+              {maskAccountText(presentation.displayName)}
+            </span>
+            <span className={`tier-tag ${presentation.planClass}`}>{presentation.planLabel}</span>
+          </div>
+        </div>
+
+        <div className="account-mini-quotas">
+          <div className="mini-quota-row-stacked">
+            <div className="mini-quota-header">
+              <span className="model-name">{totalMetric?.label || 'Total Usage'}</span>
+              <span className={`model-pct ${totalMetric?.quotaClass || ''}`}>
+                {totalMetric?.valueText || '-'}
+              </span>
+            </div>
+            <div className="mini-progress-track">
+              <div
+                className={`mini-progress-bar ${totalMetric?.quotaClass || ''}`}
+                style={{ width: `${totalMetric?.percentage ?? 0}%` }}
+              />
+            </div>
+            {totalMetric?.resetText && (
+              <div className="mini-reset-time">{totalMetric.resetText}</div>
+            )}
+          </div>
+
+          {secondaryMetrics.map((metric) => (
+            <div className="mini-quota-row-stacked" key={metric.key}>
+              <div className="mini-quota-header">
+                <span className="model-name">{metric.label}</span>
+                <span className={`model-pct ${metric.quotaClass || ''}`}>{metric.valueText || '-'}</span>
+              </div>
+              <div className="mini-progress-track">
+                <div
+                  className={`mini-progress-bar ${metric.quotaClass || ''}`}
+                  style={{ width: `${metric.percentage ?? 0}%` }}
+                />
+              </div>
+              {metric.resetText && (
+                <div className="mini-reset-time">{metric.resetText}</div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="account-mini-actions icon-only-row">
+          <button
+            className="mini-icon-btn"
+            onClick={() => handleRefreshCursor(account.id)}
+            title={t('common.refresh', '刷新')}
+            disabled={isRefreshing || isSwitching}
+          >
+            <RotateCw size={14} className={isRefreshing ? 'loading-spinner' : ''} />
+          </button>
+          <button
+            className="mini-icon-btn"
+            onClick={() => handleSwitchCursor(account.id)}
+            title={t('dashboard.switch', '切换')}
+            disabled={isSwitching || presentation.isBanned}
+          >
+            {isSwitching ? <RotateCw size={14} className="loading-spinner" /> : <Play size={14} />}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const platformCounts: Record<PlatformId, number> = {
     antigravity: stats.antigravity,
     codex: stats.codex,
     'github-copilot': stats.githubCopilot,
     windsurf: stats.windsurf,
     kiro: stats.kiro,
+    cursor: stats.cursor,
   };
 
   const visibleCardPlatformIds = visiblePlatformOrder;
@@ -1283,6 +1526,50 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
       );
     }
 
+    if (platformId === 'cursor') {
+      return (
+        <div className="main-card windsurf-card" key={platformId}>
+          <div className="main-card-header">
+            <div className="header-title">
+              <CursorIcon style={{ width: 18, height: 18 }} />
+              <h3>Cursor</h3>
+            </div>
+            <button
+              className="header-action-btn"
+              onClick={handleRefreshCursorCard}
+              disabled={cardRefreshing.cursor}
+              title={t('common.refresh', '刷新')}
+            >
+              <RotateCw size={14} className={cardRefreshing.cursor ? 'loading-spinner' : ''} />
+              <span>{t('common.refresh', '刷新')}</span>
+            </button>
+          </div>
+
+          <div className="split-content">
+            <div className="split-half current-half">
+              <span className="half-label"><CheckCircle2 size={12} /> {t('dashboard.current', '当前账户')}</span>
+              {renderCursorAccountContent(cursorCurrent)}
+            </div>
+
+            <div className="split-divider"></div>
+
+            <div className="split-half recommend-half">
+              <span className="half-label"><Sparkles size={12} /> {t('dashboard.recommended', '推荐账号')}</span>
+              {cursorRecommended ? (
+                renderCursorAccountContent(cursorRecommended)
+              ) : (
+                <div className="empty-slot-text">{t('dashboard.noRecommendation', '暂无更好推荐')}</div>
+              )}
+            </div>
+          </div>
+
+          <button className="card-footer-action" onClick={() => onNavigate('cursor')}>
+            {t('dashboard.viewAllAccounts', '查看所有账号')}
+          </button>
+        </div>
+      );
+    }
+
     return null;
   };
 
@@ -1328,6 +1615,8 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
               ? 'github'
               : platformId === 'kiro'
                 ? 'github'
+              : platformId === 'cursor'
+                ? 'info'
               : 'windsurf';
           return (
             <button

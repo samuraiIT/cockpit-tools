@@ -648,8 +648,17 @@ pub fn create_instance(params: CreateInstanceParams) -> Result<InstanceProfile, 
         .unwrap_or("copy")
         .to_ascii_lowercase();
     let create_empty = init_mode == "empty";
+    let use_existing_dir = init_mode == "existingdir" || init_mode == "existing_dir";
 
-    if create_empty {
+    if use_existing_dir {
+        if !user_dir_path.exists() {
+            let resolved = instance_store::display_path(&user_dir_path);
+            return Err(format!("所选目录不存在: {}", resolved));
+        }
+        if !user_dir_path.is_dir() {
+            return Err("所选路径不是目录".to_string());
+        }
+    } else if create_empty {
         if user_dir_path.exists() {
             let mut has_entries = false;
             if let Ok(mut iter) = fs::read_dir(&user_dir_path) {

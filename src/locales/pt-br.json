@@ -252,6 +252,10 @@
       "initMode": "Modo de inicialização",
       "initModeCopy": "Copiar instância de origem (padrão)",
       "initModeEmpty": "Instância em branco (sem copiar)",
+      "initModeExistingDir": "Usar diretório existente",
+      "pathExistingDirHint": "O caminho é definido pela seleção e não pode ser editado",
+      "existingDirHint": "Use um diretório existente como diretório da instância; o caminho selecionado é final e não pode ser editado.",
+      "bindExistingDirHint": "Opcional; você pode vincular uma conta após adicionar o diretório à lista",
       "emptyInitHint": "Ao escolher sem cópia, apenas um diretório em branco será criado. Inicie uma vez antes de vincular a conta.",
       "copySource": "Copiar instância de origem",
       "copySourceDesc": "Copiar configuração e dados de login da instância selecionada",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Instância criada",
       "emptyCreated": "Instância em branco criada. Inicie uma vez antes de vincular a conta.",
+      "existingDirCreated": "Instância criada usando o diretório selecionado.",
       "updated": "Instância atualizada",
       "deleted": "Instância excluída",
       "started": "Instância iniciada",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Excluir instância",
       "message": "Excluir instância {{name}}? Isso removerá a configuração e excluirá a pasta da instância."
+    },
+    "import": {
+      "btnTitle": "Importar diretório existente",
+      "title": "Importar diretório existente",
+      "dirLabel": "Selecionar diretório da instância",
+      "dirPlaceholder": "Clique para selecionar um diretório",
+      "dirHint": "Registra um diretório local existente como instância sem mover ou modificar arquivos",
+      "changeDir": "Alterar",
+      "bindLabel": "Vincular conta (opcional)",
+      "bindHint": "Você pode vincular uma conta depois pela lista de instâncias",
+      "pathRequired": "Selecione um diretório primeiro",
+      "submit": "Importar"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Caminho padrão",
       "kiroPathSelect": "Selecione",
       "kiroPathReset": "Redefinir para o padrão",
+      "cursorPathReset": "Redefinir padrão",
       "codexLaunchOnSwitch": "Iniciar Codex App ao trocar Codex",
       "codexLaunchOnSwitchDesc": "Iniciar ou reiniciar automaticamente o Codex App após trocar de conta",
       "autoUpdate": "Atualização automática em segundo plano",
@@ -1296,7 +1314,12 @@
       "title": "Configurações do Kiro",
       "appPath": "Caminho Kiro"
     },
-    "kiroRefreshInterval": "Cota de atualização automática"
+    "kiroRefreshInterval": "Cota de atualização automática",
+    "cursor": {
+      "title": "Configurações do Cursor",
+      "appPath": "Caminho do Cursor"
+    },
+    "cursorRefreshInterval": "Atualização automática de cota"
   },
   "quotaAlert": {
     "bannerText": "Alerta de cota para {{email}} (limite {{threshold}}%, mínimo {{lowest}}%, modelos: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Importar do Kiro local"
     },
     "injectToVSCode": "Mudar para Kiro"
+  },
+  "cursor": {
+    "subscription": "Assinatura",
+    "injectToCursor": "Alternar para Cursor",
+    "quota": {
+      "onDemand": "Sob demanda"
+    },
+    "title": "Gerenciamento de contas Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Múltiplas instâncias do Cursor são compatíveis apenas com macOS, Windows e Linux."
+      }
+    },
+    "empty": {
+      "description": "Clique em \"Adicionar conta\" para começar a gerenciar suas contas Cursor"
+    },
+    "addModal": {
+      "title": "Adicionar conta Cursor"
+    },
+    "token": {
+      "desc": "Cole seu token de acesso do Cursor (JWT) ou dados JSON exportados.",
+      "formatHint": "Campos obrigatórios e exemplos (clique para expandir)",
+      "formatRequired": "Token único: cole o JWT diretamente; importação em lote: use o formato de array JSON",
+      "singleExample": "Exemplo único (JWT)",
+      "batchExample": "Exemplo em lote (JSON)"
+    },
+    "import": {
+      "localDesc": "Importar dados da conta do cliente Cursor local ou de um arquivo JSON.",
+      "localClient": "Importar do Cursor local"
+    },
+    "flowNotice": {
+      "title": "Guia de conta Cursor (clique para expandir/recolher)",
+      "desc": "Gerencie contas Cursor importando da instalação local do Cursor ou colando tokens JWT. Os dados são processados apenas localmente.",
+      "reason": "Escopo de permissões: leitura do armazenamento de autenticação local do Cursor para importação de conta e injeção de token.",
+      "storage": "Escopo de dados: apenas registros de sessão de autenticação do Cursor são lidos/atualizados; nenhuma chave/token é enviada."
+    },
+    "oauth": {
+      "desc": "Clique no botão abaixo e conclua a autorização do Cursor no navegador."
+    }
   },
   "breakout": {
     "gameOver": "Fim de jogo",

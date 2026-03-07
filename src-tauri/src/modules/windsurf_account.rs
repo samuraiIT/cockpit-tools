@@ -399,17 +399,14 @@ fn deduplicate_accounts_by_identity() -> Result<(), String> {
 
     let mut groups: Vec<Vec<WindsurfAccount>> = Vec::new();
     for account in accounts {
-        let account_keys = build_account_identity_keys(&account);
+        // 仅按 github_id 分组合并，同邮箱不同 github_id 不合并
         let mut matched_indices: Vec<usize> = groups
             .iter()
             .enumerate()
             .filter(|(_, group)| {
                 group.iter().any(|existing| {
-                    if !account_apis_are_compatible(&account, existing) {
-                        return false;
-                    }
-                    let existing_keys = build_account_identity_keys(existing);
-                    has_shared_identity_keys(&account_keys, &existing_keys)
+                    existing.github_id == account.github_id
+                        && account_apis_are_compatible(&account, existing)
                 })
             })
             .map(|(idx, _)| idx)
@@ -688,19 +685,21 @@ pub fn upsert_account(payload: WindsurfOAuthCompletePayload) -> Result<WindsurfA
     let now = now_ts();
     let mut index = load_account_index();
     let normalized_login = normalize_login(&payload);
-    let payload_identity_keys = build_payload_identity_keys(&payload, &normalized_login);
     let payload_api_key = resolve_payload_api_key(&payload);
     let generated_id = format!(
         "windsurf_{:x}",
         md5::compute(format!("{}:{}", normalized_login, payload.github_id))
     );
-    let payload_identity_key_set: HashSet<String> = payload_identity_keys.into_iter().collect();
 
+    // 以 github_id 唯一标识区分账号，同邮箱不同 GitHub 账号不合并
     let account_id = index
         .accounts
         .iter()
         .filter_map(|item| load_account(&item.id))
         .find(|account| {
+            if account.github_id != payload.github_id {
+                return false;
+            }
             if let (Some(incoming_api), Some(existing_api)) = (
                 payload_api_key.as_ref(),
                 resolve_account_api_key(account).as_ref(),
@@ -709,17 +708,7 @@ pub fn upsert_account(payload: WindsurfOAuthCompletePayload) -> Result<WindsurfA
                     return false;
                 }
             }
-
-            let account_match_keys = build_account_match_keys(account);
-            if account_match_keys
-                .iter()
-                .any(|key| payload_identity_key_set.contains(key))
-            {
-                return true;
-            }
-            normalize_non_empty(Some(account.github_login.as_str()))
-                .map(|login| login.eq_ignore_ascii_case(&normalized_login))
-                .unwrap_or(false)
+            true
         })
         .map(|account| account.id)
         .unwrap_or(generated_id);

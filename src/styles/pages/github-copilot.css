@@ -304,53 +304,73 @@
   letter-spacing: 0.05em;
 }
 
+.cursor-accounts-page .ghcp-account-card .tier-badge,
+.cursor-accounts-page .account-table .tier-badge {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .ghcp-account-card .tier-badge.free,
 .ghcp-accounts-page .account-table .tier-badge.free {
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-  color: white;
+  background: var(--plan-free-bg);
+  color: var(--plan-free-color);
+  border: 1px solid var(--plan-free-border);
 }
 
 .ghcp-account-card .tier-badge.individual,
 .ghcp-accounts-page .account-table .tier-badge.individual {
-  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
-  color: white;
+  background: var(--plan-individual-bg);
+  color: var(--plan-individual-color);
+  border: 1px solid var(--plan-individual-border);
 }
 
 .ghcp-account-card .tier-badge.business,
 .ghcp-accounts-page .account-table .tier-badge.business {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  color: white;
+  background: var(--plan-business-bg);
+  color: var(--plan-business-color);
+  border: 1px solid var(--plan-business-border);
 }
 
 .ghcp-account-card .tier-badge.plus,
 .ghcp-accounts-page .account-table .tier-badge.plus {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
+  background: var(--plan-plus-bg);
+  color: var(--plan-plus-color);
+  border: 1px solid var(--plan-plus-border);
 }
 
 .ghcp-account-card .tier-badge.team,
 .ghcp-accounts-page .account-table .tier-badge.team {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  color: white;
+  background: var(--plan-team-bg);
+  color: var(--plan-team-color);
+  border: 1px solid var(--plan-team-border);
 }
 
 .ghcp-account-card .tier-badge.enterprise,
 .ghcp-accounts-page .account-table .tier-badge.enterprise {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
+  background: var(--plan-enterprise-bg);
+  color: var(--plan-enterprise-color);
+  border: 1px solid var(--plan-enterprise-border);
 }
 
 .ghcp-account-card .tier-badge.pro,
 .ghcp-accounts-page .account-table .tier-badge.pro {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
+  background: var(--plan-pro-bg);
+  color: var(--plan-pro-color);
+  border: 1px solid var(--plan-pro-border);
+}
+
+.ghcp-account-card .tier-badge.ultra,
+.ghcp-accounts-page .account-table .tier-badge.ultra {
+  background: var(--plan-ultra-bg);
+  color: var(--plan-ultra-color);
+  border: 1px solid var(--plan-ultra-border);
 }
 
 .ghcp-account-card .tier-badge.unknown,
 .ghcp-accounts-page .account-table .tier-badge.unknown {
-  background: rgba(148, 163, 184, 0.18);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-light);
+  background: var(--plan-unknown-bg);
+  color: var(--plan-unknown-color);
+  border: 1px solid var(--plan-unknown-border);
 }
 
 /* 配额部分 */

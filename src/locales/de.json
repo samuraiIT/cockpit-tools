@@ -252,6 +252,10 @@
       "initMode": "Initialisierungsmodus",
       "initModeCopy": "Von Quellinstanz kopieren (Standard)",
       "initModeEmpty": "Leere Instanz (ohne Kopieren)",
+      "initModeExistingDir": "Vorhandenes Verzeichnis verwenden",
+      "pathExistingDirHint": "Pfad wird durch Auswahl gesetzt und ist nicht bearbeitbar",
+      "existingDirHint": "Ein vorhandenes Verzeichnis als Instanzverzeichnis verwenden; der gewählte Pfad ist endgültig und nicht bearbeitbar.",
+      "bindExistingDirHint": "Optional; Konto kann nach Hinzufügen des Verzeichnisses zur Instanzliste gebunden werden",
       "emptyInitHint": "Bei Auswahl ohne Kopieren wird nur ein leeres Verzeichnis erstellt. Starten Sie die Instanz einmal, bevor Sie ein Konto binden.",
       "copySource": "Quell-Instanz kopieren",
       "copySourceDesc": "Konfiguration und Login-Daten von der ausgewählten Instanz kopieren",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Instanz erstellt",
       "emptyCreated": "Leere Instanz erstellt. Bitte einmal starten, bevor Sie ein Konto binden.",
+      "existingDirCreated": "Instanz wurde mit dem gewählten Verzeichnis erstellt.",
       "updated": "Instanz aktualisiert",
       "deleted": "Instanz gelöscht",
       "started": "Instanz gestartet",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Instanz löschen",
       "message": "Instanz {{name}} löschen? Dies wird die Konfiguration entfernen und den Instanzordner löschen."
+    },
+    "import": {
+      "btnTitle": "Vorhandenes Verzeichnis importieren",
+      "title": "Vorhandenes Verzeichnis importieren",
+      "dirLabel": "Instanzverzeichnis auswählen",
+      "dirPlaceholder": "Klicken, um Verzeichnis auszuwählen",
+      "dirHint": "Registriert ein vorhandenes lokales Verzeichnis als Instanz ohne Dateien zu verschieben oder zu ändern",
+      "changeDir": "Ändern",
+      "bindLabel": "Konto binden (optional)",
+      "bindHint": "Konto kann später in der Instanzliste gebunden werden",
+      "pathRequired": "Bitte zuerst ein Verzeichnis auswählen",
+      "submit": "Importieren"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Standardpfad",
       "kiroPathSelect": "Wählen",
       "kiroPathReset": "Auf Standard zurücksetzen",
+      "cursorPathReset": "Standard zurücksetzen",
       "codexLaunchOnSwitch": "Codex App beim Wechseln von Codex automatisch starten",
       "codexLaunchOnSwitchDesc": "Nach dem Kontowechsel Codex App automatisch starten oder neu starten",
       "autoUpdate": "Automatische Hintergrund-Updates",
@@ -1296,7 +1314,12 @@
       "title": "Kiro-Einstellungen",
       "appPath": "Kiro-Pfad"
     },
-    "kiroRefreshInterval": "Kontingent für automatische Aktualisierung"
+    "kiroRefreshInterval": "Kontingent für automatische Aktualisierung",
+    "cursor": {
+      "title": "Cursor-Einstellungen",
+      "appPath": "Cursor-Pfad"
+    },
+    "cursorRefreshInterval": "Kontingent automatisch aktualisieren"
   },
   "quotaAlert": {
     "bannerText": "Kontingentwarnung für {{email}} (Schwelle {{threshold}} %, Minimum {{lowest}} %, Modelle: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Import aus lokalem Kiro"
     },
     "injectToVSCode": "Wechseln Sie zu Kiro"
+  },
+  "cursor": {
+    "subscription": "Abonnement",
+    "injectToCursor": "Zu Cursor wechseln",
+    "quota": {
+      "onDemand": "On-Demand"
+    },
+    "title": "Cursor-Kontoverwaltung",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Mehrere Cursor-Instanzen werden nur unter macOS, Windows und Linux unterstützt."
+      }
+    },
+    "empty": {
+      "description": "Klicken Sie auf „Konto hinzufügen“, um Ihre Cursor-Konten zu verwalten"
+    },
+    "addModal": {
+      "title": "Cursor-Konto hinzufügen"
+    },
+    "token": {
+      "desc": "Fügen Sie Ihr Cursor-Zugriffstoken (JWT) oder exportierte JSON-Daten ein.",
+      "formatHint": "Erforderliche Felder und Beispiele (klicken zum Aufklappen)",
+      "formatRequired": "Einzelnes Token: JWT direkt einfügen; Massenimport: JSON-Array-Format verwenden",
+      "singleExample": "Einzelbeispiel (JWT)",
+      "batchExample": "Massenbeispiel (JSON)"
+    },
+    "import": {
+      "localDesc": "Kontodaten vom lokalen Cursor-Client oder einer JSON-Datei importieren.",
+      "localClient": "Vom lokalen Cursor importieren"
+    },
+    "flowNotice": {
+      "title": "Cursor-Kontoleitfaden (zum Auf-/Zuklappen klicken)",
+      "desc": "Verwalten Sie Cursor-Konten durch Import aus der lokalen Cursor-Installation oder durch Einfügen von JWT-Token. Daten werden nur lokal verarbeitet.",
+      "reason": "Berechtigungsumfang: Lesen des lokalen Cursor-Auth-Speichers für Kontoimport und Token-Injektion.",
+      "storage": "Datenumfang: Nur Cursor-Auth-Sitzungseinträge werden gelesen/aktualisiert; kein Schlüssel/Token wird hochgeladen."
+    },
+    "oauth": {
+      "desc": "Klicken Sie auf die Schaltfläche unten und schließen Sie die Cursor-Autorisierung im Browser ab."
+    }
   },
   "breakout": {
     "gameOver": "Spiel vorbei",

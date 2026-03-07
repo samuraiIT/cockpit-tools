@@ -252,6 +252,10 @@
       "initMode": "Tryb inicjalizacji",
       "initModeCopy": "Kopiuj z instancji źródłowej (domyślne)",
       "initModeEmpty": "Pusta instancja (bez kopiowania)",
+      "initModeExistingDir": "Użyj istniejącego katalogu",
+      "pathExistingDirHint": "Ścieżka jest ustawiana przez wybór i nie można jej edytować",
+      "existingDirHint": "Użyj istniejącego katalogu jako katalogu instancji; wybrana ścieżka jest ostateczna i nie można jej edytować.",
+      "bindExistingDirHint": "Opcjonalnie; możesz powiązać konto po dodaniu katalogu do listy",
       "emptyInitHint": "Po wybraniu opcji bez kopiowania zostanie utworzony tylko pusty katalog. Przed powiązaniem konta uruchom instancję raz.",
       "copySource": "Kopiuj z instancji źródłowej",
       "copySourceDesc": "Kopiuj konfigurację i dane logowania z wybranej instancji",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Utworzono instancję",
       "emptyCreated": "Utworzono pustą instancję. Przed powiązaniem konta uruchom ją raz.",
+      "existingDirCreated": "Instancja utworzona przy użyciu wybranego katalogu.",
       "updated": "Zaktualizowano instancję",
       "deleted": "Usunięto instancję",
       "started": "Uruchomiono instancję",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Usuń instancję",
       "message": "Czy usunąć instancję {{name}}? Spowoduje to usunięcie konfiguracji i folderu instancji."
+    },
+    "import": {
+      "btnTitle": "Importuj istniejący katalog",
+      "title": "Importuj istniejący katalog",
+      "dirLabel": "Wybierz katalog instancji",
+      "dirPlaceholder": "Kliknij, aby wybrać katalog",
+      "dirHint": "Rejestruje istniejący katalog lokalny jako instancję bez przenoszenia ani modyfikowania plików",
+      "changeDir": "Zmień",
+      "bindLabel": "Powiąż konto (opcjonalnie)",
+      "bindHint": "Konto możesz powiązać później z listy instancji",
+      "pathRequired": "Najpierw wybierz katalog",
+      "submit": "Importuj"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Domyślna ścieżka",
       "kiroPathSelect": "Wybierać",
       "kiroPathReset": "Przywróć ustawienia domyślne",
+      "cursorPathReset": "Przywróć domyślne",
       "codexLaunchOnSwitch": "Automatycznie uruchamiaj Codex App podczas przełączania Codex",
       "codexLaunchOnSwitchDesc": "Po przełączeniu konta automatycznie uruchom lub uruchom ponownie Codex App",
       "autoUpdate": "Automatyczna aktualizacja w tle",
@@ -1296,7 +1314,12 @@
       "title": "Ustawienia Kiro",
       "appPath": "Ścieżka Kiro"
     },
-    "kiroRefreshInterval": "Limit automatycznego odświeżania"
+    "kiroRefreshInterval": "Limit automatycznego odświeżania",
+    "cursor": {
+      "title": "Ustawienia Cursor",
+      "appPath": "Ścieżka Cursor"
+    },
+    "cursorRefreshInterval": "Automatyczne odświeżanie limitu"
   },
   "quotaAlert": {
     "bannerText": "Alert limitu dla {{email}} (próg {{threshold}}%, minimum {{lowest}}%, modele: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Importuj z lokalnego Kiro"
     },
     "injectToVSCode": "Przełącz się na Kiro"
+  },
+  "cursor": {
+    "subscription": "Subskrypcja",
+    "injectToCursor": "Przełącz na Cursor",
+    "quota": {
+      "onDemand": "Na żądanie"
+    },
+    "title": "Zarządzanie kontami Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Wiele instancji Cursor jest obsługiwanych tylko w systemach macOS, Windows i Linux."
+      }
+    },
+    "empty": {
+      "description": "Kliknij „Dodaj konto“, aby rozpocząć zarządzanie kontami Cursor"
+    },
+    "addModal": {
+      "title": "Dodaj konto Cursor"
+    },
+    "token": {
+      "desc": "Wklej swój token dostępu Cursor (JWT) lub wyeksportowane dane JSON.",
+      "formatHint": "Wymagane pola i przykłady (kliknij, aby rozwinąć)",
+      "formatRequired": "Pojedynczy token: wklej JWT bezpośrednio; import zbiorczy: użyj formatu tablicy JSON",
+      "singleExample": "Przykład pojedynczy (JWT)",
+      "batchExample": "Przykład zbiorczy (JSON)"
+    },
+    "import": {
+      "localDesc": "Importuj dane konta z lokalnego klienta Cursor lub pliku JSON.",
+      "localClient": "Importuj z lokalnego Cursor"
+    },
+    "flowNotice": {
+      "title": "Przewodnik po koncie Cursor (kliknij, aby rozwinąć/zwinąć)",
+      "desc": "Zarządzaj kontami Cursor, importując z lokalnej instalacji Cursor lub wklejając tokeny JWT. Dane są przetwarzane wyłącznie lokalnie.",
+      "reason": "Zakres uprawnień: odczyt lokalnego magazynu uwierzytelniania Cursor w celu importu konta i wstrzyknięcia tokenu.",
+      "storage": "Zakres danych: odczytywane/aktualizowane są wyłącznie wpisy sesji uwierzytelniania Cursor; żaden klucz/token nie jest przesyłany."
+    },
+    "oauth": {
+      "desc": "Kliknij przycisk poniżej i dokończ autoryzację Cursor w przeglądarce."
+    }
   },
   "breakout": {
     "gameOver": "Koniec gry",

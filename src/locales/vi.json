@@ -252,6 +252,10 @@
       "initMode": "Chế độ khởi tạo",
       "initModeCopy": "Sao chép từ phiên bản nguồn (mặc định)",
       "initModeEmpty": "Phiên bản trống (không sao chép)",
+      "initModeExistingDir": "Dùng thư mục có sẵn",
+      "pathExistingDirHint": "Đường dẫn do bạn chọn và không thể chỉnh sửa",
+      "existingDirHint": "Dùng thư mục có sẵn làm thư mục phiên bản; đường dẫn đã chọn là cuối cùng và không thể chỉnh sửa.",
+      "bindExistingDirHint": "Tùy chọn; bạn có thể liên kết tài khoản sau khi thêm thư mục vào danh sách",
       "emptyInitHint": "Khi chọn không sao chép, chỉ tạo thư mục trống. Cần khởi chạy một lần trước khi liên kết tài khoản.",
       "copySource": "Sao chép từ phiên bản nguồn",
       "copySourceDesc": "Sao chép cấu hình và dữ liệu đăng nhập từ phiên bản đã chọn",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Đã tạo phiên bản",
       "emptyCreated": "Đã tạo phiên bản trống. Hãy khởi chạy một lần trước khi liên kết tài khoản.",
+      "existingDirCreated": "Đã tạo phiên bản bằng thư mục đã chọn.",
       "updated": "Đã cập nhật phiên bản",
       "deleted": "Đã xóa phiên bản",
       "started": "Đã bắt đầu phiên bản",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Xóa phiên bản",
       "message": "Xóa phiên bản {{name}}? Hành động này sẽ gỡ bỏ cấu hình và xóa thư mục phiên bản."
+    },
+    "import": {
+      "btnTitle": "Nhập thư mục hiện có",
+      "title": "Nhập thư mục hiện có",
+      "dirLabel": "Chọn thư mục phiên bản",
+      "dirPlaceholder": "Nhấn để chọn thư mục",
+      "dirHint": "Đăng ký thư mục hiện có làm phiên bản mà không di chuyển hay sửa đổi tệp nào",
+      "changeDir": "Đổi",
+      "bindLabel": "Liên kết tài khoản (tuỳ chọn)",
+      "bindHint": "Bạn có thể liên kết tài khoản sau từ danh sách phiên bản",
+      "pathRequired": "Vui lòng chọn thư mục trước",
+      "submit": "Nhập"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Đường dẫn mặc định",
       "kiroPathSelect": "Lựa chọn",
       "kiroPathReset": "Đặt lại về mặc định",
+      "cursorPathReset": "Đặt lại mặc định",
       "codexLaunchOnSwitch": "Tự động khởi chạy Codex App khi chuyển Codex",
       "codexLaunchOnSwitchDesc": "Tự động khởi động hoặc khởi động lại Codex App sau khi chuyển tài khoản",
       "autoUpdate": "Tự động cập nhật nền",
@@ -1296,7 +1314,12 @@
       "title": "Cài đặt Kiro",
       "appPath": "Con đường Kiro"
     },
-    "kiroRefreshInterval": "Hạn ngạch làm mới tự động"
+    "kiroRefreshInterval": "Hạn ngạch làm mới tự động",
+    "cursor": {
+      "title": "Cài đặt Cursor",
+      "appPath": "Đường dẫn Cursor"
+    },
+    "cursorRefreshInterval": "Tự động làm mới hạn mức"
   },
   "quotaAlert": {
     "bannerText": "Cảnh báo hạn mức cho {{email}} (ngưỡng {{threshold}}%, thấp nhất {{lowest}}%, mô hình: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Nhập khẩu từ Kiro địa phương"
     },
     "injectToVSCode": "Chuyển sang Kiro"
+  },
+  "cursor": {
+    "subscription": "Gói đăng ký",
+    "injectToCursor": "Chuyển sang Cursor",
+    "quota": {
+      "onDemand": "Theo yêu cầu"
+    },
+    "title": "Quản lý tài khoản Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Đa phiên bản Cursor chỉ được hỗ trợ trên macOS, Windows và Linux."
+      }
+    },
+    "empty": {
+      "description": "Nhấp \"Thêm tài khoản\" để bắt đầu quản lý tài khoản Cursor của bạn"
+    },
+    "addModal": {
+      "title": "Thêm tài khoản Cursor"
+    },
+    "token": {
+      "desc": "Dán mã truy cập Cursor (JWT) hoặc dữ liệu JSON đã xuất của bạn.",
+      "formatHint": "Các trường bắt buộc và ví dụ (nhấp để mở rộng)",
+      "formatRequired": "Mã đơn lẻ: dán JWT trực tiếp; nhập hàng loạt: sử dụng định dạng mảng JSON",
+      "singleExample": "Ví dụ đơn lẻ (JWT)",
+      "batchExample": "Ví dụ hàng loạt (JSON)"
+    },
+    "import": {
+      "localDesc": "Nhập dữ liệu tài khoản từ ứng dụng Cursor cục bộ hoặc tệp JSON.",
+      "localClient": "Nhập từ Cursor cục bộ"
+    },
+    "flowNotice": {
+      "title": "Hướng dẫn tài khoản Cursor (nhấp để mở rộng/thu gọn)",
+      "desc": "Quản lý tài khoản Cursor bằng cách nhập từ bản cài đặt Cursor cục bộ hoặc dán mã JWT. Dữ liệu chỉ được xử lý cục bộ.",
+      "reason": "Phạm vi quyền: đọc bộ nhớ xác thực cục bộ của Cursor để nhập tài khoản và chèn mã.",
+      "storage": "Phạm vi dữ liệu: chỉ đọc/cập nhật các mục phiên xác thực liên quan đến Cursor; không tải lên bất kỳ khóa/mã nào."
+    },
+    "oauth": {
+      "desc": "Nhấn nút bên dưới và hoàn tất ủy quyền Cursor trong trình duyệt."
+    }
   },
   "breakout": {
     "gameOver": "Kết thúc game",

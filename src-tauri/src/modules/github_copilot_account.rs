@@ -136,11 +136,13 @@ pub fn upsert_account(
         "ghcp_{:x}",
         md5::compute(format!("{}:{}", payload.github_login, payload.github_id))
     );
+    // 以 github_id 唯一标识区分账号，同一邮箱不同 GitHub 账号不合并
     let account_id = index
         .accounts
         .iter()
-        .find(|item| item.github_login == payload.github_login)
-        .map(|item| item.id.clone())
+        .filter_map(|item| load_account_file(&item.id).map(|acc| (item.id.clone(), acc)))
+        .find(|(_, acc)| acc.github_id == payload.github_id)
+        .map(|(id, _)| id)
         .unwrap_or(generated_id);
 
     let existing = load_account_file(&account_id);

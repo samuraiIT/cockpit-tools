@@ -252,6 +252,10 @@
       "initMode": "طريقة التهيئة",
       "initModeCopy": "نسخ من مثيل المصدر (افتراضي)",
       "initModeEmpty": "مثيل فارغ (بدون نسخ)",
+      "initModeExistingDir": "استخدام مجلد موجود",
+      "pathExistingDirHint": "المسار يحدده الاختيار ولا يمكن تعديله",
+      "existingDirHint": "استخدم مجلداً موجوداً كمجلد المثيل؛ المسار المحدد نهائي ولا يمكن تعديله.",
+      "bindExistingDirHint": "اختياري؛ يمكنك ربط حساب بعد إضافة المجلد إلى القائمة",
       "emptyInitHint": "عند اختيار عدم النسخ سيتم إنشاء مجلد فارغ فقط. يجب تشغيله مرة واحدة قبل ربط الحساب.",
       "copySource": "نسخ مثيل المصدر",
       "copySourceDesc": "نسخ الإعدادات وبيانات تسجيل الدخول من المثيل المحدد",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "تم إنشاء المثيل",
       "emptyCreated": "تم إنشاء مثيل فارغ. شغّله مرة واحدة أولاً ثم اربط الحساب.",
+      "existingDirCreated": "تم إنشاء المثيل باستخدام المجلد المحدد.",
       "updated": "تم تحديث المثيل",
       "deleted": "تم حذف المثيل",
       "started": "تم تشغيل المثيل",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "حذف المثيل",
       "message": "هل تريد حذف نسخة {{name}}؟ سيؤدي ذلك إلى إزالة التكوين وحذف مجلد النسخة."
+    },
+    "import": {
+      "btnTitle": "استيراد مجلد موجود",
+      "title": "استيراد مجلد موجود",
+      "dirLabel": "اختر مجلد المثيل",
+      "dirPlaceholder": "انقر لاختيار مجلد",
+      "dirHint": "يسجّل مجلداً محلياً موجوداً كمثيل دون نقل أي ملفات أو تعديلها",
+      "changeDir": "تغيير",
+      "bindLabel": "ربط حساب (اختياري)",
+      "bindHint": "يمكنك ربط حساب لاحقاً من قائمة المثيلات",
+      "pathRequired": "يرجى اختيار مجلد أولاً",
+      "submit": "استيراد"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "المسار الافتراضي",
       "kiroPathSelect": "يختار",
       "kiroPathReset": "إعادة التعيين إلى الوضع الافتراضي",
+      "cursorPathReset": "إعادة تعيين الافتراضي",
       "codexLaunchOnSwitch": "تشغيل تطبيق Codex App تلقائيًا عند تبديل Codex",
       "codexLaunchOnSwitchDesc": "تشغيل أو إعادة تشغيل تطبيق Codex App تلقائيًا بعد تبديل الحساب",
       "autoUpdate": "التحديث التلقائي في الخلفية",
@@ -1296,7 +1314,12 @@
       "title": "إعدادات Kiro",
       "appPath": "مسار Kiro"
     },
-    "kiroRefreshInterval": "تحديث الحصة تلقائياً"
+    "kiroRefreshInterval": "تحديث الحصة تلقائياً",
+    "cursor": {
+      "title": "إعدادات Cursor",
+      "appPath": "مسار Cursor"
+    },
+    "cursorRefreshInterval": "تحديث الحصة تلقائيًا"
   },
   "quotaAlert": {
     "bannerText": "تنبيه حصة للحساب {{email}} (العتبة {{threshold}}%، الأدنى {{lowest}}%، النماذج: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "استيراد من Kiro المحلي"
     },
     "injectToVSCode": "التبديل إلى Kiro"
+  },
+  "cursor": {
+    "subscription": "الاشتراك",
+    "injectToCursor": "التبديل إلى Cursor",
+    "quota": {
+      "onDemand": "حسب الطلب"
+    },
+    "title": "إدارة حسابات Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "تعدد مثيلات Cursor مدعوم فقط على macOS وWindows وLinux."
+      }
+    },
+    "empty": {
+      "description": "انقر على \"إضافة حساب\" لبدء إدارة حسابات Cursor الخاصة بك"
+    },
+    "addModal": {
+      "title": "إضافة حساب Cursor"
+    },
+    "token": {
+      "desc": "الصق رمز الوصول الخاص بك من Cursor (JWT) أو بيانات JSON المصدّرة.",
+      "formatHint": "الحقول المطلوبة والأمثلة (انقر للتوسيع)",
+      "formatRequired": "رمز مفرد: الصق JWT مباشرة؛ استيراد دفعي: استخدم تنسيق مصفوفة JSON",
+      "singleExample": "مثال مفرد (JWT)",
+      "batchExample": "مثال دفعي (JSON)"
+    },
+    "import": {
+      "localDesc": "استيراد بيانات الحساب من عميل Cursor المحلي أو ملف JSON.",
+      "localClient": "الاستيراد من Cursor المحلي"
+    },
+    "flowNotice": {
+      "title": "دليل حساب Cursor (انقر للتوسيع/الطي)",
+      "desc": "إدارة حسابات Cursor عن طريق الاستيراد من تثبيت Cursor المحلي أو لصق رموز JWT. تتم معالجة البيانات محليًا فقط.",
+      "reason": "نطاق الصلاحيات: قراءة تخزين المصادقة المحلي لـ Cursor لاستيراد الحساب وحقن الرمز.",
+      "storage": "نطاق البيانات: يتم قراءة/تحديث إدخالات جلسة المصادقة المتعلقة بـ Cursor فقط؛ لا يتم رفع أي مفتاح/رمز."
+    },
+    "oauth": {
+      "desc": "انقر الزر أدناه لإكمال تفويض Cursor في المتصفح."
+    }
   },
   "breakout": {
     "gameOver": "انتهت اللعبة",

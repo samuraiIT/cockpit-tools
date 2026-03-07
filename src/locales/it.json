@@ -252,6 +252,10 @@
       "initMode": "Modalità di inizializzazione",
       "initModeCopy": "Copia dall'istanza sorgente (predefinito)",
       "initModeEmpty": "Istanza vuota (senza copia)",
+      "initModeExistingDir": "Usa directory esistente",
+      "pathExistingDirHint": "Il percorso è impostato dalla selezione e non è modificabile",
+      "existingDirHint": "Usa una directory esistente come directory dell'istanza; il percorso selezionato è definitivo e non modificabile.",
+      "bindExistingDirHint": "Opzionale; puoi collegare un account dopo aver aggiunto la directory all'elenco",
       "emptyInitHint": "Se scegli senza copia, verrà creata solo una cartella vuota. Avvia una volta prima di collegare un account.",
       "copySource": "Copia istanza sorgente",
       "copySourceDesc": "Copia configurazione e dati di accesso dall'istanza selezionata",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "Istanza creata",
       "emptyCreated": "Istanza vuota creata. Avviala una volta prima di collegare un account.",
+      "existingDirCreated": "Istanza creata utilizzando la directory selezionata.",
       "updated": "Istanza aggiornata",
       "deleted": "Istanza eliminata",
       "started": "Istanza avviata",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "Elimina istanza",
       "message": "Eliminare l'istanza {{name}}? Questo rimuoverà la configurazione e cancellerà la cartella dell'istanza."
+    },
+    "import": {
+      "btnTitle": "Importa directory esistente",
+      "title": "Importa directory esistente",
+      "dirLabel": "Seleziona la directory dell'istanza",
+      "dirPlaceholder": "Clicca per selezionare una directory",
+      "dirHint": "Registra una directory locale esistente come istanza senza spostare o modificare file",
+      "changeDir": "Cambia",
+      "bindLabel": "Collega account (opzionale)",
+      "bindHint": "Puoi collegare un account in seguito dalla lista istanze",
+      "pathRequired": "Seleziona prima una directory",
+      "submit": "Importa"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "Percorso predefinito",
       "kiroPathSelect": "Selezionare",
       "kiroPathReset": "Ripristina le impostazioni predefinite",
+      "cursorPathReset": "Ripristina predefinito",
       "codexLaunchOnSwitch": "Avvia Codex App quando cambi Codex",
       "codexLaunchOnSwitchDesc": "Avvia o riavvia automaticamente Codex App dopo il cambio account",
       "autoUpdate": "Aggiornamento automatico in background",
@@ -1296,7 +1314,12 @@
       "title": "Impostazioni Kiro",
       "appPath": "Sentiero Kiro"
     },
-    "kiroRefreshInterval": "Quota di aggiornamento automatico"
+    "kiroRefreshInterval": "Quota di aggiornamento automatico",
+    "cursor": {
+      "title": "Impostazioni Cursor",
+      "appPath": "Percorso Cursor"
+    },
+    "cursorRefreshInterval": "Aggiornamento automatico quota"
   },
   "quotaAlert": {
     "bannerText": "Avviso quota per {{email}} (soglia {{threshold}}%, minimo {{lowest}}%, modelli: {{models}})",
@@ -1438,6 +1461,45 @@
       "localClient": "Importazione da Kiro locale"
     },
     "injectToVSCode": "Passa a Kiro"
+  },
+  "cursor": {
+    "subscription": "Abbonamento",
+    "injectToCursor": "Passa a Cursor",
+    "quota": {
+      "onDemand": "Su richiesta"
+    },
+    "title": "Gestione account Cursor",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Le istanze multiple di Cursor sono supportate solo su macOS, Windows e Linux."
+      }
+    },
+    "empty": {
+      "description": "Fai clic su \"Aggiungi account\" per iniziare a gestire i tuoi account Cursor"
+    },
+    "addModal": {
+      "title": "Aggiungi account Cursor"
+    },
+    "token": {
+      "desc": "Incolla il tuo token di accesso Cursor (JWT) o i dati JSON esportati.",
+      "formatHint": "Campi obbligatori ed esempi (clicca per espandere)",
+      "formatRequired": "Token singolo: incolla direttamente il JWT; importazione in blocco: usa il formato array JSON",
+      "singleExample": "Esempio singolo (JWT)",
+      "batchExample": "Esempio in blocco (JSON)"
+    },
+    "import": {
+      "localDesc": "Importa i dati dell'account dal client Cursor locale o da un file JSON.",
+      "localClient": "Importa da Cursor locale"
+    },
+    "flowNotice": {
+      "title": "Guida account Cursor (clicca per espandere/comprimere)",
+      "desc": "Gestisci gli account Cursor importando dall'installazione locale di Cursor o incollando token JWT. I dati vengono elaborati solo localmente.",
+      "reason": "Ambito autorizzazioni: lettura dell'archivio di autenticazione locale di Cursor per l'importazione dell'account e l'iniezione del token.",
+      "storage": "Ambito dati: vengono letti/aggiornati solo i record di sessione di autenticazione Cursor; nessuna chiave/token viene caricata."
+    },
+    "oauth": {
+      "desc": "Fai clic sul pulsante qui sotto e completa l'autorizzazione di Cursor nel browser."
+    }
   },
   "breakout": {
     "gameOver": "Partita finita",

@@ -252,6 +252,10 @@
       "initMode": "初期化方式",
       "initModeCopy": "元インスタンスをコピー（デフォルト）",
       "initModeEmpty": "空のインスタンス（コピーしない）",
+      "initModeExistingDir": "既存のディレクトリを使用",
+      "pathExistingDirHint": "選択したパスが適用され、編集できません",
+      "existingDirHint": "既存のディレクトリをインスタンスのディレクトリとして使用します。選択したパスが確定し、編集できません。",
+      "bindExistingDirHint": "任意。ディレクトリをリストに追加した後にアカウントを紐付けできます",
       "emptyInitHint": "コピーしないを選ぶと空のディレクトリのみ作成されます。アカウントを紐付ける前に一度起動してください。",
       "copySource": "コピー元インスタンス",
       "copySourceDesc": "選択したインスタンスから設定とログイン情報をコピーします",
@@ -280,6 +284,7 @@
     "messages": {
       "created": "インスタンスを作成しました",
       "emptyCreated": "空のインスタンスを作成しました。アカウントを紐付ける前に一度起動してください。",
+      "existingDirCreated": "選択したディレクトリでインスタンスを作成しました。",
       "updated": "インスタンスを更新しました",
       "deleted": "インスタンスを削除しました",
       "started": "インスタンスを開始しました",
@@ -339,6 +344,18 @@
     "delete": {
       "title": "インスタンスを削除",
       "message": "インスタンス {{name}} を削除しますか？設定が削除され、インスタンスフォルダーも削除されます。"
+    },
+    "import": {
+      "btnTitle": "既存ディレクトリをインポート",
+      "title": "既存ディレクトリをインポート",
+      "dirLabel": "インスタンスディレクトリを選択",
+      "dirPlaceholder": "クリックしてディレクトリを選択",
+      "dirHint": "既存のローカルディレクトリをファイルを移動・変更せずにインスタンスとして登録します",
+      "changeDir": "変更",
+      "bindLabel": "アカウントを紐付ける（任意）",
+      "bindHint": "インスタンス一覧から後で紐付けることもできます",
+      "pathRequired": "先にディレクトリを選択してください",
+      "submit": "インポート"
     }
   },
   "settings": {
@@ -432,6 +449,7 @@
       "kiroAppPathPlaceholder": "デフォルトのパス",
       "kiroPathSelect": "選択",
       "kiroPathReset": "デフォルトにリセットする",
+      "cursorPathReset": "デフォルトにリセット",
       "codexLaunchOnSwitch": "Codex 切替時に Codex App を自動起動",
       "codexLaunchOnSwitchDesc": "アカウント切替後に Codex App を自動で起動または再起動",
       "autoUpdate": "バックグラウンド自動更新",
@@ -1296,7 +1314,12 @@
       "title": "キロの設定",
       "appPath": "キロパス"
     },
-    "kiroRefreshInterval": "自動更新クォータ"
+    "kiroRefreshInterval": "自動更新クォータ",
+    "cursor": {
+      "title": "Cursor 設定",
+      "appPath": "Cursor パス"
+    },
+    "cursorRefreshInterval": "クォータ自動更新"
   },
   "quotaAlert": {
     "bannerText": "{{email}} のクォータ警告（しきい値 {{threshold}}%、最低 {{lowest}}%、モデル: {{models}}）",
@@ -1438,6 +1461,45 @@
       "localClient": "地元キロから輸入"
     },
     "injectToVSCode": "キロに切り替えます"
+  },
+  "cursor": {
+    "subscription": "サブスクリプション",
+    "injectToCursor": "Cursor に切り替え",
+    "quota": {
+      "onDemand": "オンデマンド"
+    },
+    "title": "Cursor アカウント管理",
+    "instances": {
+      "unsupported": {
+        "descPlatform": "Cursor のマルチインスタンスは macOS、Windows、Linux のみ対応しています。"
+      }
+    },
+    "empty": {
+      "description": "「アカウント追加」をクリックして Cursor アカウントの管理を開始してください"
+    },
+    "addModal": {
+      "title": "Cursor アカウントを追加"
+    },
+    "token": {
+      "desc": "Cursor アクセストークン（JWT）またはエクスポートされた JSON データを貼り付けてください。",
+      "formatHint": "必須フィールドと例（クリックで展開）",
+      "formatRequired": "単一トークン：JWT を直接貼り付け；一括インポート：JSON 配列形式を使用",
+      "singleExample": "単一の例（JWT）",
+      "batchExample": "一括の例（JSON）"
+    },
+    "import": {
+      "localDesc": "ローカルの Cursor クライアントまたは JSON ファイルからアカウントデータをインポートします。",
+      "localClient": "ローカル Cursor からインポート"
+    },
+    "flowNotice": {
+      "title": "Cursor アカウントガイド（クリックで展開/折りたたみ）",
+      "desc": "ローカルの Cursor インストールからのインポートまたは JWT トークンの貼り付けで Cursor アカウントを管理します。データはローカルでのみ処理されます。",
+      "reason": "権限範囲：アカウントインポートとトークン注入のために Cursor のローカル認証ストレージを読み取ります。",
+      "storage": "データ範囲：Cursor の認証セッション関連エントリのみが読み取り/更新されます。キー/トークンはアップロードされません。"
+    },
+    "oauth": {
+      "desc": "下のボタンをクリックして、ブラウザで Cursor の認可を完了してください。"
+    }
   },
   "breakout": {
     "gameOver": "ゲームオーバー",
