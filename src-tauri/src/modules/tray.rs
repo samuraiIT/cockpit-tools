@@ -87,7 +87,7 @@ impl PlatformId {
             Self::Windsurf => "Windsurf",
             Self::Kiro => "Kiro",
             Self::Cursor => "Cursor",
-            Self::Gemini => "Gemini CLI",
+            Self::Gemini => "Gemini Cli",
             Self::Codebuddy => "CodeBuddy",
             Self::Qoder => "Qoder",
             Self::Trae => "Trae",

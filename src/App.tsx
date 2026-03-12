@@ -265,7 +265,7 @@ function getQuotaAlertPlatformLabel(
     case 'cursor':
       return 'Cursor';
     case 'gemini':
-      return t('nav.gemini', 'Gemini');
+      return 'Gemini Cli';
     case 'codebuddy':
       return 'CodeBuddy';
     case 'qoder':

@@ -159,7 +159,7 @@
     "codebuddy": "CodeBuddy 账号",
     "githubCopilot": "GitHub Copilot",
     "windsurf": "Windsurf",
-    "gemini": "Gemini",
+    "gemini": "Gemini Cli 账号",
     "dashboard": "仪表盘",
     "morePlatforms": "更多平台",
     "instances": "多开实例",
@@ -1587,8 +1587,8 @@
       "appPath": "CodeBuddy 路径"
     },
     "gemini": {
-      "title": "Gemini 设置",
-      "appPath": "Gemini CLI 路径"
+      "title": "Gemini Cli 设置",
+      "appPath": "Gemini Cli 路径"
     },
     "geminiRefreshInterval": "配额自动刷新",
     "error": {
@@ -1787,7 +1787,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "切换到 Gemini",
+    "injectToGemini": "切换到 Gemini Cli",
     "updated": {
       "label": "更新于 {{relative}}前"
     },
@@ -1800,10 +1800,10 @@
       "resetsUnknown": "重置时间未知",
       "onDemand": "按需使用"
     },
-    "title": "Gemini 账号管理",
+    "title": "Gemini Cli 账号管理",
     "instances": {
-      "unsupported": "Gemini 暂不支持多开实例管理。",
-      "unsupportedDescPlatform": "Gemini 多开实例仅支持 macOS、Windows 和 Linux。",
+      "unsupported": "Gemini Cli 暂不支持多开实例管理。",
+      "unsupportedDescPlatform": "Gemini Cli 多开实例仅支持 macOS、Windows 和 Linux。",
       "launchDialogTitle": "启动实例",
       "launchHint": "可复制命令手动执行，或点击下方按钮直接在终端执行。",
       "runInTerminal": "终端执行"
@@ -1812,28 +1812,28 @@
       "success": "切号成功"
     },
     "empty": {
-      "description": "点击\"添加账号\"开始管理您的 Gemini 账号"
+      "description": "点击\"添加账号\"开始管理您的 Gemini Cli 账号"
     },
     "addModal": {
-      "title": "添加 Gemini 账号"
+      "title": "添加 Gemini Cli 账号"
     },
     "oauth": {
-      "desc": "点击下方按钮，在浏览器中完成 Gemini OAuth 授权登录。"
+      "desc": "点击下方按钮，在浏览器中完成 Gemini Cli OAuth 授权登录。"
     },
     "token": {
-      "desc": "粘贴您的 Gemini Access Token（JWT）或导出的 JSON 数据。",
+      "desc": "粘贴您的 Gemini Cli Access Token（JWT）或导出的 JSON 数据。",
       "formatHint": "必填字段与示例（点击展开）",
       "formatRequired": "单条 Token 直接粘贴 JWT；批量导入使用 JSON 数组格式",
       "singleExample": "单条示例（JWT）",
       "batchExample": "批量示例（JSON）"
     },
     "import": {
-      "localDesc": "支持从本机 Gemini 配置目录（~/.gemini）或 JSON 文件导入账号数据。",
-      "localClient": "从本机 Gemini 导入"
+      "localDesc": "支持从本机 Gemini Cli 配置目录（~/.gemini）或 JSON 文件导入账号数据。",
+      "localClient": "从本机 Gemini Cli 导入"
     },
     "flowNotice": {
-      "title": "Gemini 账号管理说明（点击展开/收起）",
-      "desc": "支持从本机 Gemini 配置目录导入、粘贴 JWT 令牌或 OAuth 授权登录来管理 Gemini 账号。",
+      "title": "Gemini Cli 账号管理说明（点击展开/收起）",
+      "desc": "支持从本机 Gemini Cli 配置目录导入、粘贴 JWT 令牌或 OAuth 授权登录来管理 Gemini Cli 账号。",
       "reason": "权限范围：读取并写入默认 ~/.gemini 或实例目录（GEMINI_CLI_HOME/.gemini）下的 oauth_creds.json、google_accounts.json、settings.json，用于账号导入与本地凭证注入（切号）。",
       "storage": "网络请求范围：OAuth 与刷新会调用 Google/Gemini 官方接口（如 oauth2.googleapis.com、googleapis.com）；仅发送认证与配额所需字段，不向第三方服务器上传账号文件。"
     }

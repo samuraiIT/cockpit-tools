@@ -167,7 +167,7 @@
       "restart": "Reiniciar",
       "installing": "Instalando"
     },
-    "gemini": "Gêmeos",
+    "gemini": "Contas Gemini Cli",
     "codebuddy": "Contas CodeBuddy",
     "qoder": "Contas Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Atualização automática de cota",
     "gemini": {
-      "title": "Configurações de Gêmeos",
-      "appPath": "Caminho CLI Gemini"
+      "title": "Configurações do Gemini Cli",
+      "appPath": "Caminho do Gemini Cli"
     },
     "geminiRefreshInterval": "Atualização automática de cota",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Mudar para Gêmeos",
+    "injectToGemini": "Mudar para Gemini Cli",
     "updated": {
       "label": "Atualizado {{relative}} atrás"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Hora de redefinição desconhecida",
       "onDemand": "Sob demanda"
     },
-    "title": "Gerenciamento de contas Gêmeos",
+    "title": "Gerenciamento de contas Gemini Cli",
     "instances": {
-      "unsupported": "O gerenciamento de múltiplas instâncias do Gemini ainda não é compatível.",
-      "unsupportedDescPlatform": "A multiinstância Gemini é compatível apenas com macOS, Windows e Linux.",
+      "unsupported": "O gerenciamento de múltiplas instâncias do Gemini Cli ainda não é compatível.",
+      "unsupportedDescPlatform": "A multiinstância Gemini Cli é compatível apenas com macOS, Windows e Linux.",
       "launchDialogTitle": "Iniciar instância",
       "launchHint": "Copie o comando e execute-o manualmente ou execute-o diretamente no terminal.",
       "runInTerminal": "Execute no Terminal"
@@ -1965,28 +1965,28 @@
       "success": "Conta trocada com sucesso"
     },
     "empty": {
-      "description": "Clique em \"Adicionar conta\" para começar a gerenciar suas contas Gemini"
+      "description": "Clique em \"Adicionar conta\" para começar a gerenciar suas contas Gemini Cli"
     },
     "addModal": {
-      "title": "Adicionar conta Gemini"
+      "title": "Adicionar conta Gemini Cli"
     },
     "oauth": {
-      "desc": "Clique no botão abaixo e preencha a autorização Gemini OAuth em seu navegador."
+      "desc": "Clique no botão abaixo e preencha a autorização Gemini Cli OAuth em seu navegador."
     },
     "token": {
-      "desc": "Cole seu token de acesso Gemini (JWT) ou dados JSON exportados.",
+      "desc": "Cole seu token de acesso Gemini Cli (JWT) ou dados JSON exportados.",
       "formatHint": "Campos obrigatórios e exemplos (clique para expandir)",
       "formatRequired": "Token único: cole o JWT diretamente; importação em lote: use o formato de matriz JSON",
       "singleExample": "Exemplo único (JWT)",
       "batchExample": "Exemplo de lote (JSON)"
     },
     "import": {
-      "localDesc": "Importe dados da conta Gemini do diretório de configuração local do Gemini (~/.gemini) ou de um arquivo JSON.",
-      "localClient": "Importar do Gemini local"
+      "localDesc": "Importe dados da conta Gemini Cli do diretório de configuração local do Gemini Cli (~/.gemini) ou de um arquivo JSON.",
+      "localClient": "Importar do Gemini Cli local"
     },
     "flowNotice": {
-      "title": "Guia da conta Gemini (clique para expandir/recolher)",
-      "desc": "Gerencie contas Gemini importando da configuração local do Gemini, colando um token JWT ou fazendo login via OAuth.",
+      "title": "Guia da conta Gemini Cli (clique para expandir/recolher)",
+      "desc": "Gerencie contas Gemini Cli importando da configuração local do Gemini Cli, colando um token JWT ou fazendo login via OAuth.",
       "reason": "Escopo de permissão: ler e gravar oauth_creds.json, google_accounts.json e settings.json no padrão ~/.gemini ou caminho de instância (GEMINI_CLI_HOME/.gemini) para importação de conta e injeção de credenciais locais (troca de conta).",
       "storage": "Escopo da rede: OAuth e atualização chamam APIs oficiais do Google/Gemini (como oauth2.googleapis.com e googleapis.com). Apenas os campos de autenticação/cota obrigatórios são enviados; os arquivos da conta local não são carregados em servidores de terceiros."
     }

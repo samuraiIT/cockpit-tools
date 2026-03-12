@@ -2944,7 +2944,7 @@ export function SettingsPage() {
               </div>
 
               <div style={{ order: platformSettingsOrder.gemini }}>
-                <div className="group-title">{t('quickSettings.gemini.title', 'Gemini 设置')}</div>
+                <div className="group-title">{t('quickSettings.gemini.title', 'Gemini Cli 设置')}</div>
                 <div className="settings-group">
                   <div className="settings-row">
                     <div className="row-label">

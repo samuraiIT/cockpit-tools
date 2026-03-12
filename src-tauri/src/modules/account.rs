@@ -962,7 +962,7 @@ fn build_quota_alert_notification_text(payload: &QuotaAlertPayload) -> (String, 
         "windsurf" => "Windsurf",
         "kiro" => "Kiro",
         "cursor" => "Cursor",
-        "gemini" => "Gemini",
+        "gemini" => "Gemini Cli",
         "codebuddy" => "CodeBuddy",
         _ => "Antigravity",
     };

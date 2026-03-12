@@ -167,7 +167,7 @@
       "restart": "إعادة التشغيل",
       "installing": "جارٍ التثبيت"
     },
-    "gemini": "حسابات Gemini",
+    "gemini": "حسابات Gemini Cli",
     "codebuddy": "حسابات CodeBuddy",
     "qoder": "حسابات Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "تحديث الحصة تلقائيًا",
     "gemini": {
-      "title": "إعدادات Gemini",
-      "appPath": "مسار Gemini"
+      "title": "إعدادات Gemini Cli",
+      "appPath": "مسار Gemini Cli"
     },
     "geminiRefreshInterval": "تحديث الحصة تلقائيًا",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "التبديل إلى Gemini",
+    "injectToGemini": "التبديل إلى Gemini Cli",
     "updated": {
       "label": "تم التحديث قبل {{relative}}"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "وقت إعادة التعيين غير معروف",
       "onDemand": "عند الطلب"
     },
-    "title": "إدارة حسابات Gemini",
+    "title": "إدارة حسابات Gemini Cli",
     "instances": {
-      "unsupported": "إدارة تعدد مثيلات Gemini غير مدعومة حاليًا.",
-      "unsupportedDescPlatform": "تعدد مثيلات Gemini مدعوم فقط على macOS وWindows وLinux.",
+      "unsupported": "إدارة تعدد مثيلات Gemini Cli غير مدعومة حاليًا.",
+      "unsupportedDescPlatform": "تعدد مثيلات Gemini Cli مدعوم فقط على macOS وWindows وLinux.",
       "launchDialogTitle": "تشغيل المثيل",
       "launchHint": "انسخ الأمر وشغّله يدويًا، أو نفّذه مباشرة في الطرفية.",
       "runInTerminal": "تشغيل في الطرفية"
@@ -1965,28 +1965,28 @@
       "success": "تم تبديل الحساب بنجاح"
     },
     "empty": {
-      "description": "انقر على \"إضافة حساب\" لبدء إدارة حسابات Gemini الخاصة بك"
+      "description": "انقر على \"إضافة حساب\" لبدء إدارة حسابات Gemini Cli الخاصة بك"
     },
     "addModal": {
-      "title": "إضافة حساب Gemini"
+      "title": "إضافة حساب Gemini Cli"
     },
     "oauth": {
-      "desc": "انقر الزر أدناه لإكمال تفويض Gemini في المتصفح."
+      "desc": "انقر الزر أدناه لإكمال تفويض Gemini Cli في المتصفح."
     },
     "token": {
-      "desc": "الصق رمز الوصول الخاص بك من Gemini (JWT) أو بيانات JSON المصدّرة.",
+      "desc": "الصق رمز الوصول الخاص بك من Gemini Cli (JWT) أو بيانات JSON المصدّرة.",
       "formatHint": "الحقول المطلوبة والأمثلة (انقر للتوسيع)",
       "formatRequired": "رمز مفرد: الصق JWT مباشرة؛ استيراد دفعي: استخدم تنسيق مصفوفة JSON",
       "singleExample": "مثال مفرد (JWT)",
       "batchExample": "مثال دفعي (JSON)"
     },
     "import": {
-      "localDesc": "استيراد بيانات الحساب من عميل Gemini المحلي أو ملف JSON.",
-      "localClient": "الاستيراد من Gemini المحلي"
+      "localDesc": "استيراد بيانات الحساب من عميل Gemini Cli المحلي أو ملف JSON.",
+      "localClient": "الاستيراد من Gemini Cli المحلي"
     },
     "flowNotice": {
-      "title": "دليل حساب Gemini (انقر للتوسيع/الطي)",
-      "desc": "إدارة حسابات Gemini عن طريق الاستيراد من تثبيت Gemini المحلي أو لصق رموز JWT. تتم معالجة البيانات محليًا فقط.",
+      "title": "دليل حساب Gemini Cli (انقر للتوسيع/الطي)",
+      "desc": "إدارة حسابات Gemini Cli عن طريق الاستيراد من تثبيت Gemini Cli المحلي أو لصق رموز JWT. تتم معالجة البيانات محليًا فقط.",
       "reason": "نطاق الأذونات: قراءة وكتابة oauth_creds.json وgoogle_accounts.json وsettings.json ضمن ~/.gemini الافتراضي أو مسار المثيل (GEMINI_CLI_HOME/.gemini) لاستيراد الحسابات وحقن بيانات الاعتماد محليًا (تبديل الحساب).",
       "storage": "نطاق الشبكة: عمليات OAuth وتحديث الحصة تستدعي واجهات Google/Gemini الرسمية (مثل oauth2.googleapis.com وgoogleapis.com). يتم إرسال حقول المصادقة/الحصة الضرورية فقط؛ ولا تُرفع الملفات المحلية إلى خوادم طرف ثالث."
     }

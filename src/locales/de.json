@@ -167,7 +167,7 @@
       "restart": "Neustart",
       "installing": "Installation"
     },
-    "gemini": "Gemini-Konten",
+    "gemini": "Gemini Cli-Konten",
     "codebuddy": "CodeBuddy-Konten",
     "qoder": "Qoder-Konten",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Kontingent automatisch aktualisieren",
     "gemini": {
-      "title": "Gemini-Einstellungen",
-      "appPath": "Gemini-Pfad"
+      "title": "Gemini Cli-Einstellungen",
+      "appPath": "Gemini Cli-Pfad"
     },
     "geminiRefreshInterval": "Kontingent automatisch aktualisieren",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Zu Gemini wechseln",
+    "injectToGemini": "Zu Gemini Cli wechseln",
     "updated": {
       "label": "Vor {{relative}} aktualisiert"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Zeitpunkt der Zurücksetzung unbekannt",
       "onDemand": "Bei Bedarf"
     },
-    "title": "Gemini-Kontoverwaltung",
+    "title": "Gemini Cli-Kontoverwaltung",
     "instances": {
-      "unsupported": "Gemini-Mehrinstanzverwaltung wird derzeit nicht unterstützt.",
-      "unsupportedDescPlatform": "Gemini-Mehrinstanzen werden nur unter macOS, Windows und Linux unterstützt.",
+      "unsupported": "Gemini Cli-Mehrinstanzverwaltung wird derzeit nicht unterstützt.",
+      "unsupportedDescPlatform": "Gemini Cli-Mehrinstanzen werden nur unter macOS, Windows und Linux unterstützt.",
       "launchDialogTitle": "Instanz starten",
       "launchHint": "Kopieren Sie den Befehl und führen Sie ihn manuell aus oder direkt im Terminal.",
       "runInTerminal": "Im Terminal ausführen"
@@ -1965,28 +1965,28 @@
       "success": "Konto erfolgreich gewechselt"
     },
     "empty": {
-      "description": "Klicken Sie auf „Konto hinzufügen“, um Ihre Gemini-Konten zu verwalten"
+      "description": "Klicken Sie auf „Konto hinzufügen“, um Ihre Gemini Cli-Konten zu verwalten"
     },
     "addModal": {
-      "title": "Gemini-Konto hinzufügen"
+      "title": "Gemini Cli-Konto hinzufügen"
     },
     "oauth": {
-      "desc": "Klicken Sie auf die Schaltfläche unten und schließen Sie die Gemini-Autorisierung im Browser ab."
+      "desc": "Klicken Sie auf die Schaltfläche unten und schließen Sie die Gemini Cli-Autorisierung im Browser ab."
     },
     "token": {
-      "desc": "Fügen Sie Ihr Gemini-Zugriffstoken (JWT) oder exportierte JSON-Daten ein.",
+      "desc": "Fügen Sie Ihr Gemini Cli-Zugriffstoken (JWT) oder exportierte JSON-Daten ein.",
       "formatHint": "Erforderliche Felder und Beispiele (klicken zum Aufklappen)",
       "formatRequired": "Einzelnes Token: JWT direkt einfügen; Massenimport: JSON-Array-Format verwenden",
       "singleExample": "Einzelbeispiel (JWT)",
       "batchExample": "Massenbeispiel (JSON)"
     },
     "import": {
-      "localDesc": "Kontodaten vom lokalen Gemini-Client oder einer JSON-Datei importieren.",
-      "localClient": "Vom lokalen Gemini importieren"
+      "localDesc": "Kontodaten vom lokalen Gemini Cli-Client oder einer JSON-Datei importieren.",
+      "localClient": "Vom lokalen Gemini Cli importieren"
     },
     "flowNotice": {
-      "title": "Gemini-Kontoleitfaden (zum Auf-/Zuklappen klicken)",
-      "desc": "Verwalten Sie Gemini-Konten durch Import aus der lokalen Gemini-Installation oder durch Einfügen von JWT-Token. Daten werden nur lokal verarbeitet.",
+      "title": "Gemini Cli-Kontoleitfaden (zum Auf-/Zuklappen klicken)",
+      "desc": "Verwalten Sie Gemini Cli-Konten durch Import aus der lokalen Gemini Cli-Installation oder durch Einfügen von JWT-Token. Daten werden nur lokal verarbeitet.",
       "reason": "Berechtigungsumfang: Lesen und Schreiben von oauth_creds.json, google_accounts.json und settings.json im Standardpfad ~/.gemini oder Instanzpfad (GEMINI_CLI_HOME/.gemini) für Kontoimport und lokale Anmeldeinjektionsfunktionen (Kontowechsel).",
       "storage": "Netzwerkumfang: OAuth und Quotenaktualisierung rufen offizielle Google/Gemini-APIs auf (z. B. oauth2.googleapis.com und googleapis.com). Es werden nur notwendige Auth-/Quotenfelder gesendet; lokale Dateien werden nicht an Drittserver hochgeladen."
     }

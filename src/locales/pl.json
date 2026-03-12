@@ -167,7 +167,7 @@
       "restart": "Uruchom ponownie",
       "installing": "Instalowanie"
     },
-    "gemini": "Konta Gemini",
+    "gemini": "Konta Gemini Cli",
     "codebuddy": "Konta CodeBuddy",
     "qoder": "Konta Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Automatyczne odświeżanie limitu",
     "gemini": {
-      "title": "Ustawienia Gemini",
-      "appPath": "Ścieżka Gemini"
+      "title": "Ustawienia Gemini Cli",
+      "appPath": "Ścieżka Gemini Cli"
     },
     "geminiRefreshInterval": "Automatyczne odświeżanie limitu",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Przełącz na Gemini",
+    "injectToGemini": "Przełącz na Gemini Cli",
     "updated": {
       "label": "Zaktualizowano {{relative}} temu"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Nieznany czas resetu",
       "onDemand": "Na żądanie"
     },
-    "title": "Zarządzanie kontami Gemini",
+    "title": "Zarządzanie kontami Gemini Cli",
     "instances": {
-      "unsupported": "Zarządzanie wieloma instancjami Gemini nie jest jeszcze obsługiwane.",
-      "unsupportedDescPlatform": "Wiele instancji Gemini jest obsługiwane tylko na macOS, Windows i Linux.",
+      "unsupported": "Zarządzanie wieloma instancjami Gemini Cli nie jest jeszcze obsługiwane.",
+      "unsupportedDescPlatform": "Wiele instancji Gemini Cli jest obsługiwane tylko na macOS, Windows i Linux.",
       "launchDialogTitle": "Uruchom instancję",
       "launchHint": "Skopiuj polecenie i uruchom ręcznie albo wykonaj je bezpośrednio w terminalu.",
       "runInTerminal": "Uruchom w terminalu"
@@ -1965,28 +1965,28 @@
       "success": "Pomyślnie przełączono konto"
     },
     "empty": {
-      "description": "Kliknij „Dodaj konto“, aby rozpocząć zarządzanie kontami Gemini"
+      "description": "Kliknij „Dodaj konto“, aby rozpocząć zarządzanie kontami Gemini Cli"
     },
     "addModal": {
-      "title": "Dodaj konto Gemini"
+      "title": "Dodaj konto Gemini Cli"
     },
     "oauth": {
-      "desc": "Kliknij przycisk poniżej i dokończ autoryzację Gemini w przeglądarce."
+      "desc": "Kliknij przycisk poniżej i dokończ autoryzację Gemini Cli w przeglądarce."
     },
     "token": {
-      "desc": "Wklej swój token dostępu Gemini (JWT) lub wyeksportowane dane JSON.",
+      "desc": "Wklej swój token dostępu Gemini Cli (JWT) lub wyeksportowane dane JSON.",
       "formatHint": "Wymagane pola i przykłady (kliknij, aby rozwinąć)",
       "formatRequired": "Pojedynczy token: wklej JWT bezpośrednio; import zbiorczy: użyj formatu tablicy JSON",
       "singleExample": "Przykład pojedynczy (JWT)",
       "batchExample": "Przykład zbiorczy (JSON)"
     },
     "import": {
-      "localDesc": "Importuj dane konta z lokalnego klienta Gemini lub pliku JSON.",
-      "localClient": "Importuj z lokalnego Gemini"
+      "localDesc": "Importuj dane konta z lokalnego klienta Gemini Cli lub pliku JSON.",
+      "localClient": "Importuj z lokalnego Gemini Cli"
     },
     "flowNotice": {
-      "title": "Przewodnik po koncie Gemini (kliknij, aby rozwinąć/zwinąć)",
-      "desc": "Zarządzaj kontami Gemini, importując z lokalnej instalacji Gemini lub wklejając tokeny JWT. Dane są przetwarzane wyłącznie lokalnie.",
+      "title": "Przewodnik po koncie Gemini Cli (kliknij, aby rozwinąć/zwinąć)",
+      "desc": "Zarządzaj kontami Gemini Cli, importując z lokalnej instalacji Gemini Cli lub wklejając tokeny JWT. Dane są przetwarzane wyłącznie lokalnie.",
       "reason": "Zakres uprawnień: odczyt i zapis oauth_creds.json, google_accounts.json oraz settings.json w domyślnym ~/.gemini lub ścieżce instancji (GEMINI_CLI_HOME/.gemini) do importu kont i lokalnego wstrzykiwania poświadczeń (przełączanie kont).",
       "storage": "Zakres sieci: OAuth i odświeżanie limitu wywołują oficjalne API Google/Gemini (np. oauth2.googleapis.com i googleapis.com). Wysyłane są tylko wymagane pola uwierzytelniania/limitu; lokalne pliki nie są wysyłane na serwery stron trzecich."
     }

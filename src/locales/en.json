@@ -159,7 +159,7 @@
     "codebuddy": "CodeBuddy",
     "githubCopilot": "GitHub Copilot",
     "windsurf": "Windsurf",
-    "gemini": "Gemini",
+    "gemini": "Gemini Cli",
     "dashboard": "Dashboard",
     "morePlatforms": "More Platforms",
     "instances": "Multi-Instance",
@@ -1587,8 +1587,8 @@
       "appPath": "CodeBuddy Path"
     },
     "gemini": {
-      "title": "Gemini Settings",
-      "appPath": "Gemini CLI Path"
+      "title": "Gemini Cli Settings",
+      "appPath": "Gemini Cli Path"
     },
     "geminiRefreshInterval": "Quota Auto Refresh",
     "error": {
@@ -1787,7 +1787,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Switch to Gemini",
+    "injectToGemini": "Switch to Gemini Cli",
     "updated": {
       "label": "Updated {{relative}} ago"
     },
@@ -1800,10 +1800,10 @@
       "resetsUnknown": "Reset time unknown",
       "onDemand": "On-Demand"
     },
-    "title": "Gemini Account Management",
+    "title": "Gemini Cli Account Management",
     "instances": {
-      "unsupported": "Gemini multi-instance management is not supported yet.",
-      "unsupportedDescPlatform": "Gemini multi-instance is supported on macOS, Windows, and Linux only.",
+      "unsupported": "Gemini Cli multi-instance management is not supported yet.",
+      "unsupportedDescPlatform": "Gemini Cli multi-instance is supported on macOS, Windows, and Linux only.",
       "launchDialogTitle": "Launch Instance",
       "launchHint": "Copy the command and run manually, or execute it directly in terminal.",
       "runInTerminal": "Run in Terminal"
@@ -1812,28 +1812,28 @@
       "success": "Account switched successfully"
     },
     "empty": {
-      "description": "Click \"Add Account\" to start managing your Gemini accounts"
+      "description": "Click \"Add Account\" to start managing your Gemini Cli accounts"
     },
     "addModal": {
-      "title": "Add Gemini Account"
+      "title": "Add Gemini Cli Account"
     },
     "oauth": {
-      "desc": "Click the button below and complete Gemini OAuth authorization in your browser."
+      "desc": "Click the button below and complete Gemini Cli OAuth authorization in your browser."
     },
     "token": {
-      "desc": "Paste your Gemini Access Token (JWT) or exported JSON data.",
+      "desc": "Paste your Gemini Cli Access Token (JWT) or exported JSON data.",
       "formatHint": "Required fields & examples (click to expand)",
       "formatRequired": "Single token: paste JWT directly; batch import: use JSON array format",
       "singleExample": "Single example (JWT)",
       "batchExample": "Batch example (JSON)"
     },
     "import": {
-      "localDesc": "Import Gemini account data from local Gemini config directory (~/.gemini) or a JSON file.",
-      "localClient": "Import from local Gemini"
+      "localDesc": "Import Gemini Cli account data from local Gemini Cli config directory (~/.gemini) or a JSON file.",
+      "localClient": "Import from local Gemini Cli"
     },
     "flowNotice": {
-      "title": "Gemini account guide (click to expand/collapse)",
-      "desc": "Manage Gemini accounts by importing from local Gemini config, pasting a JWT token, or signing in via OAuth.",
+      "title": "Gemini Cli account guide (click to expand/collapse)",
+      "desc": "Manage Gemini Cli accounts by importing from local Gemini Cli config, pasting a JWT token, or signing in via OAuth.",
       "reason": "Permission scope: read and write oauth_creds.json, google_accounts.json, and settings.json under default ~/.gemini or instance path (GEMINI_CLI_HOME/.gemini) for account import and local credential injection (account switching).",
       "storage": "Network scope: OAuth and refresh call official Google/Gemini APIs (such as oauth2.googleapis.com and googleapis.com). Only required auth/quota fields are sent; local account files are not uploaded to third-party servers."
     }

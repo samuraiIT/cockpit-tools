@@ -167,7 +167,7 @@
       "restart": "Redémarrer",
       "installing": "Installation"
     },
-    "gemini": "Comptes Gemini",
+    "gemini": "Comptes Gemini Cli",
     "codebuddy": "Comptes CodeBuddy",
     "qoder": "Comptes Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Actualisation auto du quota",
     "gemini": {
-      "title": "Paramètres Gemini",
-      "appPath": "Chemin Gemini"
+      "title": "Paramètres Gemini Cli",
+      "appPath": "Chemin Gemini Cli"
     },
     "geminiRefreshInterval": "Actualisation auto du quota",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Basculer vers Gemini",
+    "injectToGemini": "Basculer vers Gemini Cli",
     "updated": {
       "label": "Mis à jour il y a {{relative}}"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Heure de réinitialisation inconnue",
       "onDemand": "À la demande"
     },
-    "title": "Gestion des comptes Gemini",
+    "title": "Gestion des comptes Gemini Cli",
     "instances": {
-      "unsupported": "La gestion multi-instances Gemini n’est pas encore prise en charge.",
-      "unsupportedDescPlatform": "Le mode multi-instances Gemini est pris en charge uniquement sur macOS, Windows et Linux.",
+      "unsupported": "La gestion multi-instances Gemini Cli n’est pas encore prise en charge.",
+      "unsupportedDescPlatform": "Le mode multi-instances Gemini Cli est pris en charge uniquement sur macOS, Windows et Linux.",
       "launchDialogTitle": "Lancer l’instance",
       "launchHint": "Copiez la commande et exécutez-la manuellement, ou lancez-la directement dans le terminal.",
       "runInTerminal": "Exécuter dans le terminal"
@@ -1965,28 +1965,28 @@
       "success": "Compte changé avec succès"
     },
     "empty": {
-      "description": "Cliquez sur « Ajouter un compte » pour commencer à gérer vos comptes Gemini"
+      "description": "Cliquez sur « Ajouter un compte » pour commencer à gérer vos comptes Gemini Cli"
     },
     "addModal": {
-      "title": "Ajouter un compte Gemini"
+      "title": "Ajouter un compte Gemini Cli"
     },
     "oauth": {
-      "desc": "Cliquez sur le bouton ci-dessous et terminez l'autorisation Gemini dans le navigateur."
+      "desc": "Cliquez sur le bouton ci-dessous et terminez l'autorisation Gemini Cli dans le navigateur."
     },
     "token": {
-      "desc": "Collez votre jeton d'accès Gemini (JWT) ou des données JSON exportées.",
+      "desc": "Collez votre jeton d'accès Gemini Cli (JWT) ou des données JSON exportées.",
       "formatHint": "Champs obligatoires et exemples (cliquer pour développer)",
       "formatRequired": "Jeton unique : collez le JWT directement ; import en lot : utilisez le format tableau JSON",
       "singleExample": "Exemple unique (JWT)",
       "batchExample": "Exemple en lot (JSON)"
     },
     "import": {
-      "localDesc": "Importer les données de compte depuis le client Gemini local ou un fichier JSON.",
-      "localClient": "Importer depuis Gemini local"
+      "localDesc": "Importer les données de compte depuis le client Gemini Cli local ou un fichier JSON.",
+      "localClient": "Importer depuis Gemini Cli local"
     },
     "flowNotice": {
-      "title": "Guide du compte Gemini (cliquer pour développer/réduire)",
-      "desc": "Gérez les comptes Gemini en important depuis l'installation locale de Gemini ou en collant des jetons JWT. Les données sont traitées uniquement en local.",
+      "title": "Guide du compte Gemini Cli (cliquer pour développer/réduire)",
+      "desc": "Gérez les comptes Gemini Cli en important depuis l'installation locale de Gemini Cli ou en collant des jetons JWT. Les données sont traitées uniquement en local.",
       "reason": "Portée des autorisations : lecture et écriture de oauth_creds.json, google_accounts.json et settings.json sous ~/.gemini par défaut ou le chemin d’instance (GEMINI_CLI_HOME/.gemini) pour l’import de comptes et l’injection locale d’identifiants (changement de compte).",
       "storage": "Portée réseau : OAuth et l’actualisation du quota appellent les API officielles Google/Gemini (comme oauth2.googleapis.com et googleapis.com). Seuls les champs d’authentification/quota nécessaires sont envoyés ; les fichiers locaux ne sont pas téléversés vers des serveurs tiers."
     }

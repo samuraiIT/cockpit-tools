@@ -167,7 +167,7 @@
       "restart": "재시작",
       "installing": "설치 중"
     },
-    "gemini": "Gemini 계정",
+    "gemini": "Gemini Cli 계정",
     "codebuddy": "CodeBuddy 계정",
     "qoder": "Qoder 계정",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "할당량 자동 새로고침",
     "gemini": {
-      "title": "Gemini 설정",
-      "appPath": "Gemini 경로"
+      "title": "Gemini Cli 설정",
+      "appPath": "Gemini Cli 경로"
     },
     "geminiRefreshInterval": "할당량 자동 새로고침",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Gemini로 전환",
+    "injectToGemini": "Gemini Cli로 전환",
     "updated": {
       "label": "{{relative}} 전에 업데이트됨"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "재설정 시간 알 수 없음",
       "onDemand": "온디맨드"
     },
-    "title": "Gemini 계정 관리",
+    "title": "Gemini Cli 계정 관리",
     "instances": {
-      "unsupported": "Gemini 다중 인스턴스 관리는 아직 지원되지 않습니다.",
-      "unsupportedDescPlatform": "Gemini 다중 인스턴스는 macOS, Windows, Linux에서만 지원됩니다.",
+      "unsupported": "Gemini Cli 다중 인스턴스 관리는 아직 지원되지 않습니다.",
+      "unsupportedDescPlatform": "Gemini Cli 다중 인스턴스는 macOS, Windows, Linux에서만 지원됩니다.",
       "launchDialogTitle": "인스턴스 실행",
       "launchHint": "명령을 복사해 수동으로 실행하거나 터미널에서 바로 실행하세요.",
       "runInTerminal": "터미널에서 실행"
@@ -1965,28 +1965,28 @@
       "success": "계정 전환에 성공했습니다"
     },
     "empty": {
-      "description": "\"계정 추가\"를 클릭하여 Gemini 계정 관리를 시작하세요"
+      "description": "\"계정 추가\"를 클릭하여 Gemini Cli 계정 관리를 시작하세요"
     },
     "addModal": {
-      "title": "Gemini 계정 추가"
+      "title": "Gemini Cli 계정 추가"
     },
     "oauth": {
-      "desc": "아래 버튼을 클릭하고 브라우저에서 Gemini 인증을 완료하세요."
+      "desc": "아래 버튼을 클릭하고 브라우저에서 Gemini Cli 인증을 완료하세요."
     },
     "token": {
-      "desc": "Gemini 액세스 토큰(JWT) 또는 내보낸 JSON 데이터를 붙여넣으세요.",
+      "desc": "Gemini Cli 액세스 토큰(JWT) 또는 내보낸 JSON 데이터를 붙여넣으세요.",
       "formatHint": "필수 필드 및 예시 (클릭하여 펼치기)",
       "formatRequired": "단일 토큰: JWT를 직접 붙여넣기; 일괄 가져오기: JSON 배열 형식 사용",
       "singleExample": "단일 예시 (JWT)",
       "batchExample": "일괄 예시 (JSON)"
     },
     "import": {
-      "localDesc": "로컬 Gemini 클라이언트 또는 JSON 파일에서 계정 데이터를 가져옵니다.",
-      "localClient": "로컬 Gemini에서 가져오기"
+      "localDesc": "로컬 Gemini Cli 클라이언트 또는 JSON 파일에서 계정 데이터를 가져옵니다.",
+      "localClient": "로컬 Gemini Cli에서 가져오기"
     },
     "flowNotice": {
-      "title": "Gemini 계정 안내 (클릭하여 펼치기/접기)",
-      "desc": "로컬 Gemini 설치에서 가져오기 또는 JWT 토큰을 붙여넣어 Gemini 계정을 관리합니다. 데이터는 로컬에서만 처리됩니다.",
+      "title": "Gemini Cli 계정 안내 (클릭하여 펼치기/접기)",
+      "desc": "로컬 Gemini Cli 설치에서 가져오기 또는 JWT 토큰을 붙여넣어 Gemini Cli 계정을 관리합니다. 데이터는 로컬에서만 처리됩니다.",
       "reason": "권한 범위: 계정 가져오기 및 로컬 자격 증명 주입(계정 전환)을 위해 기본 ~/.gemini 또는 인스턴스 경로(GEMINI_CLI_HOME/.gemini)의 oauth_creds.json, google_accounts.json, settings.json을 읽고 씁니다.",
       "storage": "네트워크 범위: OAuth 및 할당량 갱신 시 Google/Gemini 공식 API(oauth2.googleapis.com, googleapis.com 등)를 호출합니다. 필요한 인증/할당량 필드만 전송되며, 로컬 계정 파일은 제3자 서버로 업로드되지 않습니다."
     }

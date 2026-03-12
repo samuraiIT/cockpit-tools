@@ -2470,7 +2470,7 @@ export function DashboardPage({ onNavigate, onOpenPlatformLayout, onEasterEggTri
           <div className="main-card-header">
             <div className="header-title">
               <GeminiIcon style={{ width: 18, height: 18 }} />
-              <h3>{t('nav.gemini', 'Gemini')}</h3>
+              <h3>Gemini Cli</h3>
             </div>
             <button
               className="header-action-btn"

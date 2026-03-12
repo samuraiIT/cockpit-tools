@@ -167,7 +167,7 @@
       "restart": "再起動",
       "installing": "インストール中"
     },
-    "gemini": "Geminiアカウント",
+    "gemini": "Gemini Cliアカウント",
     "codebuddy": "CodeBuddyアカウント",
     "qoder": "Qoderアカウント",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "クォータ自動更新",
     "gemini": {
-      "title": "Gemini 設定",
-      "appPath": "Gemini パス"
+      "title": "Gemini Cli 設定",
+      "appPath": "Gemini Cli パス"
     },
     "geminiRefreshInterval": "クォータ自動更新",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Gemini に切り替え",
+    "injectToGemini": "Gemini Cli に切り替え",
     "updated": {
       "label": "{{relative}}前に更新"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "リセット時刻不明",
       "onDemand": "オンデマンド"
     },
-    "title": "Gemini アカウント管理",
+    "title": "Gemini Cli アカウント管理",
     "instances": {
-      "unsupported": "Gemini のマルチインスタンス管理は現在未対応です。",
-      "unsupportedDescPlatform": "Gemini のマルチインスタンスは macOS、Windows、Linux のみ対応しています。",
+      "unsupported": "Gemini Cli のマルチインスタンス管理は現在未対応です。",
+      "unsupportedDescPlatform": "Gemini Cli のマルチインスタンスは macOS、Windows、Linux のみ対応しています。",
       "launchDialogTitle": "インスタンスを起動",
       "launchHint": "コマンドをコピーして手動実行するか、ターミナルで直接実行してください。",
       "runInTerminal": "ターミナルで実行"
@@ -1965,28 +1965,28 @@
       "success": "アカウントの切り替えに成功しました"
     },
     "empty": {
-      "description": "「アカウント追加」をクリックして Gemini アカウントの管理を開始してください"
+      "description": "「アカウント追加」をクリックして Gemini Cli アカウントの管理を開始してください"
     },
     "addModal": {
-      "title": "Gemini アカウントを追加"
+      "title": "Gemini Cli アカウントを追加"
     },
     "oauth": {
-      "desc": "下のボタンをクリックして、ブラウザで Gemini の認可を完了してください。"
+      "desc": "下のボタンをクリックして、ブラウザで Gemini Cli の認可を完了してください。"
     },
     "token": {
-      "desc": "Gemini アクセストークン（JWT）またはエクスポートされた JSON データを貼り付けてください。",
+      "desc": "Gemini Cli アクセストークン（JWT）またはエクスポートされた JSON データを貼り付けてください。",
       "formatHint": "必須フィールドと例（クリックで展開）",
       "formatRequired": "単一トークン：JWT を直接貼り付け；一括インポート：JSON 配列形式を使用",
       "singleExample": "単一の例（JWT）",
       "batchExample": "一括の例（JSON）"
     },
     "import": {
-      "localDesc": "ローカルの Gemini クライアントまたは JSON ファイルからアカウントデータをインポートします。",
-      "localClient": "ローカル Gemini からインポート"
+      "localDesc": "ローカルの Gemini Cli クライアントまたは JSON ファイルからアカウントデータをインポートします。",
+      "localClient": "ローカル Gemini Cli からインポート"
     },
     "flowNotice": {
-      "title": "Gemini アカウントガイド（クリックで展開/折りたたみ）",
-      "desc": "ローカルの Gemini インストールからのインポートまたは JWT トークンの貼り付けで Gemini アカウントを管理します。データはローカルでのみ処理されます。",
+      "title": "Gemini Cli アカウントガイド（クリックで展開/折りたたみ）",
+      "desc": "ローカルの Gemini Cli インストールからのインポートまたは JWT トークンの貼り付けで Gemini Cli アカウントを管理します。データはローカルでのみ処理されます。",
       "reason": "権限範囲: デフォルトの ~/.gemini またはインスタンスパス (GEMINI_CLI_HOME/.gemini) 配下の oauth_creds.json、google_accounts.json、settings.json を読み書きし、アカウントのインポートとローカル認証情報の注入（アカウント切り替え）を行います。",
       "storage": "ネットワーク範囲: OAuth とクォータ更新では Google/Gemini の公式 API（oauth2.googleapis.com、googleapis.com など）を呼び出します。送信されるのは必要な認証/クォータ項目のみで、ローカルのアカウントファイルは第三者サーバーへアップロードされません。"
     }

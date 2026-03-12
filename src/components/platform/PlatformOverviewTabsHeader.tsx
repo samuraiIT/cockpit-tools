@@ -67,7 +67,7 @@ const CONFIGS: Record<PlatformOverviewHeaderId, PlatformOverviewConfig> = {
   },
   gemini: {
     titleKey: 'gemini.title',
-    titleDefault: 'Gemini 账号管理',
+    titleDefault: 'Gemini Cli 账号管理',
     overviewIcon: <GeminiIcon className="tab-icon" />,
   },
   codebuddy: {

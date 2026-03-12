@@ -374,7 +374,7 @@ export function QuickSettingsPopover({ type }: QuickSettingsPopoverProps) {
       case 'cursor':
         return t('quickSettings.cursor.title', 'Cursor 设置');
       case 'gemini':
-        return t('quickSettings.gemini.title', 'Gemini 设置');
+        return t('quickSettings.gemini.title', 'Gemini Cli 设置');
       case 'codebuddy':
         return t('settings.general.codebuddySettingsTitle', 'CodeBuddy 设置');
       case 'qoder':
@@ -506,7 +506,7 @@ export function QuickSettingsPopover({ type }: QuickSettingsPopoverProps) {
       case 'cursor':
         return t('quickSettings.cursor.appPath', 'Cursor 路径');
       case 'gemini':
-        return t('quickSettings.gemini.appPath', 'Gemini CLI 路径');
+        return t('quickSettings.gemini.appPath', 'Gemini Cli 路径');
       case 'codebuddy':
         return t('quickSettings.codebuddy.appPath', 'CodeBuddy 路径');
       case 'qoder':

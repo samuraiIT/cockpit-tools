@@ -167,7 +167,7 @@
       "restart": "Yeniden başlat",
       "installing": "Yükleniyor"
     },
-    "gemini": "İkizler burcu",
+    "gemini": "Gemini Cli hesapları",
     "codebuddy": "CodeBuddy Hesapları",
     "qoder": "Qoder Hesapları",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Kota otomatik yenileme",
     "gemini": {
-      "title": "İkizler Ayarları",
-      "appPath": "Gemini CLI Yolu"
+      "title": "Gemini Cli Ayarları",
+      "appPath": "Gemini Cli Yolu"
     },
     "geminiRefreshInterval": "Kota Otomatik Yenileme",
     "codebuddy": {
@@ -1940,31 +1940,31 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Gemini'ye geçiş",
-    "title": "Gemini Hesap Yönetimi",
+    "injectToGemini": "Gemini Cli'ye geç",
+    "title": "Gemini Cli Hesap Yönetimi",
     "empty": {
-      "description": "Gemini hesaplarınızı yönetmeye başlamak için \"Hesap Ekle\"ye tıklayın"
+      "description": "Gemini Cli hesaplarınızı yönetmeye başlamak için \"Hesap Ekle\"ye tıklayın"
     },
     "addModal": {
-      "title": "Gemini Hesabı Ekle"
+      "title": "Gemini Cli Hesabı Ekle"
     },
     "oauth": {
-      "desc": "Aşağıdaki düğmeye tıklayın ve tarayıcınızda Gemini OAuth yetkilendirmesini tamamlayın."
+      "desc": "Aşağıdaki düğmeye tıklayın ve tarayıcınızda Gemini Cli OAuth yetkilendirmesini tamamlayın."
     },
     "token": {
-      "desc": "Gemini Erişim Simgenizi (JWT) veya dışa aktarılan JSON verilerinizi yapıştırın.",
+      "desc": "Gemini Cli Erişim Simgenizi (JWT) veya dışa aktarılan JSON verilerinizi yapıştırın.",
       "formatHint": "Zorunlu alanlar ve örnekler (genişletmek için tıklayın)",
       "formatRequired": "Tek jeton: JWT'yi doğrudan yapıştırın; toplu içe aktarma: JSON dizi biçimini kullanın",
       "singleExample": "Tek örnek (JWT)",
       "batchExample": "Toplu örnek (JSON)"
     },
     "import": {
-      "localDesc": "Gemini hesap verilerini yerel Gemini yapılandırma dizininden (~/.gemini) veya bir JSON dosyasından içe aktarın.",
-      "localClient": "Yerel Gemini'den ithalat"
+      "localDesc": "Gemini Cli hesap verilerini yerel Gemini Cli yapılandırma dizininden (~/.gemini) veya bir JSON dosyasından içe aktarın.",
+      "localClient": "Yerel Gemini Cli'den içe aktar"
     },
     "flowNotice": {
-      "title": "Gemini hesap kılavuzu (genişletmek/daraltmak için tıklayın)",
-      "desc": "Yerel Gemini yapılandırmasından içe aktararak, bir JWT jetonu yapıştırarak veya OAuth aracılığıyla oturum açarak Gemini hesaplarını yönetin.",
+      "title": "Gemini Cli hesap kılavuzu (genişletmek/daraltmak için tıklayın)",
+      "desc": "Yerel Gemini Cli yapılandırmasından içe aktararak, bir JWT jetonu yapıştırarak veya OAuth aracılığıyla oturum açarak Gemini Cli hesaplarını yönetin.",
       "reason": "İzin kapsamı: hesap içe aktarma ve yerel kimlik bilgileri ekleme (hesap değiştirme) için varsayılan ~/.gemini veya örnek yolu (GEMINI_CLI_HOME/.gemini) altında oauth_creds.json, google_accounts.json ve settings.json okuyun ve yazın.",
       "storage": "Ağ kapsamı: OAuth ve yenileme, resmi Google/Gemini API'lerini (oauth2.googleapis.com ve googleapis.com gibi) çağırır. Yalnızca gerekli kimlik doğrulama/kota alanları gönderilir; yerel hesap dosyaları üçüncü taraf sunuculara yüklenmez."
     },
@@ -1981,8 +1981,8 @@
       "onDemand": "Talep üzerine"
     },
     "instances": {
-      "unsupported": "Gemini çoklu örnek yönetimi henüz desteklenmiyor.",
-      "unsupportedDescPlatform": "Gemini çoklu örneği yalnızca macOS, Windows ve Linux'ta desteklenir.",
+      "unsupported": "Gemini Cli çoklu örnek yönetimi henüz desteklenmiyor.",
+      "unsupportedDescPlatform": "Gemini Cli çoklu örneği yalnızca macOS, Windows ve Linux'ta desteklenir.",
       "launchDialogTitle": "Örneği Başlat",
       "launchHint": "Komutu kopyalayın ve manuel olarak çalıştırın veya doğrudan terminalde çalıştırın.",
       "runInTerminal": "Terminalde Çalıştır"

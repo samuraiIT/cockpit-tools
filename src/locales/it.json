@@ -167,7 +167,7 @@
       "restart": "Riavvia",
       "installing": "Installazione"
     },
-    "gemini": "Account Gemini",
+    "gemini": "Account Gemini Cli",
     "codebuddy": "Account CodeBuddy",
     "qoder": "Account Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Aggiornamento automatico quota",
     "gemini": {
-      "title": "Impostazioni Gemini",
-      "appPath": "Percorso Gemini"
+      "title": "Impostazioni Gemini Cli",
+      "appPath": "Percorso Gemini Cli"
     },
     "geminiRefreshInterval": "Aggiornamento automatico quota",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Passa a Gemini",
+    "injectToGemini": "Passa a Gemini Cli",
     "updated": {
       "label": "Aggiornato {{relative}} fa"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Ora di reimpostazione sconosciuta",
       "onDemand": "Su richiesta"
     },
-    "title": "Gestione account Gemini",
+    "title": "Gestione account Gemini Cli",
     "instances": {
-      "unsupported": "La gestione multi-istanza di Gemini non è ancora supportata.",
-      "unsupportedDescPlatform": "La multi-istanza Gemini è supportata solo su macOS, Windows e Linux.",
+      "unsupported": "La gestione multi-istanza di Gemini Cli non è ancora supportata.",
+      "unsupportedDescPlatform": "La multi-istanza Gemini Cli è supportata solo su macOS, Windows e Linux.",
       "launchDialogTitle": "Avvia istanza",
       "launchHint": "Copia il comando ed eseguilo manualmente, oppure eseguilo direttamente nel terminale.",
       "runInTerminal": "Esegui nel terminale"
@@ -1965,28 +1965,28 @@
       "success": "Account cambiato con successo"
     },
     "empty": {
-      "description": "Fai clic su \"Aggiungi account\" per iniziare a gestire i tuoi account Gemini"
+      "description": "Fai clic su \"Aggiungi account\" per iniziare a gestire i tuoi account Gemini Cli"
     },
     "addModal": {
-      "title": "Aggiungi account Gemini"
+      "title": "Aggiungi account Gemini Cli"
     },
     "oauth": {
-      "desc": "Fai clic sul pulsante qui sotto e completa l'autorizzazione di Gemini nel browser."
+      "desc": "Fai clic sul pulsante qui sotto e completa l'autorizzazione di Gemini Cli nel browser."
     },
     "token": {
-      "desc": "Incolla il tuo token di accesso Gemini (JWT) o i dati JSON esportati.",
+      "desc": "Incolla il tuo token di accesso Gemini Cli (JWT) o i dati JSON esportati.",
       "formatHint": "Campi obbligatori ed esempi (clicca per espandere)",
       "formatRequired": "Token singolo: incolla direttamente il JWT; importazione in blocco: usa il formato array JSON",
       "singleExample": "Esempio singolo (JWT)",
       "batchExample": "Esempio in blocco (JSON)"
     },
     "import": {
-      "localDesc": "Importa i dati dell'account dal client Gemini locale o da un file JSON.",
-      "localClient": "Importa da Gemini locale"
+      "localDesc": "Importa i dati dell'account dal client Gemini Cli locale o da un file JSON.",
+      "localClient": "Importa da Gemini Cli locale"
     },
     "flowNotice": {
-      "title": "Guida account Gemini (clicca per espandere/comprimere)",
-      "desc": "Gestisci gli account Gemini importando dall'installazione locale di Gemini o incollando token JWT. I dati vengono elaborati solo localmente.",
+      "title": "Guida account Gemini Cli (clicca per espandere/comprimere)",
+      "desc": "Gestisci gli account Gemini Cli importando dall'installazione locale di Gemini Cli o incollando token JWT. I dati vengono elaborati solo localmente.",
       "reason": "Ambito autorizzazioni: lettura e scrittura di oauth_creds.json, google_accounts.json e settings.json nel percorso predefinito ~/.gemini o nel percorso istanza (GEMINI_CLI_HOME/.gemini) per importare account e iniettare credenziali locali (cambio account).",
       "storage": "Ambito rete: OAuth e aggiornamento quota chiamano le API ufficiali Google/Gemini (come oauth2.googleapis.com e googleapis.com). Vengono inviati solo i campi necessari di autenticazione/quota; i file locali non vengono caricati su server di terze parti."
     }

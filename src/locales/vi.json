@@ -167,7 +167,7 @@
       "restart": "Khởi động lại",
       "installing": "Đang cài đặt"
     },
-    "gemini": "Song Tử",
+    "gemini": "Tài khoản Gemini Cli",
     "codebuddy": "Tài khoản CodeBuddy",
     "qoder": "Tài khoản Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Tự động làm mới hạn mức",
     "gemini": {
-      "title": "Cài đặt Song Tử",
-      "appPath": "Đường dẫn CLI của Song Tử"
+      "title": "Cài đặt Gemini Cli",
+      "appPath": "Đường dẫn Gemini Cli"
     },
     "geminiRefreshInterval": "Tự động làm mới hạn ngạch",
     "codebuddy": {
@@ -1940,31 +1940,31 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Chuyển sang cung Song Tử",
-    "title": "Quản lý tài khoản Song Tử",
+    "injectToGemini": "Chuyển sang Gemini Cli",
+    "title": "Quản lý tài khoản Gemini Cli",
     "empty": {
-      "description": "Nhấp vào \"Thêm tài khoản\" để bắt đầu quản lý tài khoản Gemini của bạn"
+      "description": "Nhấp vào \"Thêm tài khoản\" để bắt đầu quản lý tài khoản Gemini Cli của bạn"
     },
     "addModal": {
-      "title": "Thêm tài khoản Song Tử"
+      "title": "Thêm tài khoản Gemini Cli"
     },
     "oauth": {
-      "desc": "Nhấp vào nút bên dưới và hoàn tất ủy quyền Gemini OAuth trong trình duyệt của bạn."
+      "desc": "Nhấp vào nút bên dưới và hoàn tất ủy quyền Gemini Cli OAuth trong trình duyệt của bạn."
     },
     "token": {
-      "desc": "Dán Mã thông báo truy cập Gemini (JWT) hoặc dữ liệu JSON đã xuất của bạn.",
+      "desc": "Dán Mã thông báo truy cập Gemini Cli (JWT) hoặc dữ liệu JSON đã xuất của bạn.",
       "formatHint": "Các trường và ví dụ bắt buộc (bấm vào để mở rộng)",
       "formatRequired": "Mã thông báo đơn: dán JWT trực tiếp; nhập hàng loạt: sử dụng định dạng mảng JSON",
       "singleExample": "Ví dụ đơn (JWT)",
       "batchExample": "Ví dụ về lô (JSON)"
     },
     "import": {
-      "localDesc": "Nhập dữ liệu tài khoản Gemini từ thư mục cấu hình Gemini cục bộ (~/.gemini) hoặc tệp JSON.",
-      "localClient": "Nhập khẩu từ Gemini địa phương"
+      "localDesc": "Nhập dữ liệu tài khoản Gemini Cli từ thư mục cấu hình Gemini Cli cục bộ (~/.gemini) hoặc tệp JSON.",
+      "localClient": "Nhập từ Gemini Cli cục bộ"
     },
     "flowNotice": {
-      "title": "Hướng dẫn tài khoản Gemini (bấm vào để mở rộng/thu gọn)",
-      "desc": "Quản lý tài khoản Gemini bằng cách nhập từ cấu hình Gemini cục bộ, dán mã thông báo JWT hoặc đăng nhập qua OAuth.",
+      "title": "Hướng dẫn tài khoản Gemini Cli (bấm vào để mở rộng/thu gọn)",
+      "desc": "Quản lý tài khoản Gemini Cli bằng cách nhập từ cấu hình Gemini Cli cục bộ, dán mã thông báo JWT hoặc đăng nhập qua OAuth.",
       "reason": "Phạm vi quyền: đọc và ghi oauth_creds.json, google_accounts.json và settings.json theo mặc định ~/.gemini hoặc đường dẫn phiên bản (GEMINI_CLI_HOME/.gemini) để nhập tài khoản và chèn thông tin xác thực cục bộ (chuyển đổi tài khoản).",
       "storage": "Phạm vi mạng: OAuth và làm mới cuộc gọi API Google/Gemini chính thức (chẳng hạn như oauth2.googleapis.com và googleapis.com). Chỉ các trường xác thực/hạn ngạch bắt buộc mới được gửi; các tệp tài khoản cục bộ không được tải lên máy chủ của bên thứ ba."
     },
@@ -1981,8 +1981,8 @@
       "onDemand": "Theo yêu cầu"
     },
     "instances": {
-      "unsupported": "Quản lý đa phiên bản Gemini chưa được hỗ trợ.",
-      "unsupportedDescPlatform": "Phiên bản đa phiên bản Gemini chỉ được hỗ trợ trên macOS, Windows và Linux.",
+      "unsupported": "Quản lý đa phiên bản Gemini Cli chưa được hỗ trợ.",
+      "unsupportedDescPlatform": "Phiên bản đa phiên bản Gemini Cli chỉ được hỗ trợ trên macOS, Windows và Linux.",
       "launchDialogTitle": "Khởi chạy phiên bản",
       "launchHint": "Sao chép lệnh và chạy thủ công hoặc thực thi trực tiếp trong terminal.",
       "runInTerminal": "Chạy trong Terminal"

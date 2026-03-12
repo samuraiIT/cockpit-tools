@@ -158,7 +158,7 @@ fn resolve_gemini_home(cli_home_root: Option<&Path>) -> Result<PathBuf, String> 
         Some(root) => {
             let trimmed = root.to_string_lossy().trim().to_string();
             if trimmed.is_empty() {
-                return Err("Gemini CLI HOME 目录不能为空".to_string());
+                return Err("Gemini Cli HOME 目录不能为空".to_string());
             }
             Ok(PathBuf::from(trimmed).join(GEMINI_HOME_DIR))
         }

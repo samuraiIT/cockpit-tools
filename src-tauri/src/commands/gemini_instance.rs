@@ -345,7 +345,7 @@ pub async fn gemini_stop_instance(instance_id: String) -> Result<InstanceProfile
 
 #[tauri::command]
 pub async fn gemini_open_instance_window(_instance_id: String) -> Result<(), String> {
-    Err("Gemini CLI 不支持窗口定位，请使用“启动”后的命令在终端中运行".to_string())
+    Err("Gemini Cli 不支持窗口定位，请使用“启动”后的命令在终端中运行".to_string())
 }
 
 #[tauri::command]
@@ -394,7 +394,7 @@ pub async fn gemini_execute_instance_launch_command(instance_id: String) -> Resu
             let stderr = String::from_utf8_lossy(&output.stderr);
             return Err(format!("终端执行失败: {}", stderr.trim()));
         }
-        return Ok("已在终端执行 Gemini 命令".to_string());
+        return Ok("已在终端执行 Gemini Cli 命令".to_string());
     }
 
     #[cfg(target_os = "windows")]
@@ -403,7 +403,7 @@ pub async fn gemini_execute_instance_launch_command(instance_id: String) -> Resu
             .args(["/C", "start", "", "cmd", "/K", &command])
             .spawn()
             .map_err(|e| format!("打开终端失败: {}", e))?;
-        return Ok("已在终端执行 Gemini 命令".to_string());
+        return Ok("已在终端执行 Gemini Cli 命令".to_string());
     }
 
     #[cfg(target_os = "linux")]
@@ -423,8 +423,8 @@ pub async fn gemini_execute_instance_launch_command(instance_id: String) -> Resu
                     .spawn()
             })
             .or_else(|_| Command::new("sh").args(["-lc", &command]).spawn())
-            .map_err(|e| format!("执行 Gemini 命令失败: {}", e))?;
-        return Ok("已执行 Gemini 命令".to_string());
+            .map_err(|e| format!("执行 Gemini Cli 命令失败: {}", e))?;
+        return Ok("已执行 Gemini Cli 命令".to_string());
     }
 
     #[allow(unreachable_code)]

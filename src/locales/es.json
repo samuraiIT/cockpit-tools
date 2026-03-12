@@ -167,7 +167,7 @@
       "restart": "Reiniciar",
       "installing": "Instalando"
     },
-    "gemini": "Cuentas Gemini",
+    "gemini": "Cuentas Gemini Cli",
     "codebuddy": "Cuentas de CodeBuddy",
     "qoder": "Cuentas de Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Actualización automática de cuota",
     "gemini": {
-      "title": "Ajustes de Gemini",
-      "appPath": "Ruta de Gemini"
+      "title": "Ajustes de Gemini Cli",
+      "appPath": "Ruta de Gemini Cli"
     },
     "geminiRefreshInterval": "Actualización automática de cuota",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Cambiar a Gemini",
+    "injectToGemini": "Cambiar a Gemini Cli",
     "updated": {
       "label": "Actualizado hace {{relative}}"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Hora de restablecimiento desconocida",
       "onDemand": "Bajo demanda"
     },
-    "title": "Gestión de cuentas de Gemini",
+    "title": "Gestión de cuentas de Gemini Cli",
     "instances": {
-      "unsupported": "La gestión de múltiples instancias de Gemini aún no es compatible.",
-      "unsupportedDescPlatform": "La función de múltiples instancias de Gemini solo es compatible con macOS, Windows y Linux.",
+      "unsupported": "La gestión de múltiples instancias de Gemini Cli aún no es compatible.",
+      "unsupportedDescPlatform": "La función de múltiples instancias de Gemini Cli solo es compatible con macOS, Windows y Linux.",
       "launchDialogTitle": "Iniciar instancia",
       "launchHint": "Copia el comando y ejecútalo manualmente, o ejecútalo directamente en la terminal.",
       "runInTerminal": "Ejecutar en terminal"
@@ -1965,28 +1965,28 @@
       "success": "Cuenta cambiada correctamente"
     },
     "empty": {
-      "description": "Haz clic en \"Añadir cuenta\" para comenzar a gestionar tus cuentas de Gemini"
+      "description": "Haz clic en \"Añadir cuenta\" para comenzar a gestionar tus cuentas de Gemini Cli"
     },
     "addModal": {
-      "title": "Añadir cuenta de Gemini"
+      "title": "Añadir cuenta de Gemini Cli"
     },
     "oauth": {
-      "desc": "Haz clic en el botón de abajo y completa la autorización de Gemini en el navegador."
+      "desc": "Haz clic en el botón de abajo y completa la autorización de Gemini Cli en el navegador."
     },
     "token": {
-      "desc": "Pega tu token de acceso de Gemini (JWT) o datos JSON exportados.",
+      "desc": "Pega tu token de acceso de Gemini Cli (JWT) o datos JSON exportados.",
       "formatHint": "Campos obligatorios y ejemplos (clic para expandir)",
       "formatRequired": "Token individual: pega el JWT directamente; importación masiva: usa formato de array JSON",
       "singleExample": "Ejemplo individual (JWT)",
       "batchExample": "Ejemplo masivo (JSON)"
     },
     "import": {
-      "localDesc": "Importar datos de cuenta desde el cliente local de Gemini o un archivo JSON.",
-      "localClient": "Importar desde Gemini local"
+      "localDesc": "Importar datos de cuenta desde el cliente local de Gemini Cli o un archivo JSON.",
+      "localClient": "Importar desde Gemini Cli local"
     },
     "flowNotice": {
-      "title": "Guía de cuenta de Gemini (clic para expandir/contraer)",
-      "desc": "Gestiona cuentas de Gemini importando desde la instalación local de Gemini o pegando tokens JWT. Los datos se procesan solo localmente.",
+      "title": "Guía de cuenta de Gemini Cli (clic para expandir/contraer)",
+      "desc": "Gestiona cuentas de Gemini Cli importando desde la instalación local de Gemini Cli o pegando tokens JWT. Los datos se procesan solo localmente.",
       "reason": "Alcance de permisos: leer y escribir oauth_creds.json, google_accounts.json y settings.json en ~/.gemini predeterminado o en la ruta de instancia (GEMINI_CLI_HOME/.gemini) para importar cuentas e inyectar credenciales locales (cambio de cuenta).",
       "storage": "Alcance de red: OAuth y la actualización de cuota llaman a las API oficiales de Google/Gemini (como oauth2.googleapis.com y googleapis.com). Solo se envían campos necesarios de autenticación/cuota; los archivos locales no se suben a servidores de terceros."
     }

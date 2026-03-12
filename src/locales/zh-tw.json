@@ -167,7 +167,7 @@
       "restart": "重新啟動",
       "installing": "安裝中"
     },
-    "gemini": "雙子座",
+    "gemini": "Gemini Cli 帳號",
     "codebuddy": "CodeBuddy 帳號",
     "qoder": "Qoder 帳號",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "配額自動更新",
     "gemini": {
-      "title": "雙子座設定",
-      "appPath": "Gemini CLI 路徑"
+      "title": "Gemini Cli 設定",
+      "appPath": "Gemini Cli 路徑"
     },
     "geminiRefreshInterval": "配額自動刷新",
     "codebuddy": {
@@ -1940,31 +1940,31 @@
     }
   },
   "gemini": {
-    "injectToGemini": "切換到雙子座",
-    "title": "雙子座帳戶管理",
+    "injectToGemini": "切換到 Gemini Cli",
+    "title": "Gemini Cli 帳戶管理",
     "empty": {
-      "description": "點擊「新增帳戶」開始管理您的 Gemini 帳戶"
+      "description": "點擊「新增帳戶」開始管理您的 Gemini Cli 帳戶"
     },
     "addModal": {
-      "title": "新增雙子座帳戶"
+      "title": "新增 Gemini Cli 帳戶"
     },
     "oauth": {
-      "desc": "點選下方按鈕，在瀏覽器中完成Gemini OAuth授權。"
+      "desc": "點選下方按鈕，在瀏覽器中完成Gemini Cli OAuth授權。"
     },
     "token": {
-      "desc": "貼上您的 Gemini 存取權令牌 (JWT) 或匯出的 JSON 資料。",
+      "desc": "貼上您的 Gemini Cli 存取權令牌 (JWT) 或匯出的 JSON 資料。",
       "formatHint": "必填欄位和範例（點擊展開）",
       "formatRequired": "單token：直接貼上JWT；批次匯入：使用JSON陣列格式",
       "singleExample": "單一範例 (JWT)",
       "batchExample": "批量範例（JSON）"
     },
     "import": {
-      "localDesc": "從本機 Gemini 設定目錄 (~/.gemini) 或 JSON 檔案匯入 Gemini 帳戶資料。",
-      "localClient": "從當地 Gemini 進口"
+      "localDesc": "從本機 Gemini Cli 設定目錄 (~/.gemini) 或 JSON 檔案匯入 Gemini Cli 帳戶資料。",
+      "localClient": "從本機 Gemini Cli 匯入"
     },
     "flowNotice": {
-      "title": "Gemini 帳號指南（點選展開/折疊）",
-      "desc": "透過從本機 Gemini 設定匯入、貼上 JWT 令牌或透過 OAuth 登入來管理 Gemini 帳戶。",
+      "title": "Gemini Cli 帳號指南（點選展開/折疊）",
+      "desc": "透過從本機 Gemini Cli 設定匯入、貼上 JWT 令牌或透過 OAuth 登入來管理 Gemini Cli 帳戶。",
       "reason": "權限範圍：在預設~/.gemini或實例路徑（GEMINI_CLI_HOME/.gemini）下讀寫oauth_creds.json、google_accounts.json、settings.json，用於帳戶導入和本地憑證注入（帳戶切換）。",
       "storage": "網路範圍：OAuth 和刷新呼叫官方 Google/Gemini API（例如 oauth2.googleapis.com 和 googleapis.com）。僅發送必需的身份驗證/配額欄位；本機帳戶檔案不會上傳到第三方伺服器。"
     },
@@ -1981,8 +1981,8 @@
       "onDemand": "一經請求"
     },
     "instances": {
-      "unsupported": "尚不支援Gemini多實例管理。",
-      "unsupportedDescPlatform": "Gemini 多執行個體僅在 macOS、Windows 和 Linux 上支援。",
+      "unsupported": "尚不支援Gemini Cli多實例管理。",
+      "unsupportedDescPlatform": "Gemini Cli 多執行個體僅在 macOS、Windows 和 Linux 上支援。",
       "launchDialogTitle": "啟動實例",
       "launchHint": "複製命令並手動運行，或直接在終端機中執行。",
       "runInTerminal": "在終端機中運行"

@@ -167,7 +167,7 @@
       "restart": "Restartovat",
       "installing": "Instalace"
     },
-    "gemini": "Účty Gemini",
+    "gemini": "Účty Gemini Cli",
     "codebuddy": "Účty CodeBuddy",
     "qoder": "Účty Qoder",
     "trae": "Trae"
@@ -1415,8 +1415,8 @@
     },
     "cursorRefreshInterval": "Automatická obnova kvóty",
     "gemini": {
-      "title": "Nastavení Gemini",
-      "appPath": "Cesta k Gemini"
+      "title": "Nastavení Gemini Cli",
+      "appPath": "Cesta k Gemini Cli"
     },
     "geminiRefreshInterval": "Automatická obnova kvóty",
     "codebuddy": {
@@ -1940,7 +1940,7 @@
     }
   },
   "gemini": {
-    "injectToGemini": "Přepnout na Gemini",
+    "injectToGemini": "Přepnout na Gemini Cli",
     "updated": {
       "label": "Aktualizováno před {{relative}}"
     },
@@ -1953,10 +1953,10 @@
       "resetsUnknown": "Čas obnovení není znám",
       "onDemand": "Na vyžádání"
     },
-    "title": "Správa účtů Gemini",
+    "title": "Správa účtů Gemini Cli",
     "instances": {
-      "unsupported": "Správa více instancí Gemini zatím není podporována.",
-      "unsupportedDescPlatform": "Více instancí Gemini je podporováno pouze na macOS, Windows a Linuxu.",
+      "unsupported": "Správa více instancí Gemini Cli zatím není podporována.",
+      "unsupportedDescPlatform": "Více instancí Gemini Cli je podporováno pouze na macOS, Windows a Linuxu.",
       "launchDialogTitle": "Spustit instanci",
       "launchHint": "Zkopírujte příkaz a spusťte jej ručně, nebo jej spusťte přímo v terminálu.",
       "runInTerminal": "Spustit v terminálu"
@@ -1965,28 +1965,28 @@
       "success": "Účet byl úspěšně přepnut"
     },
     "empty": {
-      "description": "Klikněte na „Přidat účet“ a začněte spravovat své účty Gemini"
+      "description": "Klikněte na „Přidat účet“ a začněte spravovat své účty Gemini Cli"
     },
     "addModal": {
-      "title": "Přidat účet Gemini"
+      "title": "Přidat účet Gemini Cli"
     },
     "oauth": {
-      "desc": "Klikněte na tlačítko níže a dokončete autorizaci Gemini v prohlížeči."
+      "desc": "Klikněte na tlačítko níže a dokončete autorizaci Gemini Cli v prohlížeči."
     },
     "token": {
-      "desc": "Vložte svůj přístupový token Gemini (JWT) nebo exportovaná JSON data.",
+      "desc": "Vložte svůj přístupový token Gemini Cli (JWT) nebo exportovaná JSON data.",
       "formatHint": "Povinná pole a příklady (klikněte pro rozbalení)",
       "formatRequired": "Jeden token: vložte JWT přímo; hromadný import: použijte formát JSON pole",
       "singleExample": "Příklad jednoho tokenu (JWT)",
       "batchExample": "Příklad hromadného importu (JSON)"
     },
     "import": {
-      "localDesc": "Importujte data účtu z místního klienta Gemini nebo souboru JSON.",
-      "localClient": "Import z místního Gemini"
+      "localDesc": "Importujte data účtu z místního klienta Gemini Cli nebo souboru JSON.",
+      "localClient": "Import z místního Gemini Cli"
     },
     "flowNotice": {
-      "title": "Průvodce účtem Gemini (klikněte pro rozbalení/sbalení)",
-      "desc": "Spravujte účty Gemini importem z místní instalace Gemini nebo vložením tokenů JWT. Data jsou zpracovávána pouze lokálně.",
+      "title": "Průvodce účtem Gemini Cli (klikněte pro rozbalení/sbalení)",
+      "desc": "Spravujte účty Gemini Cli importem z místní instalace Gemini Cli nebo vložením tokenů JWT. Data jsou zpracovávána pouze lokálně.",
       "reason": "Rozsah oprávnění: čtení a zápis oauth_creds.json, google_accounts.json a settings.json v výchozím ~/.gemini nebo v cestě instance (GEMINI_CLI_HOME/.gemini) pro import účtů a lokální injekci přihlašovacích údajů (přepnutí účtu).",
       "storage": "Síťový rozsah: OAuth a obnovení kvóty volají oficiální API Google/Gemini (např. oauth2.googleapis.com a googleapis.com). Odesílají se jen nutná pole pro autentizaci/kvótu; lokální soubory se na servery třetích stran nenahrávají."
     }
