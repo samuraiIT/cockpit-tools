@@ -731,6 +731,9 @@ export function useProviderAccountsPage<TAccount extends ProviderAccountBase>(
       try {
         const imported = await importFn();
         await fetchAccounts();
+        // 部分平台本机导入后本地索引存在极短暂写入延迟，补一次短延时刷新保障列表及时更新。
+        await new Promise((resolve) => setTimeout(resolve, 180));
+        await fetchAccounts();
         setAddStatus('success');
         setAddMessage(
           t('common.shared.token.importSuccessMsg', {

@@ -319,6 +319,39 @@ pub fn clear_all_pids() -> Result<(), String> {
     Ok(())
 }
 
+pub fn replace_bind_account_references(old_account_id: &str, new_account_id: &str) -> Result<(), String> {
+    let old_id = old_account_id.trim();
+    let new_id = new_account_id.trim();
+    if old_id.is_empty() || new_id.is_empty() || old_id == new_id {
+        return Ok(());
+    }
+
+    let _lock = CODEX_INSTANCE_STORE_LOCK
+        .lock()
+        .map_err(|_| "无法获取实例锁")?;
+    let mut store = load_instance_store()?;
+    let mut changed = false;
+
+    if store.default_settings.bind_account_id.as_deref() == Some(old_id) {
+        store.default_settings.bind_account_id = Some(new_id.to_string());
+        store.default_settings.follow_local_account = false;
+        changed = true;
+    }
+
+    for instance in &mut store.instances {
+        if instance.bind_account_id.as_deref() == Some(old_id) {
+            instance.bind_account_id = Some(new_id.to_string());
+            changed = true;
+        }
+    }
+
+    if changed {
+        save_instance_store(&store)?;
+    }
+
+    Ok(())
+}
+
 pub async fn inject_account_to_profile(profile_dir: &Path, account_id: &str) -> Result<(), String> {
     let account = modules::codex_account::prepare_account_for_injection(account_id).await?;
     modules::codex_account::write_auth_file_to_dir(profile_dir, &account)

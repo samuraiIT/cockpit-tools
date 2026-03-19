@@ -23,6 +23,8 @@ pub struct CodexAccount {
     pub auth_mode: CodexAuthMode,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub openai_api_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub api_base_url: Option<String>,
     pub user_id: Option<String>,
     pub plan_type: Option<String>,
     pub account_id: Option<String>,
@@ -94,6 +96,8 @@ pub struct CodexAuthFile {
     #[serde(rename = "OPENAI_API_KEY")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub openai_api_key: Option<serde_json::Value>, // 可以是 null 或字符串
+    #[serde(default, alias = "api_base_url", alias = "apiBaseUrl", skip_serializing_if = "Option::is_none")]
+    pub base_url: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tokens: Option<CodexAuthTokens>,
     #[serde(default)]
@@ -176,6 +180,7 @@ impl CodexAccount {
             email,
             auth_mode: CodexAuthMode::OAuth,
             openai_api_key: None,
+            api_base_url: None,
             user_id: None,
             plan_type: None,
             account_id: None,
@@ -191,7 +196,12 @@ impl CodexAccount {
         }
     }
 
-    pub fn new_api_key(id: String, email: String, openai_api_key: String) -> Self {
+    pub fn new_api_key(
+        id: String,
+        email: String,
+        openai_api_key: String,
+        api_base_url: Option<String>,
+    ) -> Self {
         let mut account = Self::new(
             id,
             email,
@@ -203,6 +213,7 @@ impl CodexAccount {
         );
         account.auth_mode = CodexAuthMode::Apikey;
         account.openai_api_key = Some(openai_api_key);
+        account.api_base_url = api_base_url;
         account.plan_type = Some("API_KEY".to_string());
         account
     }

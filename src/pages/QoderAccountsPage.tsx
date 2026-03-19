@@ -677,6 +677,8 @@ export function QoderAccountsPage() {
     try {
       await qoderService.importQoderFromLocal();
       await store.fetchAccounts();
+      await new Promise((resolve) => setTimeout(resolve, 180));
+      await store.fetchAccounts();
       setAddStatus('success');
       setAddMessage(t('qoder.import.localSuccess', '已从本机 Qoder 导入账号。'));
     } catch (error) {

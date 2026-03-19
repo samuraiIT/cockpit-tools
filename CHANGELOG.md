@@ -7,6 +7,20 @@ All notable changes to Cockpit Tools will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
+## [0.16.2] - 2026-03-19
+
+### Added
+- **Codex API Key accounts now support custom Base URL end-to-end with local persistence**: API Key add/import/switch flows now read and write `base_url` (including `config.toml`) and keep account metadata synced with local auth files.
+- **Codex API Key accounts now support in-place credential editing**: account cards/tables add an edit action for API Key + Base URL, and backend updates account id/index, current-account mapping, and instance bindings in one operation.
+
+### Changed
+- **Codex quota-error cards/tables now provide direct OAuth reauthorize action for token-invalid scenarios**: `401`/`token_invalidated`-like errors can jump back into OAuth authorization from the quota error area.
+
+### Fixed
+- **Local-import account lists now refresh more reliably across pages**: shared provider, Codex, Qoder, and generic accounts pages add a short delayed refetch after import to avoid transient index-write lag.
+- **Trae refresh diagnostics are now richer for non-JSON upstream responses**: parse errors now include HTTP status, key response headers, and a safe body preview to speed up troubleshooting.
+
+---
 ## [0.16.1] - 2026-03-18
 
 ### Added

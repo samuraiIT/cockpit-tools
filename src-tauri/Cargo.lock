@@ -592,7 +592,7 @@ dependencies = [
 
 [[package]]
 name = "cockpit-tools"
-version = "0.16.1"
+version = "0.16.2"
 dependencies = [
  "aes",
  "aes-gcm",
@@ -634,6 +634,7 @@ dependencies = [
  "tokio",
  "tokio-rustls",
  "tokio-tungstenite",
+ "toml_edit 0.20.2",
  "tracing",
  "tracing-appender",
  "tracing-log",

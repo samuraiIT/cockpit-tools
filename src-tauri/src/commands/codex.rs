@@ -355,14 +355,26 @@ pub async fn add_codex_account_with_token(
 
 /// 通过 API Key 添加账号
 #[tauri::command]
-pub fn add_codex_account_with_api_key(api_key: String) -> Result<CodexAccount, String> {
-    let account = codex_account::upsert_api_key_account(api_key)?;
+pub fn add_codex_account_with_api_key(
+    api_key: String,
+    api_base_url: Option<String>,
+) -> Result<CodexAccount, String> {
+    let account = codex_account::upsert_api_key_account(api_key, api_base_url)?;
     codex_account::load_account(&account.id).ok_or_else(|| "账号保存后无法读取".to_string())
 }
 
 #[tauri::command]
 pub fn update_codex_account_name(account_id: String, name: String) -> Result<CodexAccount, String> {
     codex_account::update_account_name(&account_id, name)
+}
+
+#[tauri::command]
+pub fn update_codex_api_key_credentials(
+    account_id: String,
+    api_key: String,
+    api_base_url: Option<String>,
+) -> Result<CodexAccount, String> {
+    codex_account::update_api_key_credentials(&account_id, api_key, api_base_url)
 }
 
 #[tauri::command]

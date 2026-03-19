@@ -4,6 +4,7 @@ export interface CodexAccount {
   email: string;
   auth_mode?: string;
   openai_api_key?: string;
+  api_base_url?: string;
   user_id?: string;
   plan_type?: string;
   account_id?: string;

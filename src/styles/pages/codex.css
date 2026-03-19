@@ -912,6 +912,12 @@
   gap: 16px;
 }
 
+.codex-add-modal .api-key-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 .codex-add-modal .section-desc {
   font-size: 14px;
   color: var(--text-secondary);

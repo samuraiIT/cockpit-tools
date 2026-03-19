@@ -77,6 +77,11 @@ interface CodexAccountState {
   importFromLocal: () => Promise<CodexAccount>;
   importFromJson: (jsonContent: string) => Promise<CodexAccount[]>;
   updateAccountName: (accountId: string, name: string) => Promise<CodexAccount>;
+  updateApiKeyCredentials: (
+    accountId: string,
+    apiKey: string,
+    apiBaseUrl?: string,
+  ) => Promise<CodexAccount>;
   updateAccountTags: (accountId: string, tags: string[]) => Promise<CodexAccount>;
 }
 
@@ -197,6 +202,17 @@ export const useCodexAccountStore = create<CodexAccountState>((set, get) => ({
 
   updateAccountName: async (accountId: string, name: string) => {
     const account = await codexService.updateCodexAccountName(accountId, name);
+    await get().fetchAccounts();
+    await get().fetchCurrentAccount();
+    return account;
+  },
+
+  updateApiKeyCredentials: async (accountId: string, apiKey: string, apiBaseUrl?: string) => {
+    const account = await codexService.updateCodexApiKeyCredentials(
+      accountId,
+      apiKey,
+      apiBaseUrl,
+    );
     await get().fetchAccounts();
     await get().fetchCurrentAccount();
     return account;

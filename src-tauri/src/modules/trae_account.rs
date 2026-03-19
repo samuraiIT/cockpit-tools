@@ -2017,22 +2017,77 @@ fn pick_cookie_from_account(account: &TraeAccount) -> Option<String> {
     )
 }
 
+fn header_value_or_dash(headers: &reqwest::header::HeaderMap, key: &str) -> String {
+    headers
+        .get(key)
+        .and_then(|value| value.to_str().ok())
+        .map(|value| value.to_string())
+        .unwrap_or_else(|| "-".to_string())
+}
+
+fn build_body_preview(body_text: &str, max_chars: usize) -> String {
+    let mut preview = String::new();
+    let mut count = 0usize;
+    for ch in body_text.chars() {
+        if count >= max_chars {
+            preview.push_str("...[truncated]");
+            break;
+        }
+        match ch {
+            '\n' => preview.push_str("\\n"),
+            '\r' => preview.push_str("\\r"),
+            '\t' => preview.push_str("\\t"),
+            _ => preview.push(ch),
+        }
+        count += 1;
+    }
+    if preview.is_empty() {
+        "<empty>".to_string()
+    } else {
+        preview
+    }
+}
+
 async fn parse_trae_response_body(response: reqwest::Response, url: &str) -> Result<Value, String> {
-    let status = response.status().as_u16();
-    if status == 401 || status == 403 {
+    let status = response.status();
+    let status_code = status.as_u16();
+    if status_code == 401 || status_code == 403 {
         return Err("Trae 会话已过期或未认证，请重新登录".to_string());
     }
+
+    let headers = response.headers();
+    let content_type = headers
+        .get(reqwest::header::CONTENT_TYPE)
+        .and_then(|value| value.to_str().ok())
+        .unwrap_or("-")
+        .to_string();
+    let x_request_id = header_value_or_dash(headers, "x-request-id");
+    let request_id = header_value_or_dash(headers, "request-id");
+    let cf_ray = header_value_or_dash(headers, "cf-ray");
 
     let body_text = response
         .text()
         .await
         .map_err(|e| format!("读取 Trae 响应失败({}): {}", url, e))?;
-    if body_text.trim().is_empty() {
+    let body_trimmed = body_text.trim();
+    if body_trimmed.is_empty() {
         return Ok(Value::Object(Map::new()));
     }
 
-    serde_json::from_str::<Value>(&body_text)
-        .map_err(|e| format!("解析 Trae 响应 JSON 失败({}): {}", url, e))
+    serde_json::from_str::<Value>(&body_text).map_err(|e| {
+        let body_preview = build_body_preview(body_trimmed, 200);
+        format!(
+            "解析 Trae 响应 JSON 失败({}): {} | status={} | content-type={} | x-request-id={} | request-id={} | cf-ray={} | body_preview={}",
+            url,
+            e,
+            status_code,
+            content_type,
+            x_request_id,
+            request_id,
+            cf_ray,
+            body_preview
+        )
+    })
 }
 
 async fn request_trae_json(
@@ -2326,20 +2381,6 @@ async fn refresh_account_async_once(account_id: &str) -> Result<TraeAccount, Str
         .map_err(|e| format!("创建 HTTP 客户端失败: {}", e))?;
 
     let mut account = existing.clone();
-
-    if let Some(local_payload) = read_local_trae_auth()? {
-        let same_identity = normalize_email(Some(local_payload.email.as_str()))
-            == normalize_email(Some(account.email.as_str()))
-            || normalize_non_empty(local_payload.user_id.as_deref())
-                == normalize_non_empty(account.user_id.as_deref());
-        if same_identity {
-            let tags = account.tags.clone();
-            let created_at = account.created_at;
-            apply_payload(&mut account, local_payload);
-            account.tags = tags;
-            account.created_at = created_at;
-        }
-    }
 
     let cookie = pick_cookie_from_account(&account);
 

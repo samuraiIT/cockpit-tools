@@ -1115,6 +1115,8 @@ export function AccountsPage({ onNavigate }: AccountsPageProps) {
     try {
       const imported = await accountService.importFromLocal()
       await fetchAccounts()
+      await new Promise((resolve) => setTimeout(resolve, 180))
+      await fetchAccounts()
       await refreshQuota(imported.id)
       await fetchAccounts()
       setAddStatus('success')
