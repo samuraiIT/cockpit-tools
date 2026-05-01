@@ -116,8 +116,20 @@ pub fn get_default_instances_root_dir() -> Result<PathBuf, String> {
         return Ok(home.join(".antigravity_cockpit/instances/codex"));
     }
 
+    #[cfg(target_os = "windows")]
+    {
+        let home = dirs::home_dir().ok_or("无法获取用户主目录")?;
+        return Ok(home.join(".antigravity_cockpit").join("instances").join("codex"));
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        let home = dirs::home_dir().ok_or("无法获取用户主目录")?;
+        return Ok(home.join(".antigravity_cockpit/instances/codex"));
+    }
+
     #[allow(unreachable_code)]
-    Err("Codex 多开实例仅支持 macOS".to_string())
+    Err("Codex 多开实例当前仅支持 macOS / Windows / Linux".to_string())
 }
 
 pub fn get_instance_defaults() -> Result<InstanceDefaults, String> {

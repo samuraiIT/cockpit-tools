@@ -4,6 +4,7 @@ pub mod codebuddy;
 pub mod codebuddy_cn;
 pub mod codebuddy_cn_instance;
 pub mod codebuddy_instance;
+pub mod cockpit_remote_sync;
 pub mod codex;
 pub mod codex_instance;
 pub mod cursor;

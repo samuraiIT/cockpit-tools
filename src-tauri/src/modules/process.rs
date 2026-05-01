@@ -6601,7 +6601,7 @@ pub fn is_codex_running() -> bool {
     }
 }
 
-/// 启动 Codex（支持 CODEX_HOME 与附加参数，仅 macOS）
+/// 启动 Codex（支持 CODEX_HOME 与附加参数，跨平台）
 pub fn start_codex_with_args(codex_home: &str, extra_args: &[String]) -> Result<u32, String> {
     #[cfg(target_os = "macos")]
     {
@@ -6668,14 +6668,102 @@ pub fn start_codex_with_args(codex_home: &str, extra_args: &[String]) -> Result<
         return Ok(open_pid);
     }
 
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(target_os = "windows")]
+    {
+        use std::os::windows::process::CommandExt;
+
+        let codex_home_trimmed = codex_home.trim();
+        let launch_path = resolve_codex_launch_path()?;
+        crate::modules::logger::log_info(&format!(
+            "[Codex Start] 启动策略=exe-path-with-home launch_path={} CODEX_HOME={}",
+            launch_path.to_string_lossy(),
+            codex_home_trimmed
+        ));
+
+        let mut cmd = Command::new(&launch_path);
+        apply_managed_proxy_env_to_command(&mut cmd);
+        if !codex_home_trimmed.is_empty() {
+            cmd.env("CODEX_HOME", codex_home_trimmed);
+        }
+        if should_detach_child() {
+            cmd.creation_flags(CREATE_NEW_PROCESS_GROUP | DETACHED_PROCESS);
+            cmd.stdin(Stdio::null())
+                .stdout(Stdio::null())
+                .stderr(Stdio::null());
+        }
+        for arg in extra_args {
+            let trimmed = arg.trim();
+            if !trimmed.is_empty() {
+                cmd.arg(trimmed);
+            }
+        }
+
+        let child =
+            spawn_command_with_trace(&mut cmd).map_err(|e| format!("启动 Codex 失败: {}", e))?;
+        crate::modules::logger::log_info(&format!(
+            "[Codex Start] 启动策略=exe-path-with-home pid={} CODEX_HOME={}",
+            child.id(),
+            codex_home_trimmed
+        ));
+
+        let probe_started = Instant::now();
+        let timeout = Duration::from_secs(6);
+        while probe_started.elapsed() < timeout {
+            if let Some(resolved_pid) =
+                resolve_codex_pid(Some(child.id()), Some(codex_home_trimmed))
+            {
+                return Ok(resolved_pid);
+            }
+            thread::sleep(Duration::from_millis(200));
+        }
+        return Ok(child.id());
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        let codex_home_trimmed = codex_home.trim();
+        let launch_path = resolve_codex_launch_path()?;
+        crate::modules::logger::log_info(&format!(
+            "[Codex Start] 启动策略=linux-exec launch_path={} CODEX_HOME={}",
+            launch_path.to_string_lossy(),
+            codex_home_trimmed
+        ));
+
+        let mut cmd = Command::new(&launch_path);
+        apply_managed_proxy_env_to_command(&mut cmd);
+        if !codex_home_trimmed.is_empty() {
+            cmd.env("CODEX_HOME", codex_home_trimmed);
+        }
+        for arg in extra_args {
+            let trimmed = arg.trim();
+            if !trimmed.is_empty() {
+                cmd.arg(trimmed);
+            }
+        }
+
+        let child =
+            spawn_detached_unix(&mut cmd).map_err(|e| format!("启动 Codex 失败: {}", e))?;
+        let probe_started = Instant::now();
+        let timeout = Duration::from_secs(6);
+        while probe_started.elapsed() < timeout {
+            if let Some(resolved_pid) =
+                resolve_codex_pid(Some(child.id()), Some(codex_home_trimmed))
+            {
+                return Ok(resolved_pid);
+            }
+            thread::sleep(Duration::from_millis(200));
+        }
+        return Ok(child.id());
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "linux")))]
     {
         let _ = (codex_home, extra_args);
-        Err("Codex 多开实例仅支持 macOS".to_string())
+        Err("Codex 多开实例当前仅支持 macOS / Windows / Linux".to_string())
     }
 }
 
-/// 启动 Codex 默认实例（不注入 CODEX_HOME，支持附加参数，支持 macOS / Windows）
+/// 启动 Codex 默认实例（不注入 CODEX_HOME，支持附加参数，支持 macOS / Windows / Linux）
 pub fn start_codex_default(extra_args: &[String]) -> Result<u32, String> {
     #[cfg(target_os = "macos")]
     {
@@ -6817,10 +6905,32 @@ pub fn start_codex_default(extra_args: &[String]) -> Result<u32, String> {
         return Ok(child.id());
     }
 
-    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    #[cfg(target_os = "linux")]
+    {
+        let launch_path = resolve_codex_launch_path()?;
+        crate::modules::logger::log_info(&format!(
+            "[Codex Start] 启动策略=linux-exec-default launch_path={}",
+            launch_path.to_string_lossy()
+        ));
+
+        let mut cmd = Command::new(&launch_path);
+        apply_managed_proxy_env_to_command(&mut cmd);
+        for arg in extra_args {
+            let trimmed = arg.trim();
+            if !trimmed.is_empty() {
+                cmd.arg(trimmed);
+            }
+        }
+
+        let child =
+            spawn_detached_unix(&mut cmd).map_err(|e| format!("启动 Codex 失败: {}", e))?;
+        return Ok(child.id());
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "linux")))]
     {
         let _ = extra_args;
-        Err("Codex 启动仅支持 macOS 和 Windows".to_string())
+        Err("Codex 启动当前仅支持 macOS / Windows / Linux".to_string())
     }
 }
 

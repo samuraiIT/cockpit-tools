@@ -813,6 +813,18 @@ pub fn run() {
             commands::instance::stop_instance,
             commands::instance::open_instance_window,
             commands::instance::close_all_instances,
+            // Cockpit Remote Sync Commands
+            commands::cockpit_remote_sync::cockpit_remote_list_hosts,
+            commands::cockpit_remote_sync::cockpit_remote_add_host,
+            commands::cockpit_remote_sync::cockpit_remote_update_host,
+            commands::cockpit_remote_sync::cockpit_remote_delete_host,
+            commands::cockpit_remote_sync::cockpit_remote_test_connection,
+            commands::cockpit_remote_sync::cockpit_remote_ensure_codex_path,
+            commands::cockpit_remote_sync::cockpit_remote_fetch_codex_auth,
+            commands::cockpit_remote_sync::cockpit_remote_push_codex_auth,
+            commands::cockpit_remote_sync::cockpit_remote_start_tunnel,
+            commands::cockpit_remote_sync::cockpit_remote_stop_tunnel,
+            commands::cockpit_remote_sync::cockpit_remote_apply_full_setup,
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application");

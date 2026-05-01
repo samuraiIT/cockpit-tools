@@ -181,6 +181,11 @@ fn posix_shell_quote(value: &str) -> String {
     format!("'{}'", value.replace('\'', "'\"'\"'"))
 }
 
+#[cfg(target_os = "windows")]
+fn powershell_quote(value: &str) -> String {
+    format!("'{}'", value.replace('\'', "''"))
+}
+
 fn build_launch_command(context: &CodexLaunchContext) -> Result<String, String> {
     let runtime = modules::codex_wakeup::resolve_cli_runtime()?;
     let parsed_args = modules::process::parse_extra_args(&context.extra_args);
@@ -214,6 +219,37 @@ fn build_launch_command(context: &CodexLaunchContext) -> Result<String, String> 
 
         command_parts.push(codex_cmd);
         return Ok(command_parts.join(" && "));
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        let mut parts: Vec<String> = Vec::new();
+        parts.push(format!(
+            "$env:CODEX_HOME = {}",
+            powershell_quote(&context.user_data_dir)
+        ));
+        if let Some(ref dir) = context.working_dir {
+            if !dir.trim().is_empty() {
+                parts.push(format!("Set-Location {}", powershell_quote(dir)));
+            }
+        }
+
+        let mut invocation = String::new();
+        invocation.push_str("& ");
+        if let Some(node_path) = runtime.node_path.as_deref() {
+            invocation.push_str(&powershell_quote(node_path));
+            invocation.push(' ');
+        }
+        invocation.push_str(&powershell_quote(&runtime.binary_path));
+        for arg in parsed_args {
+            let trimmed = arg.trim();
+            if !trimmed.is_empty() {
+                invocation.push(' ');
+                invocation.push_str(&powershell_quote(trimmed));
+            }
+        }
+        parts.push(invocation);
+        return Ok(parts.join("; "));
     }
 
     #[allow(unreachable_code)]
