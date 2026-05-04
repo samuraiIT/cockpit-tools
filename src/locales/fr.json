@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Veuillez sélectionner au moins une session",
         "syncNeedTwo": "Au moins deux instances sont nécessaires pour synchroniser les sessions",
-        "pickRestoreOne": "Veuillez sélectionner au moins une session à restaurer"
+        "pickRestoreOne": "Veuillez sélectionner au moins une session à restaurer",
+        "repairVisibilitySkippedOnly": "Aucune différence de fournisseur inscriptible n’a été trouvée ; {{count}} fichier(s) state_5.sqlite invalides ou corrompus ont été ignorés. Codex doit les régénérer avant que leurs enregistrements SQLite puissent être réparés.",
+        "repairVisibilitySkippedWithBase": "{{message}} ; {{count}} fichier(s) state_5.sqlite invalides ou corrompus ont été ignorés. Codex doit les régénérer avant que leurs enregistrements SQLite puissent être réparés."
       },
       "groupCount": "{{count}} sessions",
       "updatedAt": "Mis à jour",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Sessions Codex masquées",
-      "message": "En raison du comportement officiel de Codex, les sessions existantes peuvent ne pas s’afficher automatiquement après un changement direct entre le mode API et les comptes. Vous pouvez lancer Réparer la visibilité une fois dans cette fenêtre, puis aussi le refaire plus tard via Gestion des sessions > Réparer la visibilité.",
-      "dontAskAgain": "Ne plus afficher",
-      "switchOnly": "Changer seulement",
-      "switchAndRepair": "Changer et réparer",
-      "repairFailed": "La réparation rapide a échoué. Vous pouvez réessayer plus tard via Gestion des sessions > Réparer la visibilité."
+      "message": "Codex est passé de {{from}} à {{to}}. En raison du comportement officiel, les sessions existantes peuvent ne pas s’afficher automatiquement après un changement direct entre API et comptes. La visibilité des sessions est réparée automatiquement ; vous pouvez aussi utiliser Gestion des sessions > Réparer la visibilité plus tard.",
+      "repairing": "Réparation de la visibilité des sessions Codex...",
+      "repairFailed": "La réparation automatique a échoué. Vous pouvez réessayer plus tard via Gestion des sessions > Réparer la visibilité.",
+      "type": {
+        "apiKey": "Clé API",
+        "apiService": "Service API",
+        "account": "Compte"
+      }
     }
   },
   "githubCopilot": {

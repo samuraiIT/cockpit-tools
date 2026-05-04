@@ -7,6 +7,19 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
 ---
+## [0.22.18] - 2026-05-04
+
+### 新增
+- **Codex 本地 API 服务现已支持官方生图 API 路径**：本地网关会暴露 `gpt-image-2`，支持 `/v1/images/generations` 与 `/v1/images/edits`，并将图片请求映射为 Codex Responses 的 `image_generation` 工具；普通 Responses/chat 会话也会注入生图工具，让 Codex 官方 imagegen skill 能通过同一个本地 API 服务使用。
+
+### 变更
+- **Codex API/账号切换现会自动修复会话可见性**：在 OAuth 账号、API Key 账号与本地 API 服务之间切换时，会展示检测到的来源与目标凭据类型，并在弹框内自动执行可见性修复、展示修复结果，不再需要单独手动点击修复。
+- **Codex 额度刷新错误现避免误导为账号异常**：临时额度刷新失败时，会说明只是未能获取最新额度且账号状态不受影响。
+
+### 修复
+- **Codex 会话可见性修复与同步不再因无效 state 数据库失败**：遇到无法读取、损坏或结构不完整的 `state_5.sqlite` 时会跳过并在修复摘要中说明，其他有效的 rollout 与 SQLite 记录仍会继续修复或同步。
+
+---
 ## [0.22.17] - 2026-04-30
 
 ### 变更

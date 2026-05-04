@@ -2143,7 +2143,9 @@
       "messages": {
         "pickOne": "請至少選擇一條會話",
         "syncNeedTwo": "至少需要兩個實例才能同步會話",
-        "pickRestoreOne": "請至少選擇一個要還原的工作階段"
+        "pickRestoreOne": "請至少選擇一個要還原的工作階段",
+        "repairVisibilitySkippedOnly": "未發現需要寫入的 provider 差異；已略過 {{count}} 個無效或損毀的 state_5.sqlite，需由 Codex 重新產生後才能修復其中的 SQLite 記錄。",
+        "repairVisibilitySkippedWithBase": "{{message}}；已略過 {{count}} 個無效或損毀的 state_5.sqlite，需由 Codex 重新產生後才能修復其中的 SQLite 記錄。"
       },
       "groupCount": "{{count}} 條會話",
       "updatedAt": "最近更新",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Codex 工作階段不可見",
-      "message": "由於 Codex 官方機制，API 與帳號直接切換後，原有工作階段可能不會自動顯示。你可以在此彈框中執行一次「修復可見性」，後續也可以透過「工作階段管理」中的「修復可見性」功能修復。",
-      "dontAskAgain": "不再提示",
-      "switchOnly": "僅切換",
-      "switchAndRepair": "切換並修復一次",
-      "repairFailed": "快速修復失敗。你仍可稍後在「工作階段管理」中使用「修復可見性」重試。"
+      "message": "偵測到 Codex 已從 {{from}} 切換到 {{to}}。由於官方機制，API 與帳號直接切換後，原有工作階段可能不會自動顯示。正在自動修復工作階段可見性，後續也可以透過「工作階段管理」中的「修復可見性」功能修復。",
+      "repairing": "正在修復 Codex 工作階段可見性...",
+      "repairFailed": "自動修復失敗。你仍可稍後在「工作階段管理」中使用「修復可見性」重試。",
+      "type": {
+        "apiKey": "API 金鑰",
+        "apiService": "API 服務",
+        "account": "帳號"
+      }
     }
   },
   "githubCopilot": {

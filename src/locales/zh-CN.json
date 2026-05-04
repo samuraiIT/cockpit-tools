@@ -1655,11 +1655,14 @@
     },
     "apiSwitchNotice": {
       "title": "Codex 会话不可见",
-      "message": "由于 Codex 官方机制，API 与账号直接切换后，原有会话可能不会自动显示。你可以在本弹框中执行一次「修复可见性」，后续也可以通过「会话管理」里的「修复可见性」功能修复。",
-      "dontAskAgain": "不再提示",
-      "switchOnly": "仅切换",
-      "switchAndRepair": "切换并修复一次",
-      "repairFailed": "快捷修复失败。你仍可稍后在「会话管理」中使用「修复可见性」重试。"
+      "message": "检测到 Codex 已从 {{from}} 切换到 {{to}}。由于官方机制，API 与账号直接切换后，原有会话可能不会自动显示。正在自动修复会话可见性，后续也可以通过「会话管理」里的「修复可见性」功能修复。",
+      "repairing": "正在修复 Codex 会话可见性...",
+      "repairFailed": "自动修复失败。你仍可稍后在「会话管理」中使用「修复可见性」重试。",
+      "type": {
+        "apiKey": "API 密钥",
+        "apiService": "API 服务",
+        "account": "账号"
+      }
     },
     "current": "当前",
     "account": {
@@ -2059,7 +2062,7 @@
       "badge": "配额异常",
       "generic": "配额刷新失败，请稍后重试",
       "deactivatedWorkspace": "工作区已停用，请切换账号或重新授权",
-      "requestFailedManualRetry": "网络异常，请手动刷新配额"
+      "requestFailedManualRetry": "额度刷新失败，未能获取最新额度；账号状态不受影响，请重新刷新"
     },
     "plan": {
       "free": "FREE",
@@ -2330,7 +2333,9 @@
       "messages": {
         "pickOne": "请至少选择一条会话",
         "pickRestoreOne": "请至少选择一条待恢复会话",
-        "syncNeedTwo": "至少需要两个实例才能同步会话"
+        "syncNeedTwo": "至少需要两个实例才能同步会话",
+        "repairVisibilitySkippedOnly": "未发现需要写入的 provider 差异；已跳过 {{count}} 个无效或损坏的 state_5.sqlite，需由 Codex 重新生成后才能修复其中的 SQLite 记录",
+        "repairVisibilitySkippedWithBase": "{{message}}；已跳过 {{count}} 个无效或损坏的 state_5.sqlite，需由 Codex 重新生成后才能修复其中的 SQLite 记录"
       },
       "groupCount": "{{count}} 条会话",
       "updatedAt": "最近更新",

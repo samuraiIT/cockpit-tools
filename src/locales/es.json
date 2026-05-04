@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Selecciona al menos una sesión",
         "syncNeedTwo": "Se requieren al menos dos instancias para sincronizar sesiones",
-        "pickRestoreOne": "Selecciona al menos una sesión para restaurar"
+        "pickRestoreOne": "Selecciona al menos una sesión para restaurar",
+        "repairVisibilitySkippedOnly": "No se encontraron diferencias de proveedor que se puedan escribir; se omitieron {{count}} archivo(s) state_5.sqlite no válidos o dañados. Codex debe regenerarlos antes de poder reparar sus registros SQLite.",
+        "repairVisibilitySkippedWithBase": "{{message}}; se omitieron {{count}} archivo(s) state_5.sqlite no válidos o dañados. Codex debe regenerarlos antes de poder reparar sus registros SQLite."
       },
       "groupCount": "{{count}} sesiones",
       "updatedAt": "Actualizado",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Sesiones de Codex ocultas",
-      "message": "Por el comportamiento oficial de Codex, las sesiones existentes pueden no aparecer automáticamente después de cambiar directamente entre el modo API y las cuentas. Puedes ejecutar Reparar visibilidad una vez en este diálogo, y también repararlas luego en Gestión de sesiones > Reparar visibilidad.",
-      "dontAskAgain": "No volver a mostrar",
-      "switchOnly": "Solo cambiar",
-      "switchAndRepair": "Cambiar y reparar",
-      "repairFailed": "Falló la reparación rápida. Puedes reintentarlo luego en Gestión de sesiones > Reparar visibilidad."
+      "message": "Se detectó que Codex cambió de {{from}} a {{to}}. Por el comportamiento oficial, las sesiones existentes pueden no aparecer automáticamente tras cambiar directamente entre API y cuentas. La visibilidad de las sesiones se está reparando automáticamente; también puedes usar Gestión de sesiones > Reparar visibilidad más tarde.",
+      "repairing": "Reparando la visibilidad de sesiones de Codex...",
+      "repairFailed": "Falló la reparación automática. Puedes reintentarlo luego en Gestión de sesiones > Reparar visibilidad.",
+      "type": {
+        "apiKey": "Clave API",
+        "apiService": "Servicio API",
+        "account": "Cuenta"
+      }
     }
   },
   "githubCopilot": {

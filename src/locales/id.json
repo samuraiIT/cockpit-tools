@@ -2189,7 +2189,9 @@
       "messages": {
         "pickOne": "Silakan pilih setidaknya satu sesi",
         "syncNeedTwo": "Setidaknya dua instansi diperlukan untuk menyinkronkan sesi",
-        "pickRestoreOne": "Pilih setidaknya satu sesi untuk dipulihkan"
+        "pickRestoreOne": "Pilih setidaknya satu sesi untuk dipulihkan",
+        "repairVisibilitySkippedOnly": "Tidak ditemukan perbedaan provider yang dapat ditulis; {{count}} file state_5.sqlite yang tidak valid atau rusak dilewati. Codex harus membuatnya ulang sebelum catatan SQLite di dalamnya dapat diperbaiki.",
+        "repairVisibilitySkippedWithBase": "{{message}}; {{count}} file state_5.sqlite yang tidak valid atau rusak dilewati. Codex harus membuatnya ulang sebelum catatan SQLite di dalamnya dapat diperbaiki."
       },
       "groupCount": "{{count}} sesi",
       "updatedAt": "Diperbarui",
@@ -2345,11 +2347,14 @@
     },
     "apiSwitchNotice": {
       "title": "Sesi Codex tersembunyi",
-      "message": "Karena perilaku resmi Codex, sesi yang ada mungkin tidak muncul otomatis setelah beralih langsung antara mode API dan akun. Anda dapat menjalankan Perbaiki Visibilitas sekali di dialog ini, dan juga memperbaikinya nanti dari Manajemen Sesi > Perbaiki Visibilitas.",
-      "dontAskAgain": "Jangan tampilkan lagi",
-      "switchOnly": "Beralih saja",
-      "switchAndRepair": "Beralih & perbaiki",
-      "repairFailed": "Perbaikan cepat gagal. Anda dapat mencoba lagi nanti dari Manajemen Sesi > Perbaiki Visibilitas."
+      "message": "Terdeteksi Codex beralih dari {{from}} ke {{to}}. Karena perilaku resmi, sesi yang ada mungkin tidak muncul otomatis setelah beralih langsung antara API dan akun. Visibilitas sesi sedang diperbaiki otomatis; Anda juga dapat memakai Manajemen Sesi > Perbaiki Visibilitas nanti.",
+      "repairing": "Memperbaiki visibilitas sesi Codex...",
+      "repairFailed": "Perbaikan otomatis gagal. Anda dapat mencoba lagi nanti dari Manajemen Sesi > Perbaiki Visibilitas.",
+      "type": {
+        "apiKey": "Kunci API",
+        "apiService": "Layanan API",
+        "account": "Akun"
+      }
     }
   },
   "codebuddy": {

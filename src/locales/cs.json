@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Vyberte prosím alespoň jednu relaci",
         "syncNeedTwo": "Pro synchronizaci relací jsou potřeba alespoň dvě instance",
-        "pickRestoreOne": "Vyberte prosím alespoň jednu relaci k obnovení"
+        "pickRestoreOne": "Vyberte prosím alespoň jednu relaci k obnovení",
+        "repairVisibilitySkippedOnly": "Nebyly nalezeny žádné zapisovatelné rozdíly provideru; přeskočeno {{count}} neplatných nebo poškozených souborů state_5.sqlite. Codex je musí znovu vygenerovat, než bude možné opravit jejich záznamy SQLite.",
+        "repairVisibilitySkippedWithBase": "{{message}}; přeskočeno {{count}} neplatných nebo poškozených souborů state_5.sqlite. Codex je musí znovu vygenerovat, než bude možné opravit jejich záznamy SQLite."
       },
       "groupCount": "{{count}} relací",
       "updatedAt": "Aktualizováno",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Relace Codexu jsou skryté",
-      "message": "Kvůli oficiálnímu chování Codexu se existující relace po přímém přepnutí mezi režimem API a účty nemusí zobrazit automaticky. V tomto okně můžete jednou spustit Opravit viditelnost a později také ve Správa relací > Opravit viditelnost.",
-      "dontAskAgain": "Už nezobrazovat",
-      "switchOnly": "Jen přepnout",
-      "switchAndRepair": "Přepnout a opravit",
-      "repairFailed": "Rychlá oprava selhala. Zkuste to později ve Správa relací > Opravit viditelnost."
+      "message": "Bylo zjištěno, že Codex přešel z {{from}} na {{to}}. Kvůli oficiálnímu chování se existující relace po přímém přepnutí mezi API a účty nemusí zobrazit automaticky. Viditelnost relací se teď opravuje automaticky; později můžete použít také Správa relací > Opravit viditelnost.",
+      "repairing": "Opravuji viditelnost relací Codexu...",
+      "repairFailed": "Automatická oprava selhala. Zkuste to později ve Správa relací > Opravit viditelnost.",
+      "type": {
+        "apiKey": "Klíč API",
+        "apiService": "Služba API",
+        "account": "Účet"
+      }
     }
   },
   "githubCopilot": {

@@ -1655,11 +1655,14 @@
     },
     "apiSwitchNotice": {
       "title": "Codex Sessions Hidden",
-      "message": "Because of Codex's official behavior, existing sessions may not appear automatically after switching directly between API mode and accounts. You can run Repair Visibility once in this dialog, and you can also repair them later from Session Management > Repair Visibility.",
-      "dontAskAgain": "Don't show again",
-      "switchOnly": "Switch Only",
-      "switchAndRepair": "Switch & Repair Once",
-      "repairFailed": "Quick repair failed. You can retry later from Session Management > Repair Visibility."
+      "message": "Detected that Codex switched from {{from}} to {{to}}. Because of Codex's official behavior, existing sessions may not appear automatically after switching directly between API and accounts. Session visibility is being repaired automatically. You can also use Session Management > Repair Visibility later.",
+      "repairing": "Repairing Codex session visibility...",
+      "repairFailed": "Automatic repair failed. You can retry later from Session Management > Repair Visibility.",
+      "type": {
+        "apiKey": "API Key",
+        "apiService": "API Service",
+        "account": "Account"
+      }
     },
     "current": "Current",
     "account": {
@@ -2059,7 +2062,7 @@
       "badge": "Quota error",
       "generic": "Quota refresh failed, please try again later",
       "deactivatedWorkspace": "Workspace is deactivated, switch account or re-authorize",
-      "requestFailedManualRetry": "Network error, please refresh quota manually"
+      "requestFailedManualRetry": "Quota refresh failed, and the latest quota could not be fetched; the account status is not affected. Please refresh again."
     },
     "plan": {
       "free": "FREE",
@@ -2330,7 +2333,9 @@
       "messages": {
         "pickOne": "Please select at least one session",
         "pickRestoreOne": "Please select at least one session to restore",
-        "syncNeedTwo": "At least two instances are required to sync sessions"
+        "syncNeedTwo": "At least two instances are required to sync sessions",
+        "repairVisibilitySkippedOnly": "No writable provider differences were found; skipped {{count}} invalid or corrupted state_5.sqlite file(s). Codex must regenerate them before their SQLite records can be repaired.",
+        "repairVisibilitySkippedWithBase": "{{message}}; skipped {{count}} invalid or corrupted state_5.sqlite file(s). Codex must regenerate them before their SQLite records can be repaired."
       },
     "groupCount": "{{count}} sessions",
     "updatedAt": "Updated",

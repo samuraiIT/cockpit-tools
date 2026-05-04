@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Wybierz co najmniej jedną sesję",
         "syncNeedTwo": "Do synchronizacji sesji wymagane są co najmniej dwie instancje",
-        "pickRestoreOne": "Wybierz co najmniej jedną sesję do przywrócenia"
+        "pickRestoreOne": "Wybierz co najmniej jedną sesję do przywrócenia",
+        "repairVisibilitySkippedOnly": "Nie znaleziono zapisywalnych różnic provider; pominięto {{count}} nieprawidłowych lub uszkodzonych plików state_5.sqlite. Codex musi je ponownie wygenerować, zanim będzie można naprawić ich rekordy SQLite.",
+        "repairVisibilitySkippedWithBase": "{{message}}; pominięto {{count}} nieprawidłowych lub uszkodzonych plików state_5.sqlite. Codex musi je ponownie wygenerować, zanim będzie można naprawić ich rekordy SQLite."
       },
       "groupCount": "{{count}} sesji",
       "updatedAt": "Zaktualizowano",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Sesje Codex są ukryte",
-      "message": "Ze względu na oficjalne zachowanie Codexu istniejące sesje mogą nie pojawić się automatycznie po bezpośrednim przełączeniu między trybem API a kontami. Możesz raz uruchomić Napraw widoczność w tym oknie, a później także w Zarządzanie sesjami > Napraw widoczność.",
-      "dontAskAgain": "Nie pokazuj ponownie",
-      "switchOnly": "Tylko przełącz",
-      "switchAndRepair": "Przełącz i napraw",
-      "repairFailed": "Szybka naprawa się nie powiodła. Możesz spróbować później w Zarządzanie sesjami > Napraw widoczność."
+      "message": "Wykryto, że Codex przełączył się z {{from}} na {{to}}. Ze względu na oficjalne zachowanie istniejące sesje mogą nie pojawić się automatycznie po bezpośrednim przełączeniu między API a kontami. Widoczność sesji jest teraz naprawiana automatycznie; później możesz też użyć Zarządzanie sesjami > Napraw widoczność.",
+      "repairing": "Naprawianie widoczności sesji Codex...",
+      "repairFailed": "Automatyczna naprawa się nie powiodła. Możesz spróbować później w Zarządzanie sesjami > Napraw widoczność.",
+      "type": {
+        "apiKey": "Klucz API",
+        "apiService": "Usługa API",
+        "account": "Konto"
+      }
     }
   },
   "githubCopilot": {

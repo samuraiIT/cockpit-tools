@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Lütfen en az bir oturum seçin",
         "syncNeedTwo": "Oturumları eşitlemek için en az iki örnek gerekir",
-        "pickRestoreOne": "Lütfen geri yüklenecek en az bir oturum seçin"
+        "pickRestoreOne": "Lütfen geri yüklenecek en az bir oturum seçin",
+        "repairVisibilitySkippedOnly": "Yazılabilir provider farkı bulunamadı; geçersiz veya bozuk {{count}} state_5.sqlite dosyası atlandı. Bu SQLite kayıtları onarılmadan önce Codex bu dosyaları yeniden oluşturmalıdır.",
+        "repairVisibilitySkippedWithBase": "{{message}}; geçersiz veya bozuk {{count}} state_5.sqlite dosyası atlandı. Bu SQLite kayıtları onarılmadan önce Codex bu dosyaları yeniden oluşturmalıdır."
       },
       "groupCount": "{{count}} oturum",
       "updatedAt": "Güncellendi",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Codex oturumları gizli",
-      "message": "Codex’in resmi davranışı nedeniyle API modu ile hesaplar arasında doğrudan geçiş yaptıktan sonra mevcut oturumlar otomatik görünmeyebilir. Bu pencerede Görünürlüğü Onar işlemini bir kez çalıştırabilir, daha sonra Oturum Yönetimi > Görünürlüğü Onar bölümünden de onarabilirsiniz.",
-      "dontAskAgain": "Bir daha gösterme",
-      "switchOnly": "Sadece geç",
-      "switchAndRepair": "Geç ve onar",
-      "repairFailed": "Hızlı onarım başarısız oldu. Daha sonra Oturum Yönetimi > Görünürlüğü Onar bölümünden tekrar deneyebilirsiniz."
+      "message": "Codex’in {{from}} üzerinden {{to}} konumuna geçtiği algılandı. Resmi davranış nedeniyle API ile hesaplar arasında doğrudan geçişten sonra mevcut oturumlar otomatik görünmeyebilir. Oturum görünürlüğü otomatik olarak onarılıyor; daha sonra Oturum Yönetimi > Görünürlüğü Onar bölümünü de kullanabilirsiniz.",
+      "repairing": "Codex oturum görünürlüğü onarılıyor...",
+      "repairFailed": "Otomatik onarım başarısız oldu. Daha sonra Oturum Yönetimi > Görünürlüğü Onar bölümünden tekrar deneyebilirsiniz.",
+      "type": {
+        "apiKey": "API Anahtarı",
+        "apiService": "API Hizmeti",
+        "account": "Hesap"
+      }
     }
   },
   "githubCopilot": {

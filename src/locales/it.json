@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Seleziona almeno una sessione",
         "syncNeedTwo": "Sono necessarie almeno due istanze per sincronizzare le sessioni",
-        "pickRestoreOne": "Seleziona almeno una sessione da ripristinare"
+        "pickRestoreOne": "Seleziona almeno una sessione da ripristinare",
+        "repairVisibilitySkippedOnly": "Non sono state trovate differenze provider scrivibili; sono stati ignorati {{count}} file state_5.sqlite non validi o danneggiati. Codex deve rigenerarli prima di poter riparare i relativi record SQLite.",
+        "repairVisibilitySkippedWithBase": "{{message}}; sono stati ignorati {{count}} file state_5.sqlite non validi o danneggiati. Codex deve rigenerarli prima di poter riparare i relativi record SQLite."
       },
       "groupCount": "{{count}} sessioni",
       "updatedAt": "Aggiornato",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Sessioni Codex nascoste",
-      "message": "Per il comportamento ufficiale di Codex, le sessioni esistenti potrebbero non apparire automaticamente dopo il passaggio diretto tra modalità API e account. Puoi eseguire Ripara visibilità una volta in questa finestra e ripararle anche più tardi da Gestione sessioni > Ripara visibilità.",
-      "dontAskAgain": "Non mostrare più",
-      "switchOnly": "Solo passa",
-      "switchAndRepair": "Passa e ripara",
-      "repairFailed": "Riparazione rapida non riuscita. Puoi riprovare più tardi da Gestione sessioni > Ripara visibilità."
+      "message": "È stato rilevato che Codex è passato da {{from}} a {{to}}. Per il comportamento ufficiale, le sessioni esistenti potrebbero non apparire automaticamente dopo il passaggio diretto tra API e account. La visibilità delle sessioni viene riparata automaticamente; puoi usare anche Gestione sessioni > Ripara visibilità più tardi.",
+      "repairing": "Riparazione della visibilità delle sessioni Codex...",
+      "repairFailed": "Riparazione automatica non riuscita. Puoi riprovare più tardi da Gestione sessioni > Ripara visibilità.",
+      "type": {
+        "apiKey": "Chiave API",
+        "apiService": "Servizio API",
+        "account": "Account"
+      }
     }
   },
   "githubCopilot": {

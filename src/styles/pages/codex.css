@@ -555,36 +555,30 @@
   border-bottom-color: color-mix(in srgb, var(--primary) 12%, var(--border-light));
 }
 
-.codex-api-switch-notice-options {
-  border-color: color-mix(in srgb, var(--primary) 14%, var(--border));
-  background: color-mix(in srgb, var(--bg-tertiary) 88%, var(--primary) 12%);
-}
-
-.codex-api-switch-notice-repair-entry {
-  margin-top: 16px;
-}
-
-.codex-api-switch-notice-repair-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.codex-api-switch-notice-repair-result {
+.codex-api-switch-notice-repair-status {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid color-mix(in srgb, #16a34a 20%, var(--border));
-  background: color-mix(in srgb, #dcfce7 74%, var(--bg-surface));
-  color: #166534;
   font-size: 13px;
   line-height: 1.55;
 }
 
-.codex-api-switch-notice-repair-result svg {
+.codex-api-switch-notice-repair-status.is-loading {
+  border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--border));
+  background: color-mix(in srgb, var(--primary) 9%, var(--bg-surface));
+  color: var(--text-primary);
+}
+
+.codex-api-switch-notice-repair-status.is-success {
+  border: 1px solid color-mix(in srgb, #16a34a 20%, var(--border));
+  background: color-mix(in srgb, #dcfce7 74%, var(--bg-surface));
+  color: #166534;
+}
+
+.codex-api-switch-notice-repair-status svg {
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -777,7 +771,13 @@
   background: rgba(51, 65, 85, 0.68);
 }
 
-[data-theme="dark"] .codex-api-switch-notice-repair-result {
+[data-theme="dark"] .codex-api-switch-notice-repair-status.is-loading {
+  border-color: rgba(96, 165, 250, 0.24);
+  background: rgba(30, 41, 59, 0.72);
+  color: #dbeafe;
+}
+
+[data-theme="dark"] .codex-api-switch-notice-repair-status.is-success {
   border-color: rgba(74, 222, 128, 0.22);
   background: rgba(20, 83, 45, 0.28);
   color: #bbf7d0;

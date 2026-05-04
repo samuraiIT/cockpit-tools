@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Vui lòng chọn ít nhất một phiên",
         "syncNeedTwo": "Cần ít nhất hai phiên bản để đồng bộ phiên",
-        "pickRestoreOne": "Hãy chọn ít nhất một phiên để khôi phục"
+        "pickRestoreOne": "Hãy chọn ít nhất một phiên để khôi phục",
+        "repairVisibilitySkippedOnly": "Không tìm thấy khác biệt provider có thể ghi; đã bỏ qua {{count}} tệp state_5.sqlite không hợp lệ hoặc bị hỏng. Codex phải tạo lại chúng trước khi có thể sửa các bản ghi SQLite bên trong.",
+        "repairVisibilitySkippedWithBase": "{{message}}; đã bỏ qua {{count}} tệp state_5.sqlite không hợp lệ hoặc bị hỏng. Codex phải tạo lại chúng trước khi có thể sửa các bản ghi SQLite bên trong."
       },
       "groupCount": "{{count}} phiên",
       "updatedAt": "Đã cập nhật",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Phiên Codex bị ẩn",
-      "message": "Do hành vi chính thức của Codex, các phiên hiện có có thể không tự hiển thị sau khi chuyển trực tiếp giữa chế độ API và tài khoản. Bạn có thể chạy Sửa hiển thị một lần trong hộp thoại này, và cũng có thể sửa sau trong Quản lý phiên > Sửa hiển thị.",
-      "dontAskAgain": "Không hiện lại",
-      "switchOnly": "Chỉ chuyển",
-      "switchAndRepair": "Chuyển & sửa",
-      "repairFailed": "Sửa nhanh thất bại. Bạn có thể thử lại sau trong Quản lý phiên > Sửa hiển thị."
+      "message": "Đã phát hiện Codex chuyển từ {{from}} sang {{to}}. Do hành vi chính thức, các phiên hiện có có thể không tự hiển thị sau khi chuyển trực tiếp giữa API và tài khoản. Hệ thống đang tự sửa khả năng hiển thị phiên; bạn cũng có thể dùng Quản lý phiên > Sửa hiển thị sau này.",
+      "repairing": "Đang sửa khả năng hiển thị phiên Codex...",
+      "repairFailed": "Tự động sửa thất bại. Bạn có thể thử lại sau trong Quản lý phiên > Sửa hiển thị.",
+      "type": {
+        "apiKey": "Khóa API",
+        "apiService": "Dịch vụ API",
+        "account": "Tài khoản"
+      }
     }
   },
   "githubCopilot": {

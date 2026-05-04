@@ -2057,7 +2057,9 @@
       "messages": {
         "pickOne": "Selecione pelo menos uma sessão",
         "syncNeedTwo": "Pelo menos duas instâncias são necessárias para sincronizar sessões",
-        "pickRestoreOne": "Selecione pelo menos uma sessão para restaurar"
+        "pickRestoreOne": "Selecione pelo menos uma sessão para restaurar",
+        "repairVisibilitySkippedOnly": "Nenhuma diferença de provider gravável foi encontrada; {{count}} arquivo(s) state_5.sqlite inválidos ou corrompidos foram ignorados. O Codex precisa recriá-los antes que seus registros SQLite possam ser reparados.",
+        "repairVisibilitySkippedWithBase": "{{message}}; {{count}} arquivo(s) state_5.sqlite inválidos ou corrompidos foram ignorados. O Codex precisa recriá-los antes que seus registros SQLite possam ser reparados."
       },
       "groupCount": "{{count}} sessões",
       "updatedAt": "Atualizado",
@@ -2299,11 +2301,14 @@
     },
     "apiSwitchNotice": {
       "title": "Sessões do Codex ocultas",
-      "message": "Pelo comportamento oficial do Codex, sessões existentes podem não aparecer automaticamente após alternar diretamente entre o modo API e contas. Você pode executar Reparar visibilidade uma vez nesta janela e também reparar depois em Gerenciamento de sessões > Reparar visibilidade.",
-      "dontAskAgain": "Não mostrar de novo",
-      "switchOnly": "Só mudar",
-      "switchAndRepair": "Mudar e reparar",
-      "repairFailed": "O reparo rápido falhou. Você pode tentar novamente depois em Gerenciamento de sessões > Reparar visibilidade."
+      "message": "Foi detectado que o Codex mudou de {{from}} para {{to}}. Pelo comportamento oficial, sessões existentes podem não aparecer automaticamente após alternar diretamente entre API e contas. A visibilidade das sessões está sendo reparada automaticamente; você também pode usar Gerenciamento de sessões > Reparar visibilidade depois.",
+      "repairing": "Reparando a visibilidade das sessões do Codex...",
+      "repairFailed": "O reparo automático falhou. Você pode tentar novamente depois em Gerenciamento de sessões > Reparar visibilidade.",
+      "type": {
+        "apiKey": "Chave API",
+        "apiService": "Serviço API",
+        "account": "Conta"
+      }
     }
   },
   "githubCopilot": {

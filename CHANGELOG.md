@@ -7,6 +7,19 @@ All notable changes to Cockpit Tools will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
+## [0.22.18] - 2026-05-04
+
+### Added
+- **Codex Local API Service now supports the official image-generation API path**: the local gateway exposes `gpt-image-2`, accepts `/v1/images/generations` and `/v1/images/edits`, maps image requests to Codex Responses `image_generation`, and injects the image-generation tool into regular Responses/chat sessions so Codex's official imagegen skill can use the same local API service.
+
+### Changed
+- **Codex API/account switching now repairs session visibility automatically**: switches between OAuth accounts, API Key accounts, and the local API Service show the detected source and target credential types, run visibility repair in the dialog automatically, and show the repair result without requiring a separate manual repair click.
+- **Codex quota refresh errors now avoid implying account damage**: transient quota refresh failures now say that the latest quota could not be fetched and the account status is unaffected.
+
+### Fixed
+- **Codex session visibility repair and sync no longer fail on invalid state databases**: unreadable, corrupted, or incomplete `state_5.sqlite` files are skipped with a clear repair summary, while valid rollout and SQLite records continue to be repaired or synchronized.
+
+---
 ## [0.22.17] - 2026-04-30
 
 ### Changed

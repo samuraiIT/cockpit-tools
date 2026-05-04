@@ -116,6 +116,7 @@ export interface CodexSessionVisibilityRepairItem {
   targetProvider: string;
   changedRolloutFileCount: number;
   updatedSqliteRowCount: number;
+  skippedSqliteFile: boolean;
   backupDir?: string | null;
   running: boolean;
 }
@@ -125,6 +126,7 @@ export interface CodexSessionVisibilityRepairSummary {
   mutatedInstanceCount: number;
   changedRolloutFileCount: number;
   updatedSqliteRowCount: number;
+  skippedSqliteFileCount: number;
   items: CodexSessionVisibilityRepairItem[];
   backupDirs: string[];
   message: string;
