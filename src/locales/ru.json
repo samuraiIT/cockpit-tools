@@ -70,6 +70,34 @@
           "statusPending": "Ожидает импорта"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "Пакет импорта не является корректным JSON",
+        "bundleEmpty": "Пакет импорта пуст",
+        "bundleProviderMismatch": "Поставщик пакета импорта не совпадает",
+        "bundleNoItems": "В пакете импорта нет элементов для импорта",
+        "titleCodex": "Пакетный импорт Codex",
+        "statusReceiving": "Получение запроса на импорт...",
+        "statusFetching": "Получение пакета импорта...",
+        "statusParsing": "Разбор JSON Codex...",
+        "statusImporting": "Импорт аккаунта {{current}} / {{total}}",
+        "statusRefreshing": "Обновление списка аккаунтов...",
+        "statusSuccess": "Импорт завершен",
+        "statusPartial": "Импорт частично завершен",
+        "statusFailed": "Ошибка импорта",
+        "total": "Всего",
+        "success": "Успешно",
+        "failed": "Ошибки",
+        "stepReceive": "Получить запрос",
+        "stepFetch": "Получить пакет",
+        "stepParse": "Разобрать JSON Codex",
+        "stepImport": "Импортировать аккаунты",
+        "stepRefresh": "Обновить список",
+        "errorsTitle": "Ошибочные элементы",
+        "viewAccounts": "Показать аккаунты Codex",
+        "copyErrors": "Копировать ошибки",
+        "copied": "Скопировано",
+        "unknownItem": "JSON № {{index}}"
+      },
       "instances": {
         "unsupported": {
           "title": "Не поддерживается на этой системе"
@@ -107,7 +135,10 @@
         "descTooltip": "По убыванию (нажмите для возрастания)",
         "toggleDirection": "Изменить порядок",
         "credits": "По оставшимся кредитам",
-        "planEnd": "По времени окончания цикла"
+        "planEnd": "По времени окончания цикла",
+        "recommended": "Рекомендуемое",
+        "recommendedAscTooltip": "Рекомендуемое (сначала наименее выгодные)",
+        "recommendedDescTooltip": "Рекомендуемое (сначала наиболее выгодные)"
       },
       "sortLabel": "Сортировка",
       "token": {
@@ -823,11 +854,23 @@
           "saveSettingsFailed": "Не удалось сохранить настройки резервного копирования: {{error}}",
           "cleanupDone": "Очищено {{count}} устаревших копий",
           "cleanupFailed": "Не удалось очистить устаревшие копии: {{error}}",
-          "openFolderFailed": "Не удалось открыть папку резервных копий: {{error}}"
+          "openFolderFailed": "Не удалось открыть папку резервных копий: {{error}}",
+          "downloadSuccess": "Резервная копия скачана в {{path}}",
+          "downloadFailed": "Не удалось скачать резервную копию: {{error}}"
         },
         "errors": {
           "invalidRetention": "Срок хранения должен быть от 1 до 365 дней"
-        }
+        },
+        "platformFilterLabel": "Платформа",
+        "platformFilterAll": "Все платформы",
+        "platformEmptyTitle": "Нет подходящих резервных копий",
+        "platformEmptyDesc": "Для этой платформы нет резервной копии аккаунтов для скачивания.",
+        "archiveTag": "Архив",
+        "archiveSize": "Архив: {{size}}",
+        "platformsTitle": "Аккаунты платформы",
+        "platformDownloadAction": "Скачать JSON платформы",
+        "downloadJsonAction": "Файл JSON",
+        "downloadZipAction": "ZIP-архив"
       },
       "exportTitle": "Экспорт данных",
       "exportDesc": "При необходимости экспортируйте данные аккаунтов, данные конфигурации или полный пакет миграции.",
@@ -1681,7 +1724,8 @@
         "freeNoticeRestricted": "Free-аккаунты ограничены. Отключите это, чтобы их выбирать.",
         "freeNoticeUnstable": "Прокси Free-аккаунтов может быть нестабильным. Используйте с осторожностью.",
         "restrictFreeDisableConfirmTitle": "Разрешить Free-аккаунты",
-        "restrictFreeDisableConfirmMessage": "Прокси Free-аккаунтов может быть нестабильным. Вы уверены, что хотите их использовать?"
+        "restrictFreeDisableConfirmMessage": "Прокси Free-аккаунтов может быть нестабильным. Вы уверены, что хотите их использовать?",
+        "manageMembers": "Управление участниками"
       },
       "entryAction": "Добавить в API-сервис",
       "testAction": "Проверить API-сервис",
@@ -1774,7 +1818,15 @@
       "apiPortUrl": "URL API-порта",
       "modelId": "ID модели",
       "modelIdPlaceholder": "Выберите ID модели",
-      "modelIdViewOnly": "Только просмотр"
+      "modelIdViewOnly": "Только просмотр",
+      "quotaPool": {
+        "title": "Пул квот",
+        "hourlyShort": "5h",
+        "weeklyShort": "Неделя",
+        "viewFull": "Показать полную статистику",
+        "modalTitle": "Пул квот сервиса API",
+        "empty": "Статистики квот пока нет"
+      }
     },
     "local": {
       "desc": "Импортировать текущий аккаунт из ~/.codex/auth.json",
@@ -1788,7 +1840,8 @@
     "quota": {
       "hourly": "Квота 5 часов",
       "weekly": "Недельная квота",
-      "reset": "Сброс"
+      "reset": "Сброс",
+      "weeklyBlocksHourly": "Недельная квота равна 0, поэтому 5-часовая квота недоступна"
     },
     "quotaError": {
       "badge": "Ошибка квоты",
@@ -2094,6 +2147,7 @@
       },
       "provider": {
         "label": "Провайдер",
+        "inlineLabel": "Провайдер: {{provider}}",
         "custom": "Пользовательский",
         "endpoint": "Конечная точка провайдера",
         "hint": "Совместимый Base URL был заполнен автоматически. При необходимости вы можете отредактировать его вручную.",

@@ -123,6 +123,10 @@ import {
   resolveCodexApiProviderPresetId,
 } from '../utils/codexProviderPresets';
 import {
+  formatCodexQuotaPoolPercent,
+  summarizeCodexQuotaPool,
+} from '../utils/codexQuotaPool';
+import {
   findCodexModelProviderById,
   findCodexModelProviderByBaseUrl,
   listCodexModelProviders,
@@ -400,6 +404,8 @@ export function CodexAccountsPage() {
   const [localAccessCopiedField, setLocalAccessCopiedField] = useState<'baseUrl' | 'apiKey' | null>(null);
   const [localAccessKeyVisible, setLocalAccessKeyVisible] = useState(false);
   const [localAccessEntryVisible, setLocalAccessEntryVisible] = useState(true);
+  const [localAccessLaunchCurrent, setLocalAccessLaunchCurrent] = useState(false);
+  const [showLocalAccessQuotaStatsModal, setShowLocalAccessQuotaStatsModal] = useState(false);
   const localAccessRiskNoticeResolverRef = useRef<((accepted: boolean) => void) | null>(null);
   const [localAccessDetailsExpanded, setLocalAccessDetailsExpanded] = useState<boolean>(() => {
     try {
@@ -517,6 +523,7 @@ export function CodexAccountsPage() {
     toggleExportJsonHidden,
     showAddModal, addTab, addStatus, addMessage, tokenInput, setTokenInput,
     importing, openAddModal, closeAddModal,
+    externalImportProgress, closeExternalImportProgressModal,
     formatDate, normalizeTag, saveJsonFile,
   } = page;
 
@@ -577,6 +584,16 @@ export function CodexAccountsPage() {
     }
   }, []);
 
+  const reloadLocalAccessLaunchCurrent = useCallback(async () => {
+    try {
+      const instances = await codexInstanceService.listInstances();
+      const defaultInstance = instances.find((instance) => instance.isDefault);
+      setLocalAccessLaunchCurrent(defaultInstance?.bindAccountId === CODEX_API_SERVICE_BIND_ID);
+    } catch (error) {
+      console.warn('Failed to resolve Codex API service current marker:', error);
+    }
+  }, []);
+
   const exportFormatOptions = useMemo<SingleSelectFilterOption[]>(
     () => [
       {
@@ -604,6 +621,10 @@ export function CodexAccountsPage() {
   }, [reloadLocalAccessEntryVisibility]);
 
   useEffect(() => {
+    void reloadLocalAccessLaunchCurrent();
+  }, [reloadLocalAccessLaunchCurrent]);
+
+  useEffect(() => {
     try {
       localStorage.setItem(
         CODEX_LOCAL_ACCESS_EXPANDED_KEY,
@@ -617,22 +638,24 @@ export function CodexAccountsPage() {
   useEffect(() => {
     const handleConfigUpdated = () => {
       void reloadLocalAccessEntryVisibility();
+      void reloadLocalAccessLaunchCurrent();
     };
     window.addEventListener('config-updated', handleConfigUpdated);
     return () => {
       window.removeEventListener('config-updated', handleConfigUpdated);
     };
-  }, [reloadLocalAccessEntryVisibility]);
+  }, [reloadLocalAccessEntryVisibility, reloadLocalAccessLaunchCurrent]);
 
   useEffect(() => {
     const handleLocalAccessUpdated = () => {
       void reloadLocalAccessState();
+      void reloadLocalAccessLaunchCurrent();
     };
     window.addEventListener('codex-local-access-state-updated', handleLocalAccessUpdated);
     return () => {
       window.removeEventListener('codex-local-access-state-updated', handleLocalAccessUpdated);
     };
-  }, [reloadLocalAccessState]);
+  }, [reloadLocalAccessLaunchCurrent, reloadLocalAccessState]);
 
   useEffect(() => {
     if (!localAccessEntryVisible) {
@@ -1874,6 +1897,7 @@ export function CodexAccountsPage() {
       setSwitching(accountId);
       try {
         const account = await switchAccount(accountId);
+        setLocalAccessLaunchCurrent(false);
         if (showSuccessMessage) {
           setMessage({ text: t('codex.switched', { email: maskAccountText(account.email) }) });
         }
@@ -1986,7 +2010,6 @@ export function CodexAccountsPage() {
         platformId: 'codex',
         reason: 'import',
       });
-      try { await refreshQuota(account.id); await fetchAccounts(); } catch { }
       page.setAddStatus('success');
       page.setAddMessage(t('codex.import.successMsg', '导入成功: {{email}}').replace('{{email}}', maskAccountText(account.email)));
       setTimeout(() => { closeAddModal(); }, 1200);
@@ -2040,25 +2063,6 @@ export function CodexAccountsPage() {
       } else {
         page.setAddStatus('success');
         page.setAddMessage(t('messages.importSuccess', { count: imported.length }));
-      }
-      // 后台刷新配额，带进度显示，可关闭弹窗
-      if (imported.length > 0) {
-        const total = imported.length;
-        let done = 0;
-        const refreshAll = async () => {
-          for (const acc of imported) {
-            await refreshQuota(acc.id).catch(() => { });
-            done++;
-            page.setAddStatus('loading');
-            page.setAddMessage(t('messages.refreshingQuota', { done, total }));
-            // 每 5 个刷新一次列表，让 UI 实时更新
-            if (done % 5 === 0) await fetchAccounts();
-          }
-          await fetchAccounts();
-          page.setAddStatus('success');
-          page.setAddMessage(`${t('messages.importSuccess', { count: total })}，${t('messages.quotaRefreshDone')}`);
-        };
-        refreshAll();
       }
     } catch (e) {
       page.setAddStatus('error');
@@ -2332,8 +2336,6 @@ export function CodexAccountsPage() {
           reason: 'import',
         });
       }
-      for (const acc of imported) { await refreshQuota(acc.id).catch(() => { }); }
-      await fetchAccounts();
       page.setAddStatus('success');
       page.setAddMessage(t('common.shared.token.importSuccessMsg', '成功导入 {{count}} 个账号').replace('{{count}}', String(imported.length)));
       setTimeout(() => { closeAddModal(); }, 1200);
@@ -2768,6 +2770,26 @@ export function CodexAccountsPage() {
         .filter((account): account is CodexAccount => Boolean(account)),
     [accounts, localAccessCollection?.accountIds],
   );
+  const localAccessQuotaPoolSummary = useMemo(
+    () => summarizeCodexQuotaPool(localAccessAccounts),
+    [localAccessAccounts],
+  );
+  const localAccessQuotaPoolLabels = useMemo(
+    () => ({
+      hourly: t('codex.localAccess.quotaPool.hourlyShort', '5h'),
+      weekly: t('codex.localAccess.quotaPool.weeklyShort', '周'),
+      title: t('codex.localAccess.quotaPool.title', '额度池'),
+    }),
+    [t],
+  );
+  const localAccessQuotaPreviewItems = useMemo(
+    () => localAccessQuotaPoolSummary.visiblePlans.slice(0, 3),
+    [localAccessQuotaPoolSummary.visiblePlans],
+  );
+  const localAccessQuotaHiddenCount = Math.max(
+    0,
+    localAccessQuotaPoolSummary.visiblePlans.length - localAccessQuotaPreviewItems.length,
+  );
   const overviewAccounts = accounts;
   const localAccessBusy =
     localAccessSaving ||
@@ -2886,14 +2908,12 @@ export function CodexAccountsPage() {
     try {
       await handleSaveLocalAccessAccounts(
         localAccessCollection.accountIds.filter((id) => id !== accountId),
-        {
-          restrictFreeAccounts: localAccessCollection.restrictFreeAccounts ?? true,
-        },
+        { restrictFreeAccounts: localAccessCollection.restrictFreeAccounts ?? true },
       );
     } catch (error) {
       setMessage({
         text: t('messages.actionFailed', {
-          action: t('accounts.groups.removeFromGroup', '移出分组'),
+          action: t('accounts.groups.removeFromGroup'),
           error: String(error).replace(/^Error:\s*/, ''),
         }),
         tone: 'error',
@@ -3281,6 +3301,7 @@ export function CodexAccountsPage() {
       const nextState = await codexLocalAccessService.activateCodexLocalAccess();
       setLocalAccessState(nextState);
       await fetchCurrentAccount();
+      setLocalAccessLaunchCurrent(true);
       if (options?.showSuccessMessage ?? true) {
         setMessage({
           text: t('codex.localAccess.activateSuccess', '已切换到 API 服务'),
@@ -3406,6 +3427,7 @@ export function CodexAccountsPage() {
     });
     return map;
   }, [customSortOrder]);
+  const overviewCurrentAccountId = localAccessLaunchCurrent ? null : currentAccount?.id ?? null;
 
   const compareAccountsBySort = useCallback((a: CodexAccount, b: CodexAccount) => {
     if (sortBy === 'custom') {
@@ -3417,7 +3439,7 @@ export function CodexAccountsPage() {
       return b.created_at - a.created_at;
     }
 
-    const currentFirstDiff = compareCurrentAccountFirst(a.id, b.id, currentAccount?.id);
+    const currentFirstDiff = compareCurrentAccountFirst(a.id, b.id, overviewCurrentAccountId);
     if (currentFirstDiff !== 0) {
       return currentFirstDiff;
     }
@@ -3445,7 +3467,7 @@ export function CodexAccountsPage() {
     const aV = sortBy === 'weekly' ? a.quota?.weekly_percentage ?? -1 : a.quota?.hourly_percentage ?? -1;
     const bV = sortBy === 'weekly' ? b.quota?.weekly_percentage ?? -1 : b.quota?.hourly_percentage ?? -1;
     return sortDirection === 'desc' ? bV - aV : aV - bV;
-  }, [currentAccount?.id, customSortOrderIndex, resolveSubscriptionPresentation, sortBy, sortDirection]);
+  }, [customSortOrderIndex, overviewCurrentAccountId, resolveSubscriptionPresentation, sortBy, sortDirection]);
 
   const sortedAccountsForInstances = useMemo(
     () => [...accounts].sort(compareAccountsBySort),
@@ -3658,11 +3680,13 @@ export function CodexAccountsPage() {
           key: 'primary',
           valueText: primary?.valueText ?? '--',
           quotaClass: primary?.quotaClass ?? 'unknown',
+          titleText: primary?.hintText || primary?.label || '',
         },
         {
           key: 'secondary',
           valueText: secondary?.valueText ?? '--',
           quotaClass: secondary?.quotaClass ?? 'unknown',
+          titleText: secondary?.hintText || secondary?.label || '',
         },
       ];
     },
@@ -3674,7 +3698,7 @@ export function CodexAccountsPage() {
   const renderCompactRows = (items: typeof filteredAccounts, groupKey?: string) =>
     items.map((account) => {
       const presentation = resolvePresentation(account);
-      const isCurrent = currentAccount?.id === account.id;
+      const isCurrent = overviewCurrentAccountId === account.id;
       const isSelected = selected.has(account.id);
       const isApiKeyAccount = isCodexApiKeyAccount(account);
       const compactQuotaItems = resolveCompactQuotaItems(presentation);
@@ -3704,6 +3728,7 @@ export function CodexAccountsPage() {
               <span
                 key={`${account.id}-${item.key}`}
                 className={`codex-compact-quota codex-compact-quota-${item.key}`}
+                title={item.titleText}
               >
                 <span className="codex-compact-dot" />
                 <span className={`codex-compact-quota-value ${item.quotaClass}`}>{item.valueText}</span>
@@ -3738,7 +3763,7 @@ export function CodexAccountsPage() {
     items.map((account) => {
       const presentation = resolvePresentation(account);
       const meta = resolveAccountMeta(account);
-      const isCurrent = currentAccount?.id === account.id;
+      const isCurrent = overviewCurrentAccountId === account.id;
       const isApiKeyAccount = isCodexApiKeyAccount(account);
       const isEditingApiKeyName = isApiKeyAccount && editingApiKeyNameId === account.id;
       const isSavingApiKeyName = savingApiKeyNameId === account.id;
@@ -3882,7 +3907,7 @@ export function CodexAccountsPage() {
                 )}
                 {quotaItems.map((item) => {
                   const QuotaIcon = item.key === 'secondary' ? Calendar : item.key === 'code_review' ? BookOpen : Clock;
-                  return (<div key={item.key} className="quota-item"><div className="quota-header"><QuotaIcon size={14} /><span className="quota-label">{item.label}</span><span className={`quota-pct ${item.quotaClass}`}>{item.valueText}</span></div>
+                  return (<div key={item.key} className="quota-item" title={item.hintText}><div className="quota-header"><QuotaIcon size={14} /><span className="quota-label">{item.label}</span><span className={`quota-pct ${item.quotaClass}`}>{item.valueText}</span></div>
                     <div className="quota-bar-track"><div className={`quota-bar ${item.quotaClass}`} style={{ width: `${item.percentage}%` }} /></div>
                     {item.resetText && <span className="quota-reset">{item.resetText}</span>}</div>);
                 })}
@@ -3996,6 +4021,7 @@ export function CodexAccountsPage() {
         : localAccessCollection.enabled
           ? t('codex.localAccess.statusStopped', '未运行')
           : t('codex.localAccess.statusDisabled', '已停用');
+    const isLocalAccessCurrent = localAccessLaunchCurrent;
     const localAccessSummaryMeta = t('codex.localAccess.summaryMeta', {
       count: localAccessState?.memberCount ?? 0,
       defaultValue: '{{count}} 个账号 · 本机/局域网',
@@ -4006,6 +4032,8 @@ export function CodexAccountsPage() {
       <div
         key="codex-local-access-card"
         className={`codex-account-card folder-inline-card codex-local-access-card codex-local-access-card--${overviewLayoutMode} ${
+          isLocalAccessCurrent ? 'current' : ''
+        } ${
           showLocalAccessDetails ? 'is-expanded' : 'is-collapsed'
         }`}
       >
@@ -4016,7 +4044,9 @@ export function CodexAccountsPage() {
                 <Server size={24} />
               </div>
               <div className="folder-inline-info">
-                <span className="folder-inline-name">{t('codex.localAccess.title', 'API 服务')}</span>
+                <div className="codex-local-access-title-row">
+                  <span className="folder-inline-name">{t('codex.localAccess.title', 'API 服务')}</span>
+                </div>
                 <span className="folder-inline-count">
                   {t('codex.localAccess.memberOnlyLocal', '本机/局域网')}
                 </span>
@@ -4048,6 +4078,9 @@ export function CodexAccountsPage() {
             </button>
           )}
           <div className="codex-local-access-header-actions">
+            {isLocalAccessCurrent && (
+              <span className="current-tag">{t('codex.current', '当前')}</span>
+            )}
             <span className={`codex-local-access-status ${localAccessStatusTone}`}>
               {localAccessStatusText}
             </span>
@@ -4151,54 +4184,91 @@ export function CodexAccountsPage() {
                   </button>
                 </div>
               ) : (
-                previewAccounts.map((account) => {
-                  const presentation = resolvePresentation(account);
-                  const [primaryQuota, weeklyQuota] = resolveCompactQuotaItems(presentation);
-                  return (
-                    <div
-                      key={`local-access-${account.id}`}
-                      className="folder-preview-item codex-local-access-member"
+                <>
+                  {previewAccounts.map((account) => {
+                    const presentation = resolvePresentation(account);
+                    const hourlyQuota = presentation.quotaItems.find((item) => item.key === 'primary');
+                    const weeklyQuota = presentation.quotaItems.find((item) => item.key === 'secondary');
+                    return (
+                      <div key={`local-access-${account.id}`} className="folder-preview-item codex-local-access-member">
+                        <span
+                          className="folder-preview-email codex-local-access-member-email"
+                          title={maskAccountText(presentation.displayName)}
+                        >
+                          {maskAccountText(presentation.displayName)}
+                        </span>
+                        <span
+                          className={`codex-local-access-member-text codex-local-access-member-quota ${hourlyQuota?.quotaClass || 'unknown'}`}
+                          title={hourlyQuota?.hintText || hourlyQuota?.label}
+                        >
+                          {hourlyQuota?.valueText || '-'}
+                        </span>
+                        <span
+                          className={`codex-local-access-member-text codex-local-access-member-quota ${weeklyQuota?.quotaClass || 'unknown'}`}
+                          title={weeklyQuota?.label}
+                        >
+                          {weeklyQuota?.valueText || '-'}
+                        </span>
+                        <span className={`codex-local-access-member-plan tier-badge ${presentation.planClass || 'unknown'}`}>
+                          {presentation.planLabel}
+                        </span>
+                        <button
+                          type="button"
+                          className="folder-preview-remove-btn"
+                          onClick={() => void handleRemoveLocalAccessAccount(account.id)}
+                          title={t('accounts.groups.removeFromGroup')}
+                          aria-label={`${t('accounts.groups.removeFromGroup')}: ${maskAccountText(presentation.displayName)}`}
+                          disabled={localAccessBusy}
+                        >
+                          <LogOut size={12} />
+                        </button>
+                      </div>
+                    );
+                  })}
+                  {hiddenCount > 0 && (
+                    <button
+                      type="button"
+                      className="folder-preview-item more"
+                      onClick={openLocalAccessMemberPicker}
+                      title={t('codex.localAccess.modal.manageMembers', '管理成员')}
+                      aria-label={t('codex.localAccess.modal.manageMembers', '管理成员')}
                     >
-                      <span
-                        className="folder-preview-email codex-local-access-member-email"
-                        title={maskAccountText(presentation.displayName)}
-                      >
-                        {maskAccountText(presentation.displayName)}
-                      </span>
-                      <span className="codex-local-access-member-text">
-                        {primaryQuota.valueText}
-                      </span>
-                      <span className="codex-local-access-member-text">
-                        {weeklyQuota.valueText}
-                      </span>
-                      <span className="codex-local-access-member-plan">
-                        {presentation.planLabel}
-                      </span>
-                      <button
-                        type="button"
-                        className="folder-preview-remove-btn"
-                        onClick={() => void handleRemoveLocalAccessAccount(account.id)}
-                        title={t('accounts.groups.removeFromGroup', '移出分组')}
-                        aria-label={`${t('accounts.groups.removeFromGroup', '移出分组')}: ${maskAccountText(presentation.displayName)}`}
-                        disabled={localAccessSaving}
-                      >
-                        <LogOut size={12} />
-                      </button>
-                    </div>
-                  );
-                })
-              )}
-              {hiddenCount > 0 && (
-                <button
-                  type="button"
-                  className="folder-preview-item more"
-                  onClick={openLocalAccessMemberPicker}
-                  title={t('codex.localAccess.viewAllAccounts', '查看全部账号')}
-                >
-                  +{hiddenCount}
-                </button>
+                      +{hiddenCount}
+                    </button>
+                  )}
+                </>
               )}
             </div>
+
+            {localAccessQuotaPreviewItems.length > 0 && (
+              <div
+                className="codex-local-access-pool-row"
+                aria-label={localAccessQuotaPoolLabels.title}
+              >
+                {localAccessQuotaPreviewItems.map((item) => (
+                  <div key={item.key} className="codex-local-access-pool-pill">
+                    <strong>{item.key} ({item.count})</strong>
+                    <span>
+                      {localAccessQuotaPoolLabels.hourly} {formatCodexQuotaPoolPercent(item.hourly)}
+                    </span>
+                    <span>
+                      {localAccessQuotaPoolLabels.weekly} {formatCodexQuotaPoolPercent(item.weekly)}
+                    </span>
+                  </div>
+                ))}
+                {localAccessQuotaHiddenCount > 0 && (
+                  <button
+                    type="button"
+                    className="codex-local-access-pool-more"
+                    onClick={() => setShowLocalAccessQuotaStatsModal(true)}
+                    title={t('codex.localAccess.quotaPool.viewFull', '查看完整统计')}
+                    aria-label={t('codex.localAccess.quotaPool.viewFull', '查看完整统计')}
+                  >
+                    +{localAccessQuotaHiddenCount}
+                  </button>
+                )}
+              </div>
+            )}
 
             {localAccessState?.lastError && (
               <div className="quota-error-inline">
@@ -4221,53 +4291,55 @@ export function CodexAccountsPage() {
               </div>
             )}
 
-            <div className="card-footer codex-local-access-footer">
+            <div className="codex-card-bottom codex-local-access-card-bottom">
               <span className="card-date">
                 {t('codex.localAccess.footerHint', '监听本机与局域网')}
               </span>
-              <div className="card-actions">
-                <button
-                  className="card-action-btn"
-                  onClick={openLocalAccessMemberPicker}
-                  title={t('common.shared.addAccount', '添加账号')}
-                  disabled={localAccessBusy}
-                >
-                  <FolderPlus size={14} />
-                </button>
-                <button
-                  className="card-action-btn"
-                  onClick={openLocalAccessPanel}
-                  title={t('codex.localAccess.dashboardAction', '服务面板')}
-                  disabled={localAccessBusy}
-                >
-                  <Database size={14} />
-                </button>
-                <button
-                  className="card-action-btn"
-                  onClick={() => void handleQuickRefreshLocalAccessQuota()}
-                  title={t('common.shared.refreshQuota', '刷新配额')}
-                  disabled={localAccessBusy || !localAccessCollection}
-                >
-                  <RotateCw size={14} className={localAccessRefreshing ? 'loading-spinner' : ''} />
-                </button>
-                <button
-                  className="card-action-btn success"
-                  onClick={() => void handleQuickActivateLocalAccess()}
-                  title={t('codex.localAccess.activateAction', '启动 API 服务')}
-                  disabled={localAccessBusy || !localAccessCollection}
-                >
-                  {localAccessStarting ? <RefreshCw size={14} className="loading-spinner" /> : <Play size={14} />}
-                </button>
-                <button
-                  className={`card-action-btn ${localAccessCollection?.enabled ? '' : 'success'}`}
-                  onClick={() => void handleQuickToggleLocalAccessEnabled()}
-                  title={localAccessCollection?.enabled
-                    ? t('codex.localAccess.disableService', '停用服务')
-                    : t('codex.localAccess.enableService', '启用服务')}
-                  disabled={localAccessBusy || !localAccessCollection}
-                >
-                  <Power size={14} />
-                </button>
+              <div className="card-footer codex-local-access-footer">
+                <div className="card-actions">
+                  <button
+                    className="card-action-btn"
+                    onClick={openLocalAccessMemberPicker}
+                    title={t('common.shared.addAccount', '添加账号')}
+                    disabled={localAccessBusy}
+                  >
+                    <FolderPlus size={14} />
+                  </button>
+                  <button
+                    className="card-action-btn"
+                    onClick={openLocalAccessPanel}
+                    title={t('codex.localAccess.dashboardAction', '服务面板')}
+                    disabled={localAccessBusy}
+                  >
+                    <Database size={14} />
+                  </button>
+                  <button
+                    className="card-action-btn"
+                    onClick={() => void handleQuickRefreshLocalAccessQuota()}
+                    title={t('common.shared.refreshQuota', '刷新配额')}
+                    disabled={localAccessBusy || !localAccessCollection}
+                  >
+                    <RotateCw size={14} className={localAccessRefreshing ? 'loading-spinner' : ''} />
+                  </button>
+                  <button
+                    className="card-action-btn success"
+                    onClick={() => void handleQuickActivateLocalAccess()}
+                    title={t('codex.localAccess.activateAction', '启动 API 服务')}
+                    disabled={localAccessBusy || !localAccessCollection}
+                  >
+                    {localAccessStarting ? <RefreshCw size={14} className="loading-spinner" /> : <Play size={14} />}
+                  </button>
+                  <button
+                    className={`card-action-btn ${localAccessCollection?.enabled ? '' : 'success'}`}
+                    onClick={() => void handleQuickToggleLocalAccessEnabled()}
+                    title={localAccessCollection?.enabled
+                      ? t('codex.localAccess.disableService', '停用服务')
+                      : t('codex.localAccess.enableService', '启用服务')}
+                    disabled={localAccessBusy || !localAccessCollection}
+                  >
+                    <Power size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           </>
@@ -4391,7 +4463,7 @@ export function CodexAccountsPage() {
     items.map((account) => {
       const presentation = resolvePresentation(account);
       const meta = resolveAccountMeta(account);
-      const isCurrent = currentAccount?.id === account.id;
+      const isCurrent = overviewCurrentAccountId === account.id;
       const isApiKeyAccount = isCodexApiKeyAccount(account);
       const isEditingApiKeyName = isApiKeyAccount && editingApiKeyNameId === account.id;
       const isSavingApiKeyName = savingApiKeyNameId === account.id;
@@ -4524,7 +4596,7 @@ export function CodexAccountsPage() {
               <>
                 <div className="quota-grid">
                   {quotaItems.map((item) => (
-                    <div key={item.key} className="quota-item">
+                    <div key={item.key} className="quota-item" title={item.hintText}>
                       <div className="quota-header"><span className="quota-name">{item.label}</span><span className={`quota-value ${item.quotaClass}`}>{item.valueText}</span></div>
                       <div className="quota-progress-track"><div className={`quota-progress-bar ${item.quotaClass}`} style={{ width: `${item.percentage}%` }} /></div>
                       {item.resetText && (<div className="quota-footer"><span className="quota-reset">{item.resetText}</span></div>)}
@@ -4674,6 +4746,59 @@ export function CodexAccountsPage() {
   const hasGroupEntryCards = Boolean(inlineFolderCards && inlineFolderCards.length > 0);
   const showOverviewSelectionBar =
     !groupByTag && !activeGroupId && paginatedAccounts.length > 0;
+  const externalImportRunning = [
+    'receiving',
+    'fetching',
+    'parsing',
+    'importing',
+    'refreshing',
+  ].includes(externalImportProgress.status);
+  const externalImportStepIndex = (() => {
+    switch (externalImportProgress.status) {
+      case 'receiving':
+        return 0;
+      case 'fetching':
+        return 1;
+      case 'parsing':
+        return 2;
+      case 'importing':
+        return 3;
+      case 'refreshing':
+        return 4;
+      case 'success':
+      case 'partial':
+      case 'error':
+        return 5;
+      default:
+        return -1;
+    }
+  })();
+  const externalImportSteps = [
+    t('common.shared.externalImport.stepReceive', '接收导入请求'),
+    t('common.shared.externalImport.stepFetch', '获取导入包'),
+    t('common.shared.externalImport.stepParse', '解析 Codex JSON'),
+    t('common.shared.externalImport.stepImport', '导入账号'),
+    t('common.shared.externalImport.stepRefresh', '刷新账号列表'),
+  ];
+  const externalImportPercent = Math.max(
+    0,
+    Math.min(100, Math.round(externalImportProgress.progress)),
+  );
+  const handleCopyExternalImportErrors = async () => {
+    const content = externalImportProgress.failures
+      .map((item) => `${item.index}. ${item.label}: ${item.error}`)
+      .join('\n');
+    if (!content) return;
+    await navigator.clipboard.writeText(content).catch(() => {});
+    setMessage({
+      text: t('common.shared.externalImport.copied', '已复制'),
+      tone: 'success',
+    });
+  };
+  const handleViewExternalImportAccounts = () => {
+    setActiveTab('overview');
+    closeExternalImportProgressModal();
+  };
 
   return (
     <div className={`codex-accounts-page codex-accounts-page--${overviewLayoutMode}`}>
@@ -4682,6 +4807,134 @@ export function CodexAccountsPage() {
         onTabChange={setActiveTab}
         tabs={['overview', 'providers', 'wakeup', 'instances', 'sessions']}
       />
+
+      {externalImportProgress.visible && (
+        <div
+          className="modal-overlay codex-external-import-overlay"
+          onClick={() => {
+            if (!externalImportRunning) {
+              closeExternalImportProgressModal();
+            }
+          }}
+        >
+          <div
+            className="modal-content codex-external-import-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h2>{t('common.shared.externalImport.titleCodex', 'Codex 批量导入')}</h2>
+              {!externalImportRunning && (
+                <button
+                  className="modal-close"
+                  onClick={closeExternalImportProgressModal}
+                  aria-label={t('common.close', '关闭')}
+                >
+                  <X />
+                </button>
+              )}
+            </div>
+            <div className="codex-external-import-body">
+              <div className="codex-external-import-main">
+                <div className="codex-external-import-primary">
+                  <div className={`codex-external-import-status is-${externalImportProgress.status}`}>
+                    {externalImportRunning ? (
+                      <RefreshCw size={18} className="loading-spinner" />
+                    ) : externalImportProgress.status === 'success' ? (
+                      <Check size={18} />
+                    ) : (
+                      <CircleAlert size={18} />
+                    )}
+                    <span>{externalImportProgress.message}</span>
+                  </div>
+
+                  <div className="codex-external-import-progress-card">
+                    <div className="codex-external-import-progress-head">
+                      <span>{externalImportPercent}%</span>
+                      <strong>
+                        {externalImportProgress.current > 0 && externalImportProgress.total > 0
+                          ? `${externalImportProgress.current}/${externalImportProgress.total}`
+                          : ''}
+                      </strong>
+                    </div>
+                    <div className="codex-external-import-progress-track">
+                      <div
+                        className="codex-external-import-progress-fill"
+                        style={{ width: `${externalImportPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="codex-external-import-side">
+                  <div className="codex-external-import-stats">
+                    <div>
+                      <span>{t('common.shared.externalImport.total', '总数')}</span>
+                      <strong>{externalImportProgress.total}</strong>
+                    </div>
+                    <div>
+                      <span>{t('common.shared.externalImport.success', '成功')}</span>
+                      <strong>{externalImportProgress.success}</strong>
+                    </div>
+                    <div>
+                      <span>{t('common.shared.externalImport.failed', '失败')}</span>
+                      <strong>{externalImportProgress.failed}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="codex-external-import-steps">
+                {externalImportSteps.map((label, index) => {
+                  const isDone = externalImportStepIndex > index;
+                  const isActive = externalImportStepIndex === index;
+                  return (
+                    <div
+                      key={label}
+                      className={`codex-external-import-step ${isDone ? 'is-done' : ''} ${isActive ? 'is-active' : ''}`}
+                    >
+                      <span>{isDone ? <Check size={13} /> : index + 1}</span>
+                      <strong>{label}</strong>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {externalImportProgress.failures.length > 0 && (
+                <div className="codex-external-import-errors">
+                  <div className="codex-external-import-errors-head">
+                    <strong>{t('common.shared.externalImport.errorsTitle', '失败项')}</strong>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={handleCopyExternalImportErrors}
+                    >
+                      <Copy size={13} />
+                      {t('common.shared.externalImport.copyErrors', '复制错误')}
+                    </button>
+                  </div>
+                  <div className="codex-external-import-error-list">
+                    {externalImportProgress.failures.map((item) => (
+                      <div key={`${item.index}-${item.label}`} className="codex-external-import-error">
+                        <span>{item.index}. {item.label}</span>
+                        <small>{item.error}</small>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            {!externalImportRunning && (
+              <div className="modal-footer codex-external-import-footer">
+                <button className="btn btn-secondary" onClick={closeExternalImportProgressModal}>
+                  {t('common.close', '关闭')}
+                </button>
+                <button className="btn btn-primary" onClick={handleViewExternalImportAccounts}>
+                  {t('common.shared.externalImport.viewAccounts', '查看 Codex 账号')}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {activeTab === 'overview' && (<>
         {message && (<div className={`message-bar ${message.tone === 'error' ? 'error' : 'success'}`}>{message.text}<button onClick={() => setMessage(null)}><X size={14} /></button></div>)}
@@ -5562,7 +5815,7 @@ export function CodexAccountsPage() {
                 >
                   {customSortAccounts.map((account, index) => {
                     const presentation = resolvePresentation(account);
-                    const isCurrent = currentAccount?.id === account.id;
+                    const isCurrent = overviewCurrentAccountId === account.id;
                     const quotaItems = isCodexApiKeyAccount(account)
                       ? []
                       : presentation.quotaItems
@@ -5618,6 +5871,7 @@ export function CodexAccountsPage() {
                                   <span
                                     key={`${account.id}-${item.key}`}
                                     className="codex-custom-sort-quota"
+                                    title={item.hintText}
                                   >
                                     <span>{item.label}</span>
                                     <strong className={item.quotaClass}>{item.valueText}</strong>
@@ -5706,6 +5960,64 @@ export function CodexAccountsPage() {
           onOpenSavedDirectory={openFormattedExportSavedDirectory}
           onCopySavedPath={copyFormattedExportSavedPath}
         />
+
+        {showLocalAccessQuotaStatsModal && (
+          <div
+            className="modal-overlay codex-local-access-stats-overlay"
+            onClick={() => setShowLocalAccessQuotaStatsModal(false)}
+          >
+            <div
+              className="modal codex-local-access-stats-modal"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h2>{t('codex.localAccess.quotaPool.modalTitle', 'API 服务额度池')}</h2>
+                <button
+                  className="modal-close"
+                  onClick={() => setShowLocalAccessQuotaStatsModal(false)}
+                  aria-label={t('common.close', '关闭')}
+                >
+                  <X />
+                </button>
+              </div>
+              <div className="modal-body">
+                {localAccessQuotaPoolSummary.visiblePlans.length === 0 ? (
+                  <div className="codex-local-access-stats-empty">
+                    {t('codex.localAccess.quotaPool.empty', '暂无额度统计')}
+                  </div>
+                ) : (
+                  <div className="codex-local-access-stats-list">
+                    {localAccessQuotaPoolSummary.visiblePlans.map((item) => (
+                      <div key={item.key} className="codex-local-access-stats-row">
+                        <div className="codex-local-access-stats-plan">
+                          <strong>{item.key} ({item.count})</strong>
+                        </div>
+                        <div className="codex-local-access-stats-values">
+                          <span>
+                            <b>{localAccessQuotaPoolLabels.hourly}</b>
+                            <strong>{formatCodexQuotaPoolPercent(item.hourly)}</strong>
+                          </span>
+                          <span>
+                            <b>{localAccessQuotaPoolLabels.weekly}</b>
+                            <strong>{formatCodexQuotaPoolPercent(item.weekly)}</strong>
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setShowLocalAccessQuotaStatsModal(false)}
+                >
+                  {t('common.confirm', '确认')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {showLocalAccessHideConfirm && (
           <div className="modal-overlay codex-local-access-hide-confirm-overlay">

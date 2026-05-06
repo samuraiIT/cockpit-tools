@@ -214,6 +214,7 @@ impl Default for CodexAccountIndex {
 /// JWT Payload 中的用户信息
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CodexJwtPayload {
+    #[serde(default)]
     pub aud: serde_json::Value, // 可能是 string 或 array
     pub iss: Option<String>,
     pub email: Option<String>,
@@ -223,6 +224,15 @@ pub struct CodexJwtPayload {
     pub sub: Option<String>,
     #[serde(rename = "https://api.openai.com/auth")]
     pub auth_data: Option<CodexAuthData>,
+    #[serde(rename = "https://api.openai.com/profile")]
+    pub profile_data: Option<CodexProfileData>,
+}
+
+/// JWT 中的 profile 数据
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CodexProfileData {
+    pub email: Option<String>,
+    pub email_verified: Option<bool>,
 }
 
 /// JWT 中的 auth 数据

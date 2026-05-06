@@ -7,6 +7,46 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
 ---
+## [0.22.20] - 2026-05-06
+
+### 新增
+- **Windsurf 账号管理现支持 2026-04+ 新账号使用的 Devin Auth 体系**：邮箱密码登录、`auth1_` token 导入、刷新与实例切号可走 Devin auth1 → session → one-time token → IDE token 链路，并保存 IDE 所需的 Devin account/org ID 与 user-status 数据。
+- **Windsurf 账号页默认使用推荐排序**：账号总览新增“按推荐”排序，按本地保存的日/周配额、重置时间和周期结束时间评分，让剩余可用度更高的账号优先展示。
+- **备份管理现支持按平台归档与下载**：自动/手动备份会保留可恢复 JSON，并同步生成 ZIP 压缩包，列表展示平台账号数量，支持按平台筛选，以及下载完整 JSON、ZIP 或单个平台 JSON。
+- **Codex 本地 API 服务现会在账号总览展示额度池**：API 服务卡片会按订阅档位汇总成员账号，并分别展示 5 小时额度与周额度；档位较多时可打开完整额度池弹框查看。
+
+### 变更
+- **Codex 账号读取现兼容更多便携账号文件**：可把便携 token/API-key JSON 详情文件恢复到当前账号模型，并保留 API 供应商、时间戳、账号 ID、组织 ID、套餐与订阅字段。
+- **Codex 账号总览会在本地 API 服务启用时把“当前”标识移到 API 服务入口**：该变化仅影响此账号列表页的展示，应用其他位置仍沿用原有当前账号逻辑。
+- **Codex 本地 API 服务卡片现与普通账号卡片对齐**：卡片操作栏和悬浮样式跟随普通账号，主体内保留成员预览并在其下方竖排展示额度池统计。
+- **Codex 实例账号选择现可识别 API Key 供应商**：API Key 账号在实例配额预览中展示供应商，也可按供应商名称搜索。
+- **账号与配置文件写入现统一使用同步原子写入路径**：账号索引、OAuth pending 状态、`config.toml`、分组/同步设置、OpenCode/OpenClaw auth 文件和备份文件都会通过临时文件替换写入，并只从有效备份恢复。
+- **配额和 Token 刷新现直接使用主刷新链路**：各平台刷新不再等待隐藏的延迟重试，失败时会更快暴露真实错误。
+- **Homebrew Cask 元数据已补齐到 v0.22.19 发布产物**：Cask 版本与 SHA256 指向 0.22.19 universal DMG。
+
+### 修复
+- **Windsurf Devin 账号切入实例时会使用更新的 IDE 凭据**：实例启动前会预刷新 Devin 账号，写入稳定的 installation、onboarding、sign-in 与 user 字段，并带上 Devin account/org/protobuf 状态数据，避免启动后显示未登录或出现权限拒绝。
+- **账号列表不再因存储临时返回异常空结果而消失**：共享账号 store 在异常空读取时会保留当前缓存账号与当前账号，同时仍允许用户主动删除后的真实空列表。
+- **备份恢复与保留清理现一致处理 JSON/ZIP 配对文件**：读取备份时可从损坏或缺失的 JSON 回退到对应压缩包，过期清理也会同时清理 JSON 与 ZIP 备份。
+
+---
+## [0.22.19] - 2026-05-05
+
+### 新增
+- **Codex 外部账号导入链接现支持远端导入包**：`import_url` 深链参数可拉取 HTTP/HTTPS JSON 导入包、逐个导入账号，并在专用进度弹框展示总数、成功/失败统计与可复制失败项。
+
+### 变更
+- **Codex 账号导入后端现统一刷新 OAuth 额度信息**：从本地、JSON 或文件导入后会跳过 API Key 账号并刷新 OAuth 账号配额，再用刷新后的记录更新账号列表与托盘状态。
+- **Codex 导入包现支持更多便携 JSON 形态**：远端导入包与粘贴 JSON 导入可读取根数组、字符串包裹载荷、直接 Codex Token 对象，以及每行一个账号对象的 JSON Lines。
+- **Codex 便携导出格式现归一 Cockpit Tools JSON**：Cockpit Tools 导出会输出可移植的 Token/API Key JSON，CPA 文档会保留 Token 刷新时间与过期时间元数据。
+- **Codex PRO 档位识别现与 CPA 20x 语义对齐**：未显式标记 `prolite` 的 `pro` 账号默认展示为 PRO Max/20x，并在本地 API 服务路由排序中按 20x 档位处理。
+- **Codex 会话可见性修复备份现按实例保留最近一次**：执行新一轮修复前会清理旧的会话可见性修复备份目录，避免备份长期堆积。
+
+### 修复
+- **Codex OAuth 导入不再因 email 只存在于 OpenAI profile claim 中失败**：解析 `id_token` 时会在缺少顶层 email claim 时读取 `https://api.openai.com/profile.email`。
+- **外部导入链接现会执行自动 token 导入请求**：带 `auto_import=true` 的 token/payload 链接会自动提交导入，短时间重复投递的同一导入请求会被忽略。
+
+---
 ## [0.22.18] - 2026-05-04
 
 ### 新增
