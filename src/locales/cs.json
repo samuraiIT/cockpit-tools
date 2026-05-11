@@ -70,6 +70,39 @@
           "statusPending": "Čeká na import"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "Importní balíček není platný JSON",
+        "bundleEmpty": "Importní balíček je prázdný",
+        "bundleProviderMismatch": "Poskytovatel importního balíčku neodpovídá",
+        "bundleNoItems": "Importní balíček neobsahuje položky k importu",
+        "titleCodex": "Hromadný import Codex",
+        "statusReceiving": "Přijímá se požadavek na import...",
+        "statusFetching": "Načítá se importní balíček...",
+        "statusParsing": "Analyzuje se obsah importu Codex...",
+        "statusImporting": "Importuje se účet {{current}} / {{total}}",
+        "statusRefreshing": "Obnovuje se seznam účtů...",
+        "statusSuccess": "Import dokončen",
+        "statusPartial": "Částečně importováno",
+        "statusFailed": "Import se nezdařil",
+        "total": "Celkem",
+        "success": "Úspěšně",
+        "failed": "Selhalo",
+        "stepReceive": "Přijmout požadavek",
+        "stepFetch": "Načíst balíček",
+        "stepParse": "Analyzovat obsah",
+        "stepImport": "Importovat účty",
+        "stepRefresh": "Obnovit seznam",
+        "errorsTitle": "Neúspěšné položky",
+        "viewAccounts": "Zobrazit účty Codex",
+        "copyErrors": "Kopírovat chyby",
+        "copied": "Zkopírováno",
+        "unknownItem": "Položka č. {{index}}",
+        "versionUnsupportedTitle": "Verze aplikace je příliš nízká",
+        "versionUnsupportedDesc": "Tento způsob zatím není podporován. Stáhněte si nejnovější verzi.",
+        "checkUpdate": "Zkontrolovat aktualizace",
+        "rawLineNoRefreshToken": "Řádek {{line}} neobsahuje refresh_token",
+        "rawLineMultipleRefreshTokens": "Řádek {{line}} obsahuje více refresh_token. Ponechte jen jeden."
+      },
       "instances": {
         "unsupported": {
           "title": "Na tomto systému nepodporováno"
@@ -107,7 +140,10 @@
         "descTooltip": "Sestupně (kliknutím přepnete na vzestupně)",
         "toggleDirection": "Přepnout směr",
         "credits": "Zbývajícími kredity",
-        "planEnd": "Podle času konce cyklu"
+        "planEnd": "Podle času konce cyklu",
+        "recommended": "Doporučeno",
+        "recommendedAscTooltip": "Doporučeno (nejméně výhodné první)",
+        "recommendedDescTooltip": "Doporučeno (nejvýhodnější první)"
       },
       "sortLabel": "Seřadit",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "Uložení nastavení záloh selhalo: {{error}}",
           "cleanupDone": "Bylo vyčištěno {{count}} starých záloh",
           "cleanupFailed": "Vyčištění starých záloh selhalo: {{error}}",
-          "openFolderFailed": "Otevření složky se zálohami selhalo: {{error}}"
+          "openFolderFailed": "Otevření složky se zálohami selhalo: {{error}}",
+          "downloadSuccess": "Záloha stažena do {{path}}",
+          "downloadFailed": "Stažení zálohy selhalo: {{error}}"
         },
         "errors": {
           "invalidRetention": "Doba uchování musí být mezi 1 a 365 dny"
-        }
+        },
+        "platformFilterLabel": "Platforma",
+        "platformFilterAll": "Všechny platformy",
+        "platformEmptyTitle": "Žádné odpovídající zálohy",
+        "platformEmptyDesc": "Tato platforma nemá stažitelnou zálohu účtů.",
+        "archiveTag": "Archiv",
+        "archiveSize": "Archiv: {{size}}",
+        "platformsTitle": "Účty platformy",
+        "platformDownloadAction": "Stáhnout JSON platformy",
+        "downloadJsonAction": "Soubor JSON",
+        "downloadZipAction": "Archiv ZIP"
       },
       "exportTitle": "Export dat",
       "exportDesc": "Podle potřeby exportujte data účtů, konfigurační data nebo celý migrační balíček.",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "Aktualizovat odkaz pro ověření"
     },
     "token": {
-      "desc": "Vložte obsah auth.json nebo JSON dat účtu",
-      "placeholder": "Příklad: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "Vložte auth.json, JSON účtu nebo refresh_token.",
+      "placeholder": "Příklad: jeden refresh_token na řádek nebo {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "Povinná pole a příklady",
+      "formatRequired": "Podporuje úplné tokens (id_token + access_token), jeden refresh_token nebo jeden refresh_token na řádek. Import pouze s refresh_token jej nejprve online vymění za úplné přihlašovací údaje.",
+      "formatSingleLabel": "Úplné tokens",
+      "formatRefreshOnlyLabel": "Jen refresh_token",
+      "formatBatchLabel": "Dávkový příklad"
     },
     "exportFormat": {
       "label": "Formát exportu",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Free účty jsou omezené. Vypněte tuto volbu, chcete-li je vybrat.",
         "freeNoticeUnstable": "Proxy pro Free účty může být nestabilní. Používejte opatrně.",
         "restrictFreeDisableConfirmTitle": "Povolit Free účty",
-        "restrictFreeDisableConfirmMessage": "Proxy pro Free účty může být nestabilní. Opravdu je chcete použít?"
+        "restrictFreeDisableConfirmMessage": "Proxy pro Free účty může být nestabilní. Opravdu je chcete použít?",
+        "manageMembers": "Spravovat členy"
       },
       "entryAction": "Přidat do API služby",
       "testAction": "Otestovat API službu",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "URL portu API",
       "modelId": "ID modelu",
       "modelIdPlaceholder": "Vyberte ID modelu",
-      "modelIdViewOnly": "Pouze zobrazení"
+      "modelIdViewOnly": "Pouze zobrazení",
+      "quotaPool": {
+        "title": "Fond kvóty",
+        "hourlyShort": "5h",
+        "weeklyShort": "Týden",
+        "viewFull": "Zobrazit úplné statistiky",
+        "modalTitle": "Fond kvóty služby API",
+        "empty": "Zatím žádné statistiky kvóty"
+      }
     },
     "local": {
       "desc": "Importovat aktuální účet z ~/.codex/auth.json",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "Kvóta 5 hodin",
       "weekly": "Týdenní kvóta",
-      "reset": "Reset"
+      "reset": "Reset",
+      "weeklyBlocksHourly": "Týdenní kvóta je 0, proto není 5hodinová kvóta dostupná"
     },
     "quotaError": {
       "badge": "Chyba kvóty",
+      "refreshFailedBadge": "Obnovení selhalo",
       "generic": "Obnovení kvóty se nezdařilo, zkuste to prosím později",
       "deactivatedWorkspace": "Pracovní prostor je deaktivovaný, přepněte účet nebo znovu autorizujte",
-      "requestFailedManualRetry": "Požadavek selhal, zkuste to prosím znovu ručně: {{error}}"
+      "requestFailedManualRetry": "Zkontrolujte síť. Nejnovější kvóta nebyla načtena. Obnovte a zkuste to znovu."
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "Poskytovatel",
+        "inlineLabel": "Poskytovatel: {{provider}}",
         "custom": "Vlastní",
         "endpoint": "Koncový bod poskytovatele",
         "hint": "Kompatibilní Base URL byla vyplněna automaticky. Stále ji můžete upravit ručně.",
@@ -2309,6 +2374,17 @@
         "apiService": "Služba API",
         "account": "Účet"
       }
+    },
+    "accountNote": {
+      "title": "Poznámka účtu",
+      "label": "Poznámka účtu",
+      "desc": "Přidejte samostatnou poznámku k účtu {{account}}.",
+      "placeholder": "E-mail, heslo, obnovovací e-mail nebo poznámky k předání",
+      "emptyTitle": "Přidat poznámku účtu",
+      "short": "Poznámka",
+      "addShort": "Přidat",
+      "saved": "Poznámka účtu uložena",
+      "saveFailed": "Uložení poznámky účtu selhalo: {{error}}"
     }
   },
   "githubCopilot": {

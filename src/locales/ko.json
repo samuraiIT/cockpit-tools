@@ -70,6 +70,39 @@
           "statusPending": "가져오기 대기"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "가져오기 패키지가 유효한 JSON이 아닙니다",
+        "bundleEmpty": "가져오기 패키지가 비어 있습니다",
+        "bundleProviderMismatch": "가져오기 패키지의 공급자가 일치하지 않습니다",
+        "bundleNoItems": "가져올 수 있는 항목이 없습니다",
+        "titleCodex": "Codex 일괄 가져오기",
+        "statusReceiving": "가져오기 요청을 받는 중...",
+        "statusFetching": "가져오기 패키지를 가져오는 중...",
+        "statusParsing": "Codex 가져오기 내용을 분석 중...",
+        "statusImporting": "{{current}} / {{total}}번째 계정 가져오는 중",
+        "statusRefreshing": "계정 목록 새로 고치는 중...",
+        "statusSuccess": "가져오기 완료",
+        "statusPartial": "일부 가져오기 완료",
+        "statusFailed": "가져오기 실패",
+        "total": "전체",
+        "success": "성공",
+        "failed": "실패",
+        "stepReceive": "요청 받기",
+        "stepFetch": "패키지 가져오기",
+        "stepParse": "내용 분석",
+        "stepImport": "계정 가져오기",
+        "stepRefresh": "목록 새로 고침",
+        "errorsTitle": "실패 항목",
+        "viewAccounts": "Codex 계정 보기",
+        "copyErrors": "오류 복사",
+        "copied": "복사됨",
+        "unknownItem": "{{index}}번째 항목",
+        "versionUnsupportedTitle": "앱 버전이 너무 낮습니다",
+        "versionUnsupportedDesc": "이 방식은 아직 지원되지 않습니다. 최신 버전을 다운로드하세요.",
+        "checkUpdate": "업데이트 확인",
+        "rawLineNoRefreshToken": "{{line}}번째 줄에 refresh_token이 없습니다",
+        "rawLineMultipleRefreshTokens": "{{line}}번째 줄에 refresh_token이 여러 개 있습니다. 하나만 남겨 주세요."
+      },
       "instances": {
         "unsupported": {
           "title": "이 시스템에서 지원되지 않음"
@@ -107,7 +140,10 @@
         "descTooltip": "내림차순 (클릭하여 오름차순으로 전환)",
         "toggleDirection": "정렬 방향 전환",
         "credits": "남은 크레딧으로",
-        "planEnd": "사이클 종료 시간별"
+        "planEnd": "사이클 종료 시간별",
+        "recommended": "추천순",
+        "recommendedAscTooltip": "추천순(전환 우선도 낮은 항목 먼저)",
+        "recommendedDescTooltip": "추천순(전환 우선도 높은 항목 먼저)"
       },
       "sortLabel": "정렬",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "백업 설정을 저장하지 못했습니다: {{error}}",
           "cleanupDone": "만료된 백업 {{count}}개를 정리했습니다",
           "cleanupFailed": "만료된 백업 정리에 실패했습니다: {{error}}",
-          "openFolderFailed": "백업 폴더를 열지 못했습니다: {{error}}"
+          "openFolderFailed": "백업 폴더를 열지 못했습니다: {{error}}",
+          "downloadSuccess": "백업을 {{path}}에 다운로드했습니다",
+          "downloadFailed": "백업 다운로드 실패: {{error}}"
         },
         "errors": {
           "invalidRetention": "보관 기간은 1일에서 365일 사이여야 합니다"
-        }
+        },
+        "platformFilterLabel": "플랫폼",
+        "platformFilterAll": "모든 플랫폼",
+        "platformEmptyTitle": "일치하는 백업 없음",
+        "platformEmptyDesc": "이 플랫폼에는 다운로드 가능한 계정 백업이 없습니다.",
+        "archiveTag": "압축본",
+        "archiveSize": "압축본: {{size}}",
+        "platformsTitle": "플랫폼 계정",
+        "platformDownloadAction": "플랫폼 JSON 다운로드",
+        "downloadJsonAction": "JSON 파일",
+        "downloadZipAction": "ZIP 압축본"
       },
       "exportTitle": "데이터 내보내기",
       "exportDesc": "필요에 따라 계정 데이터, 설정 데이터 또는 전체 마이그레이션 묶음을 내보낼 수 있습니다.",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "인증 링크 새로고침"
     },
     "token": {
-      "desc": "auth.json 내용 또는 계정 JSON 데이터를 붙여넣으세요",
-      "placeholder": "예시: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "auth.json, 계정 JSON 또는 refresh_token을 붙여넣으세요.",
+      "placeholder": "예: 줄마다 refresh_token 하나 또는 {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "필수 필드와 예시",
+      "formatRequired": "전체 tokens(id_token + access_token), 단일 refresh_token 또는 줄마다 refresh_token 하나를 지원합니다. refresh_token만 가져오면 먼저 온라인에서 전체 인증 정보로 교환합니다.",
+      "formatSingleLabel": "전체 tokens",
+      "formatRefreshOnlyLabel": "refresh_token만",
+      "formatBatchLabel": "일괄 예시"
     },
     "exportFormat": {
       "label": "내보내기 형식",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Free 계정은 제한됩니다. 선택하려면 이 옵션을 끄세요.",
         "freeNoticeUnstable": "Free 계정 프록시는 불안정할 수 있습니다. 주의해서 사용하세요.",
         "restrictFreeDisableConfirmTitle": "Free 계정 허용",
-        "restrictFreeDisableConfirmMessage": "Free 계정 프록시는 불안정할 수 있습니다. 정말 사용하시겠습니까?"
+        "restrictFreeDisableConfirmMessage": "Free 계정 프록시는 불안정할 수 있습니다. 정말 사용하시겠습니까?",
+        "manageMembers": "멤버 관리"
       },
       "entryAction": "API 서비스에 추가",
       "testAction": "API 서비스 테스트",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "API 포트 URL",
       "modelId": "모델 ID",
       "modelIdPlaceholder": "모델 ID 선택",
-      "modelIdViewOnly": "보기 전용"
+      "modelIdViewOnly": "보기 전용",
+      "quotaPool": {
+        "title": "할당량 풀",
+        "hourlyShort": "5h",
+        "weeklyShort": "주",
+        "viewFull": "전체 통계 보기",
+        "modalTitle": "API 서비스 할당량 풀",
+        "empty": "할당량 통계가 아직 없습니다"
+      }
     },
     "local": {
       "desc": "~/.codex/auth.json에서 현재 로그인된 계정 가져오기",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "5시간 쿼터",
       "weekly": "주간 쿼터",
-      "reset": "재설정"
+      "reset": "재설정",
+      "weeklyBlocksHourly": "주간 할당량이 0이라 5시간 할당량을 사용할 수 없습니다"
     },
     "quotaError": {
       "badge": "할당량 오류",
+      "refreshFailedBadge": "새로고침 실패",
       "generic": "할당량 새로고침에 실패했습니다. 나중에 다시 시도하세요",
       "deactivatedWorkspace": "워크스페이스가 비활성화되었습니다. 계정을 전환하거나 다시 인증하세요",
-      "requestFailedManualRetry": "요청에 실패했습니다. 수동으로 다시 시도하세요: {{error}}"
+      "requestFailedManualRetry": "네트워크를 확인하세요. 최신 할당량을 가져오지 못했습니다. 새로고침해 다시 시도하세요."
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "공급자",
+        "inlineLabel": "공급자: {{provider}}",
         "custom": "사용자 지정",
         "endpoint": "공급자 엔드포인트",
         "hint": "호환되는 Base URL이 자동으로 입력되었습니다. 필요하면 수동으로 수정할 수 있습니다.",
@@ -2309,6 +2374,17 @@
         "apiService": "API 서비스",
         "account": "계정"
       }
+    },
+    "accountNote": {
+      "title": "계정 메모",
+      "label": "계정 메모",
+      "desc": "{{account}}에 별도 계정 메모를 추가합니다.",
+      "placeholder": "이메일, 비밀번호, 복구 이메일 또는 전달 메모",
+      "emptyTitle": "계정 메모 추가",
+      "short": "메모",
+      "addShort": "추가",
+      "saved": "계정 메모를 저장했습니다",
+      "saveFailed": "계정 메모 저장 실패: {{error}}"
     }
   },
   "githubCopilot": {

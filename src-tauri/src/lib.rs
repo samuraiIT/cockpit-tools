@@ -356,6 +356,7 @@ pub fn run() {
             commands::system::update_auto_backup_last_run,
             commands::system::write_auto_backup_file,
             commands::system::read_auto_backup_file,
+            commands::system::copy_auto_backup_file,
             commands::system::list_auto_backup_files,
             commands::system::delete_auto_backup_file,
             commands::system::cleanup_auto_backup_files,
@@ -383,6 +384,7 @@ pub fn run() {
             commands::system::save_floating_card_position,
             commands::system::show_main_window_and_navigate,
             commands::system::external_import_take_pending,
+            commands::system::external_import_fetch_import_url,
             commands::system::open_folder,
             commands::system::delete_corrupted_file,
             // Logs Commands
@@ -458,6 +460,7 @@ pub fn run() {
             commands::codex::is_codex_oauth_port_in_use,
             commands::codex::close_codex_oauth_port,
             commands::codex::update_codex_account_tags,
+            commands::codex::update_codex_account_note,
             commands::codex::codex_wakeup_get_cli_status,
             commands::codex::codex_wakeup_update_runtime_config,
             commands::codex::codex_wakeup_get_overview,

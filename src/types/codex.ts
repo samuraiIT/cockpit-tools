@@ -25,6 +25,7 @@ export interface CodexAccount {
   organization_id?: string;
   account_name?: string;
   account_structure?: string;
+  account_note?: string;
   tokens: CodexTokens;
   token_generation?: number;
   token_updated_at?: number;
@@ -420,10 +421,9 @@ export function getCodexPlanBadgeLabel(account: CodexAccount): string {
   if (authFilePlanType === 'prolite') {
     return `${baseLabel} 5x`;
   }
-  if (authFilePlanType === 'promax') {
-    return `${baseLabel} 20x`;
-  }
-  return baseLabel;
+  // CPA 对齐：plan_type='pro' 默认视为 20x（Pro Max），
+  // 只有显式声明 prolite/pro-lite/pro_lite 才是 5x
+  return `${baseLabel} 20x`;
 }
 
 export function getCodexPlanBadgeClass(account: CodexAccount): string {
@@ -441,7 +441,8 @@ export function getCodexPlanBadgeClass(account: CodexAccount): string {
   if (authFilePlanType === 'prolite') {
     return 'pro codex-pro-lite';
   }
-  return authFilePlanType === 'promax' ? 'pro codex-pro-max' : baseClass;
+  // CPA 对齐：plan_type='pro' 默认视为 promax (20x)
+  return 'pro codex-pro-max';
 }
 
 export function getCodexPlanFilterKey(account: CodexAccount): string {
@@ -607,6 +608,56 @@ export interface CodexQuotaWindow {
   windowMinutes?: number;
 }
 
+export interface CodexEffectiveQuotaPercentages {
+  hourly: number | null;
+  weekly: number | null;
+  weeklyBlocksHourly: boolean;
+}
+
+function clampCodexQuotaPercentage(value: number | null | undefined): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 0;
+  if (value <= 0) return 0;
+  if (value >= 100) return 100;
+  return Math.round(value);
+}
+
+function isCodexQuotaWindowPresent(
+  quota: CodexQuota,
+  window: 'hourly' | 'weekly',
+): boolean {
+  const hasPresenceFlags =
+    quota.hourly_window_present !== undefined || quota.weekly_window_present !== undefined;
+  if (!hasPresenceFlags) return true;
+  if (quota.hourly_window_present === false && quota.weekly_window_present === false) {
+    return window === 'hourly';
+  }
+  return window === 'hourly'
+    ? quota.hourly_window_present === true
+    : quota.weekly_window_present === true;
+}
+
+export function getCodexEffectiveQuotaPercentages(
+  quota: CodexQuota | undefined,
+): CodexEffectiveQuotaPercentages {
+  if (!quota) {
+    return { hourly: null, weekly: null, weeklyBlocksHourly: false };
+  }
+
+  const hourly = isCodexQuotaWindowPresent(quota, 'hourly')
+    ? clampCodexQuotaPercentage(quota.hourly_percentage)
+    : null;
+  const weekly = isCodexQuotaWindowPresent(quota, 'weekly')
+    ? clampCodexQuotaPercentage(quota.weekly_percentage)
+    : null;
+  const weeklyBlocksHourly = weekly === 0 && hourly != null;
+
+  return {
+    hourly: weeklyBlocksHourly ? 0 : hourly,
+    weekly,
+    weeklyBlocksHourly,
+  };
+}
+
 export function getCodexQuotaWindowLabel(
   windowMinutes: number | undefined,
   fallback: 'hourly' | 'weekly' = 'hourly'
@@ -643,6 +694,7 @@ export function getCodexQuotaWindows(quota: CodexQuota | undefined): CodexQuotaW
   if (!quota) return [];
 
   const windows: CodexQuotaWindow[] = [];
+  const effective = getCodexEffectiveQuotaPercentages(quota);
   const hasPresenceFlags =
     quota.hourly_window_present !== undefined || quota.weekly_window_present !== undefined;
 
@@ -653,7 +705,7 @@ export function getCodexQuotaWindows(quota: CodexQuota | undefined): CodexQuotaW
     windows.push({
       id: 'primary',
       label: getCodexQuotaWindowLabel(quota.hourly_window_minutes, 'hourly'),
-      percentage: quota.hourly_percentage,
+      percentage: effective.hourly ?? 0,
       resetTime: quota.hourly_reset_time,
       windowMinutes: quota.hourly_window_minutes,
     });
@@ -663,7 +715,7 @@ export function getCodexQuotaWindows(quota: CodexQuota | undefined): CodexQuotaW
     windows.push({
       id: 'secondary',
       label: getCodexQuotaWindowLabel(quota.weekly_window_minutes, 'weekly'),
-      percentage: quota.weekly_percentage,
+      percentage: effective.weekly ?? 0,
       resetTime: quota.weekly_reset_time,
       windowMinutes: quota.weekly_window_minutes,
     });
@@ -677,7 +729,7 @@ export function getCodexQuotaWindows(quota: CodexQuota | undefined): CodexQuotaW
     {
       id: 'primary',
       label: getCodexQuotaWindowLabel(quota.hourly_window_minutes, 'hourly'),
-      percentage: quota.hourly_percentage,
+      percentage: effective.hourly ?? 0,
       resetTime: quota.hourly_reset_time,
       windowMinutes: quota.hourly_window_minutes,
     },

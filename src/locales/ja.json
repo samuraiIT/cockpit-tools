@@ -70,6 +70,39 @@
           "statusPending": "インポート待ち"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "インポートパッケージは有効な JSON ではありません",
+        "bundleEmpty": "インポートパッケージは空です",
+        "bundleProviderMismatch": "インポートパッケージのプロバイダーが一致しません",
+        "bundleNoItems": "インポート可能な項目がありません",
+        "titleCodex": "Codex 一括インポート",
+        "statusReceiving": "インポート要求を受信中...",
+        "statusFetching": "インポートパッケージを取得中...",
+        "statusParsing": "Codex インポート内容を解析中...",
+        "statusImporting": "{{current}} / {{total}} 個目のアカウントをインポート中",
+        "statusRefreshing": "アカウント一覧を更新中...",
+        "statusSuccess": "インポート完了",
+        "statusPartial": "一部インポート完了",
+        "statusFailed": "インポート失敗",
+        "total": "合計",
+        "success": "成功",
+        "failed": "失敗",
+        "stepReceive": "要求を受信",
+        "stepFetch": "パッケージ取得",
+        "stepParse": "内容を解析",
+        "stepImport": "アカウントをインポート",
+        "stepRefresh": "一覧を更新",
+        "errorsTitle": "失敗した項目",
+        "viewAccounts": "Codex アカウントを表示",
+        "copyErrors": "エラーをコピー",
+        "copied": "コピーしました",
+        "unknownItem": "インポート項目 {{index}}",
+        "versionUnsupportedTitle": "アプリのバージョンが低すぎます",
+        "versionUnsupportedDesc": "この方式はまだサポートされていません。最新版をダウンロードしてください。",
+        "checkUpdate": "アップデートを確認",
+        "rawLineNoRefreshToken": "{{line}} 行目に refresh_token がありません",
+        "rawLineMultipleRefreshTokens": "{{line}} 行目に複数の refresh_token があります。1 つだけ残してください。"
+      },
       "instances": {
         "unsupported": {
           "title": "このシステムでは非対応"
@@ -107,7 +140,10 @@
         "descTooltip": "降順（クリックで昇順へ）",
         "toggleDirection": "順序を切り替え",
         "credits": "残りのクレジットにより",
-        "planEnd": "サイクル終了時間まで"
+        "planEnd": "サイクル終了時間まで",
+        "recommended": "おすすめ順",
+        "recommendedAscTooltip": "おすすめ順（切り替え優先度が低い順）",
+        "recommendedDescTooltip": "おすすめ順（切り替え優先度が高い順）"
       },
       "sortLabel": "並べ替え",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "バックアップ設定の保存に失敗しました: {{error}}",
           "cleanupDone": "期限切れのバックアップを {{count}} 件整理しました",
           "cleanupFailed": "期限切れバックアップの整理に失敗しました: {{error}}",
-          "openFolderFailed": "バックアップフォルダーを開けませんでした: {{error}}"
+          "openFolderFailed": "バックアップフォルダーを開けませんでした: {{error}}",
+          "downloadSuccess": "バックアップを {{path}} にダウンロードしました",
+          "downloadFailed": "バックアップのダウンロードに失敗しました: {{error}}"
         },
         "errors": {
           "invalidRetention": "保持日数は 1 日から 365 日の間で指定してください"
-        }
+        },
+        "platformFilterLabel": "プラットフォーム",
+        "platformFilterAll": "すべてのプラットフォーム",
+        "platformEmptyTitle": "一致するバックアップなし",
+        "platformEmptyDesc": "このプラットフォームにはダウンロード可能なアカウントバックアップがありません。",
+        "archiveTag": "アーカイブ",
+        "archiveSize": "アーカイブ: {{size}}",
+        "platformsTitle": "プラットフォームアカウント",
+        "platformDownloadAction": "プラットフォームJSONをダウンロード",
+        "downloadJsonAction": "JSONファイル",
+        "downloadZipAction": "ZIPアーカイブ"
       },
       "exportTitle": "データのエクスポート",
       "exportDesc": "必要に応じて、アカウントデータ、設定データ、または完全な移行パッケージをエクスポートします。",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "認証リンクを更新"
     },
     "token": {
-      "desc": "auth.json の内容またはアカウント JSON を貼り付けてください",
-      "placeholder": "例: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "auth.json、アカウント JSON、または refresh_token を貼り付けます。",
+      "placeholder": "例: 1 行に 1 つの refresh_token、または {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "必須項目と例",
+      "formatRequired": "完全な tokens（id_token + access_token）、単一の refresh_token、または 1 行に 1 つの refresh_token をサポートします。refresh_token のみの場合は、先にオンラインで完全な認証情報に交換します。",
+      "formatSingleLabel": "完全な tokens",
+      "formatRefreshOnlyLabel": "refresh_token のみ",
+      "formatBatchLabel": "一括例"
     },
     "exportFormat": {
       "label": "エクスポート形式",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Freeアカウントは制限中です。選択するにはこの設定をオフにしてください。",
         "freeNoticeUnstable": "Freeアカウントのプロキシは不安定な場合があります。注意して使用してください。",
         "restrictFreeDisableConfirmTitle": "Freeアカウントを許可",
-        "restrictFreeDisableConfirmMessage": "Freeアカウントのプロキシは不安定な場合があります。使用してもよろしいですか？"
+        "restrictFreeDisableConfirmMessage": "Freeアカウントのプロキシは不安定な場合があります。使用してもよろしいですか？",
+        "manageMembers": "メンバー管理"
       },
       "entryAction": "API サービスに追加",
       "testAction": "API サービスをテスト",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "APIポートURL",
       "modelId": "モデル ID",
       "modelIdPlaceholder": "モデル ID を選択",
-      "modelIdViewOnly": "表示のみ"
+      "modelIdViewOnly": "表示のみ",
+      "quotaPool": {
+        "title": "クォータプール",
+        "hourlyShort": "5h",
+        "weeklyShort": "週",
+        "viewFull": "完全な統計を表示",
+        "modalTitle": "APIサービスのクォータプール",
+        "empty": "クォータ統計はまだありません"
+      }
     },
     "local": {
       "desc": "~/.codex/auth.json から現在ログイン中のアカウントをインポート",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "5 時間クォータ",
       "weekly": "週次クォータ",
-      "reset": "リセット"
+      "reset": "リセット",
+      "weeklyBlocksHourly": "週クォータが 0 のため、5時間クォータは利用できません"
     },
     "quotaError": {
       "badge": "クォータエラー",
+      "refreshFailedBadge": "更新失敗",
       "generic": "クォータの更新に失敗しました。後でもう一度お試しください",
       "deactivatedWorkspace": "ワークスペースが無効です。アカウントを切り替えるか再認証してください",
-      "requestFailedManualRetry": "リクエストに失敗しました。手動で再試行してください: {{error}}"
+      "requestFailedManualRetry": "ネットワークを確認してください。最新のクォータを取得できませんでした。更新して再試行できます。"
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "プロバイダー",
+        "inlineLabel": "プロバイダー: {{provider}}",
         "custom": "カスタム",
         "endpoint": "プロバイダーエンドポイント",
         "hint": "互換性のある Base URL を自動入力しました。必要なら手動で編集できます。",
@@ -2309,6 +2374,17 @@
         "apiService": "API サービス",
         "account": "アカウント"
       }
+    },
+    "accountNote": {
+      "title": "アカウントメモ",
+      "label": "アカウントメモ",
+      "desc": "{{account}} 用の個別メモを追加します。",
+      "placeholder": "メール、パスワード、復旧メール、受け渡しメモなど",
+      "emptyTitle": "アカウントメモを追加",
+      "short": "メモ",
+      "addShort": "追加",
+      "saved": "アカウントメモを保存しました",
+      "saveFailed": "アカウントメモの保存に失敗しました: {{error}}"
     }
   },
   "githubCopilot": {

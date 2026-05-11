@@ -70,6 +70,39 @@
           "statusPending": "بانتظار الاستيراد"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "حزمة الاستيراد ليست JSON صالحا",
+        "bundleEmpty": "حزمة الاستيراد فارغة",
+        "bundleProviderMismatch": "موفر حزمة الاستيراد غير مطابق",
+        "bundleNoItems": "لا تحتوي حزمة الاستيراد على عناصر قابلة للاستيراد",
+        "titleCodex": "استيراد Codex دفعة واحدة",
+        "statusReceiving": "جارٍ استلام طلب الاستيراد...",
+        "statusFetching": "جارٍ جلب حزمة الاستيراد...",
+        "statusParsing": "جارٍ تحليل محتوى استيراد Codex...",
+        "statusImporting": "جارٍ استيراد الحساب {{current}} / {{total}}",
+        "statusRefreshing": "جارٍ تحديث قائمة الحسابات...",
+        "statusSuccess": "اكتمل الاستيراد",
+        "statusPartial": "اكتمل الاستيراد جزئيا",
+        "statusFailed": "فشل الاستيراد",
+        "total": "الإجمالي",
+        "success": "نجح",
+        "failed": "فشل",
+        "stepReceive": "استلام الطلب",
+        "stepFetch": "جلب الحزمة",
+        "stepParse": "تحليل المحتوى",
+        "stepImport": "استيراد الحسابات",
+        "stepRefresh": "تحديث القائمة",
+        "errorsTitle": "العناصر الفاشلة",
+        "viewAccounts": "عرض حسابات Codex",
+        "copyErrors": "نسخ الأخطاء",
+        "copied": "تم النسخ",
+        "unknownItem": "عنصر رقم {{index}}",
+        "versionUnsupportedTitle": "إصدار التطبيق منخفض جدًا",
+        "versionUnsupportedDesc": "هذه الطريقة غير مدعومة مؤقتًا. يرجى تنزيل أحدث إصدار.",
+        "checkUpdate": "التحقق من التحديثات",
+        "rawLineNoRefreshToken": "لا يحتوي السطر {{line}} على refresh_token",
+        "rawLineMultipleRefreshTokens": "يحتوي السطر {{line}} على عدة refresh_token. أبقِ واحدًا فقط."
+      },
       "instances": {
         "unsupported": {
           "title": "غير مدعوم على هذا النظام"
@@ -107,7 +140,10 @@
         "descTooltip": "تنازلي (انقر للتبديل إلى تصاعدي)",
         "toggleDirection": "تبديل اتجاه الترتيب",
         "credits": "حسب الأرصدة المتبقية",
-        "planEnd": "حسب نهاية الدورة"
+        "planEnd": "حسب نهاية الدورة",
+        "recommended": "موصى به",
+        "recommendedAscTooltip": "موصى به (الأقل جدوى أولا)",
+        "recommendedDescTooltip": "موصى به (الأكثر جدوى أولا)"
       },
       "sortLabel": "ترتيب",
       "token": {
@@ -869,11 +905,23 @@
           "saveSettingsFailed": "فشل حفظ إعدادات النسخ الاحتياطي: {{error}}",
           "cleanupDone": "تم تنظيف {{count}} نسخة احتياطية منتهية",
           "cleanupFailed": "فشل تنظيف النسخ الاحتياطية المنتهية: {{error}}",
-          "openFolderFailed": "فشل فتح مجلد النسخ الاحتياطي: {{error}}"
+          "openFolderFailed": "فشل فتح مجلد النسخ الاحتياطي: {{error}}",
+          "downloadSuccess": "تم تنزيل النسخة الاحتياطية إلى {{path}}",
+          "downloadFailed": "فشل تنزيل النسخة الاحتياطية: {{error}}"
         },
         "errors": {
           "invalidRetention": "يجب أن تكون مدة الاحتفاظ بين 1 و365 يومًا"
-        }
+        },
+        "platformFilterLabel": "المنصة",
+        "platformFilterAll": "كل المنصات",
+        "platformEmptyTitle": "لا توجد نسخ مطابقة",
+        "platformEmptyDesc": "لا تحتوي هذه المنصة على نسخة حسابات قابلة للتنزيل.",
+        "archiveTag": "أرشيف",
+        "archiveSize": "الأرشيف: {{size}}",
+        "platformsTitle": "حسابات المنصة",
+        "platformDownloadAction": "تنزيل JSON للمنصة",
+        "downloadJsonAction": "ملف JSON",
+        "downloadZipAction": "أرشيف ZIP"
       },
       "exportTitle": "تصدير البيانات",
       "exportDesc": "صدّر بيانات الحسابات أو بيانات الإعدادات أو حزمة ترحيل كاملة حسب الحاجة.",
@@ -1677,8 +1725,13 @@
       "timeoutRetry": "تحديث رابط المصادقة"
     },
     "token": {
-      "desc": "الصق محتوى auth.json أو بيانات JSON للحساب",
-      "placeholder": "مثال: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "الصق auth.json أو JSON للحساب أو refresh_token.",
+      "placeholder": "مثال: refresh_token واحد في كل سطر، أو {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "الحقول المطلوبة والأمثلة",
+      "formatRequired": "يدعم tokens كاملة (id_token + access_token)، أو refresh_token واحداً، أو refresh_token واحداً في كل سطر. عند استخدام refresh_token فقط يتم استبداله عبر الإنترنت ببيانات اعتماد كاملة أولاً.",
+      "formatSingleLabel": "مثال tokens كاملة",
+      "formatRefreshOnlyLabel": "مثال refresh_token فقط",
+      "formatBatchLabel": "مثال دفعي"
     },
     "exportFormat": {
       "label": "تنسيق التصدير",
@@ -1727,7 +1780,8 @@
         "freeNoticeRestricted": "الحسابات المجانية مقيّدة. عطّل هذا الخيار لتحديدها.",
         "freeNoticeUnstable": "قد يكون وكيل الحسابات المجانية غير مستقر. استخدمه بحذر.",
         "restrictFreeDisableConfirmTitle": "السماح بالحسابات المجانية",
-        "restrictFreeDisableConfirmMessage": "قد يكون وكيل الحسابات المجانية غير مستقر. هل تريد المتابعة؟"
+        "restrictFreeDisableConfirmMessage": "قد يكون وكيل الحسابات المجانية غير مستقر. هل تريد المتابعة؟",
+        "manageMembers": "إدارة الأعضاء"
       },
       "entryAction": "إضافة إلى خدمة API",
       "testAction": "اختبار خدمة API",
@@ -1820,7 +1874,15 @@
       "apiPortUrl": "عنوان منفذ API",
       "modelId": "معرّف النموذج",
       "modelIdPlaceholder": "اختر معرّف النموذج",
-      "modelIdViewOnly": "عرض فقط"
+      "modelIdViewOnly": "عرض فقط",
+      "quotaPool": {
+        "title": "مجمع الحصة",
+        "hourlyShort": "5h",
+        "weeklyShort": "أسبوع",
+        "viewFull": "عرض الإحصاء الكامل",
+        "modalTitle": "مجمع حصة خدمة API",
+        "empty": "لا توجد إحصاءات حصة بعد"
+      }
     },
     "local": {
       "desc": "استيراد الحساب الحالي من ~/.codex/auth.json",
@@ -1834,13 +1896,15 @@
     "quota": {
       "hourly": "حصة 5 ساعات",
       "weekly": "الحصة الأسبوعية",
-      "reset": "إعادة ضبط"
+      "reset": "إعادة ضبط",
+      "weeklyBlocksHourly": "الحصة الأسبوعية 0، لذا حصة 5 ساعات غير متاحة"
     },
     "quotaError": {
       "badge": "خطأ في الحصة",
+      "refreshFailedBadge": "فشل التحديث",
       "generic": "فشل تحديث الحصة، يرجى المحاولة لاحقا",
       "deactivatedWorkspace": "تم تعطيل مساحة العمل، بدّل الحساب أو أعد التفويض",
-      "requestFailedManualRetry": "فشل الطلب، يُرجى إعادة المحاولة يدويًا: {{error}}"
+      "requestFailedManualRetry": "تحقّق من الشبكة. لم يتم جلب أحدث حصة. حدّث للمحاولة مجددًا."
     },
     "plan": {
       "free": "FREE",
@@ -2140,6 +2204,7 @@
       },
       "provider": {
         "label": "المزوّد",
+        "inlineLabel": "المزوّد: {{provider}}",
         "custom": "مخصّص",
         "endpoint": "نقطة نهاية المزوّد",
         "hint": "تم ملء Base URL متوافق تلقائيًا، وما زال بإمكانك تعديله يدويًا.",
@@ -2355,6 +2420,17 @@
         "apiService": "خدمة API",
         "account": "حساب"
       }
+    },
+    "accountNote": {
+      "title": "ملاحظة الحساب",
+      "label": "ملاحظة الحساب",
+      "desc": "أضف ملاحظة حساب مستقلة لـ {{account}}.",
+      "placeholder": "البريد، كلمة المرور، بريد الاسترداد أو ملاحظات التسليم",
+      "emptyTitle": "إضافة ملاحظة حساب",
+      "short": "ملاحظة",
+      "addShort": "أضف ملاحظة",
+      "saved": "تم حفظ ملاحظة الحساب",
+      "saveFailed": "فشل حفظ ملاحظة الحساب: {{error}}"
     }
   },
   "githubCopilot": {

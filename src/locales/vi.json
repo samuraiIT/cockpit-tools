@@ -70,6 +70,39 @@
           "statusPending": "Đang chờ nhập"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "Gói nhập không phải JSON hợp lệ",
+        "bundleEmpty": "Gói nhập trống",
+        "bundleProviderMismatch": "Nhà cung cấp của gói nhập không khớp",
+        "bundleNoItems": "Gói nhập không có mục nào để nhập",
+        "titleCodex": "Nhập hàng loạt Codex",
+        "statusReceiving": "Đang nhận yêu cầu nhập...",
+        "statusFetching": "Đang lấy gói nhập...",
+        "statusParsing": "Đang phân tích nội dung nhập Codex...",
+        "statusImporting": "Đang nhập tài khoản {{current}} / {{total}}",
+        "statusRefreshing": "Đang làm mới danh sách tài khoản...",
+        "statusSuccess": "Nhập hoàn tất",
+        "statusPartial": "Nhập một phần hoàn tất",
+        "statusFailed": "Nhập thất bại",
+        "total": "Tổng",
+        "success": "Thành công",
+        "failed": "Thất bại",
+        "stepReceive": "Nhận yêu cầu",
+        "stepFetch": "Lấy gói",
+        "stepParse": "Phân tích nội dung",
+        "stepImport": "Nhập tài khoản",
+        "stepRefresh": "Làm mới danh sách",
+        "errorsTitle": "Mục thất bại",
+        "viewAccounts": "Xem tài khoản Codex",
+        "copyErrors": "Sao chép lỗi",
+        "copied": "Đã sao chép",
+        "unknownItem": "Mục #{{index}}",
+        "versionUnsupportedTitle": "Phiên bản ứng dụng quá thấp",
+        "versionUnsupportedDesc": "Cách này chưa được hỗ trợ. Vui lòng tải phiên bản mới nhất.",
+        "checkUpdate": "Kiểm tra cập nhật",
+        "rawLineNoRefreshToken": "Dòng {{line}} không có refresh_token",
+        "rawLineMultipleRefreshTokens": "Dòng {{line}} có nhiều refresh_token. Chỉ giữ lại một."
+      },
       "instances": {
         "unsupported": {
           "title": "Không hỗ trợ trên hệ thống này"
@@ -107,7 +140,10 @@
         "descTooltip": "Giảm dần (nhấn để chuyển Tăng dần)",
         "toggleDirection": "Đổi hướng sắp xếp",
         "credits": "Bằng số tín chỉ còn lại",
-        "planEnd": "Theo thời gian kết thúc chu kỳ"
+        "planEnd": "Theo thời gian kết thúc chu kỳ",
+        "recommended": "Đề xuất",
+        "recommendedAscTooltip": "Đề xuất (ít đáng chuyển trước)",
+        "recommendedDescTooltip": "Đề xuất (đáng chuyển nhất trước)"
       },
       "sortLabel": "Sắp xếp",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "Lưu thiết lập sao lưu thất bại: {{error}}",
           "cleanupDone": "Đã dọn {{count}} bản sao lưu hết hạn",
           "cleanupFailed": "Dọn bản sao lưu hết hạn thất bại: {{error}}",
-          "openFolderFailed": "Mở thư mục sao lưu thất bại: {{error}}"
+          "openFolderFailed": "Mở thư mục sao lưu thất bại: {{error}}",
+          "downloadSuccess": "Đã tải bản sao lưu xuống {{path}}",
+          "downloadFailed": "Không thể tải bản sao lưu: {{error}}"
         },
         "errors": {
           "invalidRetention": "Thời gian lưu phải từ 1 đến 365 ngày"
-        }
+        },
+        "platformFilterLabel": "Nền tảng",
+        "platformFilterAll": "Tất cả nền tảng",
+        "platformEmptyTitle": "Không có bản sao phù hợp",
+        "platformEmptyDesc": "Nền tảng này không có bản sao tài khoản để tải xuống.",
+        "archiveTag": "Gói nén",
+        "archiveSize": "Gói nén: {{size}}",
+        "platformsTitle": "Tài khoản nền tảng",
+        "platformDownloadAction": "Tải JSON nền tảng",
+        "downloadJsonAction": "Tệp JSON",
+        "downloadZipAction": "Gói ZIP"
       },
       "exportTitle": "Xuất dữ liệu",
       "exportDesc": "Xuất dữ liệu tài khoản, dữ liệu cấu hình hoặc gói di chuyển đầy đủ tùy nhu cầu.",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "Làm mới link xác thực"
     },
     "token": {
-      "desc": "Dán nội dung auth.json hoặc dữ liệu JSON tài khoản",
-      "placeholder": "Ví dụ: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "Dán auth.json, JSON tài khoản hoặc refresh_token.",
+      "placeholder": "Ví dụ: mỗi dòng một refresh_token hoặc {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "Trường bắt buộc và ví dụ",
+      "formatRequired": "Hỗ trợ tokens đầy đủ (id_token + access_token), một refresh_token hoặc mỗi dòng một refresh_token. Khi chỉ có refresh_token, hệ thống sẽ đổi trực tuyến sang thông tin xác thực đầy đủ trước.",
+      "formatSingleLabel": "Tokens đầy đủ",
+      "formatRefreshOnlyLabel": "Chỉ refresh_token",
+      "formatBatchLabel": "Ví dụ hàng loạt"
     },
     "exportFormat": {
       "label": "Định dạng xuất",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Tài khoản Free bị giới hạn. Tắt tùy chọn này để chọn chúng.",
         "freeNoticeUnstable": "Proxy tài khoản Free có thể không ổn định. Hãy dùng thận trọng.",
         "restrictFreeDisableConfirmTitle": "Cho phép tài khoản Free",
-        "restrictFreeDisableConfirmMessage": "Proxy tài khoản Free có thể không ổn định. Bạn có chắc muốn dùng không?"
+        "restrictFreeDisableConfirmMessage": "Proxy tài khoản Free có thể không ổn định. Bạn có chắc muốn dùng không?",
+        "manageMembers": "Quản lý thành viên"
       },
       "entryAction": "Thêm vào dịch vụ API",
       "testAction": "Kiểm tra dịch vụ API",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "URL cổng API",
       "modelId": "ID mô hình",
       "modelIdPlaceholder": "Chọn ID mô hình",
-      "modelIdViewOnly": "Chỉ xem"
+      "modelIdViewOnly": "Chỉ xem",
+      "quotaPool": {
+        "title": "Nhóm hạn mức",
+        "hourlyShort": "5h",
+        "weeklyShort": "Tuần",
+        "viewFull": "Xem thống kê đầy đủ",
+        "modalTitle": "Nhóm hạn mức dịch vụ API",
+        "empty": "Chưa có thống kê hạn mức"
+      }
     },
     "local": {
       "desc": "Nhập tài khoản hiện tại từ ~/.codex/auth.json",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "Hạn mức 5 giờ",
       "weekly": "Hạn mức tuần",
-      "reset": "Đặt lại"
+      "reset": "Đặt lại",
+      "weeklyBlocksHourly": "Hạn mức tuần là 0 nên hạn mức 5 giờ không khả dụng"
     },
     "quotaError": {
       "badge": "Lỗi quota",
+      "refreshFailedBadge": "Làm mới thất bại",
       "generic": "Làm mới quota thất bại, vui lòng thử lại sau",
       "deactivatedWorkspace": "Workspace đã bị vô hiệu hoá, hãy đổi tài khoản hoặc cấp quyền lại",
-      "requestFailedManualRetry": "Yêu cầu thất bại, vui lòng thử lại thủ công: {{error}}"
+      "requestFailedManualRetry": "Kiểm tra mạng. Chưa lấy được quota mới nhất. Làm mới để thử lại."
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "Nhà cung cấp",
+        "inlineLabel": "Nhà cung cấp: {{provider}}",
         "custom": "Tùy chỉnh",
         "endpoint": "Điểm cuối nhà cung cấp",
         "hint": "Base URL tương thích đã được điền tự động. Bạn vẫn có thể chỉnh sửa thủ công.",
@@ -2309,6 +2374,17 @@
         "apiService": "Dịch vụ API",
         "account": "Tài khoản"
       }
+    },
+    "accountNote": {
+      "title": "Ghi chú tài khoản",
+      "label": "Ghi chú tài khoản",
+      "desc": "Thêm ghi chú tài khoản riêng cho {{account}}.",
+      "placeholder": "Email, mật khẩu, email khôi phục hoặc ghi chú bàn giao",
+      "emptyTitle": "Thêm ghi chú tài khoản",
+      "short": "Ghi chú",
+      "addShort": "Thêm",
+      "saved": "Đã lưu ghi chú tài khoản",
+      "saveFailed": "Không thể lưu ghi chú tài khoản: {{error}}"
     }
   },
   "githubCopilot": {

@@ -70,6 +70,39 @@
           "statusPending": "In attesa di importazione"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "Il pacchetto di importazione non è un JSON valido",
+        "bundleEmpty": "Il pacchetto di importazione è vuoto",
+        "bundleProviderMismatch": "Il provider del pacchetto di importazione non corrisponde",
+        "bundleNoItems": "Il pacchetto di importazione non contiene elementi importabili",
+        "titleCodex": "Importazione batch Codex",
+        "statusReceiving": "Ricezione richiesta di importazione...",
+        "statusFetching": "Recupero pacchetto di importazione...",
+        "statusParsing": "Analisi del contenuto di importazione Codex...",
+        "statusImporting": "Importazione account {{current}} / {{total}}",
+        "statusRefreshing": "Aggiornamento elenco account...",
+        "statusSuccess": "Importazione completata",
+        "statusPartial": "Importazione parziale completata",
+        "statusFailed": "Importazione non riuscita",
+        "total": "Totale",
+        "success": "Riusciti",
+        "failed": "Falliti",
+        "stepReceive": "Ricevi richiesta",
+        "stepFetch": "Recupera pacchetto",
+        "stepParse": "Analizza contenuto",
+        "stepImport": "Importa account",
+        "stepRefresh": "Aggiorna elenco",
+        "errorsTitle": "Elementi falliti",
+        "viewAccounts": "Vedi account Codex",
+        "copyErrors": "Copia errori",
+        "copied": "Copiato",
+        "unknownItem": "Elemento n. {{index}}",
+        "versionUnsupportedTitle": "Versione app troppo vecchia",
+        "versionUnsupportedDesc": "Questo metodo non è ancora supportato. Scarica la versione più recente.",
+        "checkUpdate": "Controlla aggiornamenti",
+        "rawLineNoRefreshToken": "La riga {{line}} non contiene refresh_token",
+        "rawLineMultipleRefreshTokens": "La riga {{line}} contiene più refresh_token. Lasciane solo uno."
+      },
       "instances": {
         "unsupported": {
           "title": "Non supportato su questo sistema"
@@ -107,7 +140,10 @@
         "descTooltip": "Decrescente (clicca per Ascendente)",
         "toggleDirection": "Inverti direzione",
         "credits": "Con i crediti rimanenti",
-        "planEnd": "Per ora di fine ciclo"
+        "planEnd": "Per ora di fine ciclo",
+        "recommended": "Consigliato",
+        "recommendedAscTooltip": "Consigliato (meno conveniente prima)",
+        "recommendedDescTooltip": "Consigliato (più conveniente prima)"
       },
       "sortLabel": "Ordina",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "Salvataggio delle impostazioni di backup non riuscito: {{error}}",
           "cleanupDone": "{{count}} backup scaduti rimossi",
           "cleanupFailed": "Pulizia dei backup scaduti non riuscita: {{error}}",
-          "openFolderFailed": "Apertura della cartella di backup non riuscita: {{error}}"
+          "openFolderFailed": "Apertura della cartella di backup non riuscita: {{error}}",
+          "downloadSuccess": "Backup scaricato in {{path}}",
+          "downloadFailed": "Download backup non riuscito: {{error}}"
         },
         "errors": {
           "invalidRetention": "La conservazione deve essere compresa tra 1 e 365 giorni"
-        }
+        },
+        "platformFilterLabel": "Piattaforma",
+        "platformFilterAll": "Tutte le piattaforme",
+        "platformEmptyTitle": "Nessun backup corrispondente",
+        "platformEmptyDesc": "Questa piattaforma non ha un backup account scaricabile.",
+        "archiveTag": "Archivio",
+        "archiveSize": "Archivio: {{size}}",
+        "platformsTitle": "Account piattaforma",
+        "platformDownloadAction": "Scarica JSON piattaforma",
+        "downloadJsonAction": "File JSON",
+        "downloadZipAction": "Archivio ZIP"
       },
       "exportTitle": "Esportazione dati",
       "exportDesc": "Esporta dati degli account, dati di configurazione o un pacchetto completo di migrazione secondo necessità.",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "Aggiorna link autenticazione"
     },
     "token": {
-      "desc": "Incolla il contenuto di auth.json o i dati JSON dell'account",
-      "placeholder": "Esempio: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "Incolla auth.json, JSON account o refresh_token.",
+      "placeholder": "Esempio: un refresh_token per riga oppure {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "Campi richiesti ed esempi",
+      "formatRequired": "Supporta tokens completi (id_token + access_token), un singolo refresh_token o un refresh_token per riga. Con solo refresh_token, l’import lo scambia prima online con credenziali complete.",
+      "formatSingleLabel": "Tokens completi",
+      "formatRefreshOnlyLabel": "Solo refresh_token",
+      "formatBatchLabel": "Esempio batch"
     },
     "exportFormat": {
       "label": "Formato di esportazione",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Gli account Free sono limitati. Disattiva questa opzione per selezionarli.",
         "freeNoticeUnstable": "Il proxy degli account Free può essere instabile. Usalo con cautela.",
         "restrictFreeDisableConfirmTitle": "Consenti account Free",
-        "restrictFreeDisableConfirmMessage": "Il proxy degli account Free può essere instabile. Vuoi usarli davvero?"
+        "restrictFreeDisableConfirmMessage": "Il proxy degli account Free può essere instabile. Vuoi usarli davvero?",
+        "manageMembers": "Gestisci membri"
       },
       "entryAction": "Aggiungi al servizio API",
       "testAction": "Testa il servizio API",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "URL porta API",
       "modelId": "ID modello",
       "modelIdPlaceholder": "Seleziona ID modello",
-      "modelIdViewOnly": "Solo vista"
+      "modelIdViewOnly": "Solo vista",
+      "quotaPool": {
+        "title": "Pool quota",
+        "hourlyShort": "5h",
+        "weeklyShort": "Settimana",
+        "viewFull": "Vedi statistiche complete",
+        "modalTitle": "Pool quota del servizio API",
+        "empty": "Nessuna statistica quota"
+      }
     },
     "local": {
       "desc": "Importa l'account attuale da ~/.codex/auth.json",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "Quota di 5 ore",
       "weekly": "Quota settimanale",
-      "reset": "Reimposta"
+      "reset": "Reimposta",
+      "weeklyBlocksHourly": "La quota settimanale è 0, quindi la quota di 5 ore non è disponibile"
     },
     "quotaError": {
       "badge": "Errore quota",
+      "refreshFailedBadge": "Aggiornamento fallito",
       "generic": "Aggiornamento quota non riuscito, riprova più tardi",
       "deactivatedWorkspace": "Workspace disattivato, cambia account o riautorizza",
-      "requestFailedManualRetry": "Richiesta non riuscita, riprova manualmente: {{error}}"
+      "requestFailedManualRetry": "Controlla la rete. La quota più recente non è stata recuperata. Aggiorna per riprovare."
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "Provider",
+        "inlineLabel": "Fornitore: {{provider}}",
         "custom": "Personalizzato",
         "endpoint": "Endpoint del provider",
         "hint": "È stata compilata automaticamente una Base URL compatibile. Puoi comunque modificarla manualmente.",
@@ -2309,6 +2374,17 @@
         "apiService": "Servizio API",
         "account": "Account"
       }
+    },
+    "accountNote": {
+      "title": "Nota account",
+      "label": "Nota account",
+      "desc": "Aggiungi una nota account separata per {{account}}.",
+      "placeholder": "Email, password, email di recupero o note di consegna",
+      "emptyTitle": "Aggiungi nota account",
+      "short": "Nota",
+      "addShort": "Aggiungi",
+      "saved": "Nota account salvata",
+      "saveFailed": "Salvataggio nota account non riuscito: {{error}}"
     }
   },
   "githubCopilot": {

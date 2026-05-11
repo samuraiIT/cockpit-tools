@@ -70,6 +70,39 @@
           "statusPending": "Ожидает импорта"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "Пакет импорта не является корректным JSON",
+        "bundleEmpty": "Пакет импорта пуст",
+        "bundleProviderMismatch": "Поставщик пакета импорта не совпадает",
+        "bundleNoItems": "В пакете импорта нет элементов для импорта",
+        "titleCodex": "Пакетный импорт Codex",
+        "statusReceiving": "Получение запроса на импорт...",
+        "statusFetching": "Получение пакета импорта...",
+        "statusParsing": "Разбор содержимого импорта Codex...",
+        "statusImporting": "Импорт аккаунта {{current}} / {{total}}",
+        "statusRefreshing": "Обновление списка аккаунтов...",
+        "statusSuccess": "Импорт завершен",
+        "statusPartial": "Импорт частично завершен",
+        "statusFailed": "Ошибка импорта",
+        "total": "Всего",
+        "success": "Успешно",
+        "failed": "Ошибки",
+        "stepReceive": "Получить запрос",
+        "stepFetch": "Получить пакет",
+        "stepParse": "Разобрать содержимое",
+        "stepImport": "Импортировать аккаунты",
+        "stepRefresh": "Обновить список",
+        "errorsTitle": "Ошибочные элементы",
+        "viewAccounts": "Показать аккаунты Codex",
+        "copyErrors": "Копировать ошибки",
+        "copied": "Скопировано",
+        "unknownItem": "Элемент №{{index}}",
+        "versionUnsupportedTitle": "Версия приложения слишком старая",
+        "versionUnsupportedDesc": "Этот способ пока не поддерживается. Скачайте последнюю версию.",
+        "checkUpdate": "Проверить обновления",
+        "rawLineNoRefreshToken": "Строка {{line}} не содержит refresh_token",
+        "rawLineMultipleRefreshTokens": "Строка {{line}} содержит несколько refresh_token. Оставьте только один."
+      },
       "instances": {
         "unsupported": {
           "title": "Не поддерживается на этой системе"
@@ -107,7 +140,10 @@
         "descTooltip": "По убыванию (нажмите для возрастания)",
         "toggleDirection": "Изменить порядок",
         "credits": "По оставшимся кредитам",
-        "planEnd": "По времени окончания цикла"
+        "planEnd": "По времени окончания цикла",
+        "recommended": "Рекомендуемое",
+        "recommendedAscTooltip": "Рекомендуемое (сначала наименее выгодные)",
+        "recommendedDescTooltip": "Рекомендуемое (сначала наиболее выгодные)"
       },
       "sortLabel": "Сортировка",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "Не удалось сохранить настройки резервного копирования: {{error}}",
           "cleanupDone": "Очищено {{count}} устаревших копий",
           "cleanupFailed": "Не удалось очистить устаревшие копии: {{error}}",
-          "openFolderFailed": "Не удалось открыть папку резервных копий: {{error}}"
+          "openFolderFailed": "Не удалось открыть папку резервных копий: {{error}}",
+          "downloadSuccess": "Резервная копия скачана в {{path}}",
+          "downloadFailed": "Не удалось скачать резервную копию: {{error}}"
         },
         "errors": {
           "invalidRetention": "Срок хранения должен быть от 1 до 365 дней"
-        }
+        },
+        "platformFilterLabel": "Платформа",
+        "platformFilterAll": "Все платформы",
+        "platformEmptyTitle": "Нет подходящих резервных копий",
+        "platformEmptyDesc": "Для этой платформы нет резервной копии аккаунтов для скачивания.",
+        "archiveTag": "Архив",
+        "archiveSize": "Архив: {{size}}",
+        "platformsTitle": "Аккаунты платформы",
+        "platformDownloadAction": "Скачать JSON платформы",
+        "downloadJsonAction": "Файл JSON",
+        "downloadZipAction": "ZIP-архив"
       },
       "exportTitle": "Экспорт данных",
       "exportDesc": "При необходимости экспортируйте данные аккаунтов, данные конфигурации или полный пакет миграции.",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "Обновить ссылку аутентификации"
     },
     "token": {
-      "desc": "Вставьте содержимое auth.json или JSON данных аккаунта",
-      "placeholder": "Пример: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "Вставьте auth.json, JSON аккаунта или refresh_token.",
+      "placeholder": "Пример: один refresh_token в строке или {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "Обязательные поля и примеры",
+      "formatRequired": "Поддерживаются полные tokens (id_token + access_token), один refresh_token или один refresh_token в строке. При импорте только refresh_token он сначала обменивается онлайн на полные учетные данные.",
+      "formatSingleLabel": "Полные tokens",
+      "formatRefreshOnlyLabel": "Только refresh_token",
+      "formatBatchLabel": "Пакетный пример"
     },
     "exportFormat": {
       "label": "Формат экспорта",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Free-аккаунты ограничены. Отключите это, чтобы их выбирать.",
         "freeNoticeUnstable": "Прокси Free-аккаунтов может быть нестабильным. Используйте с осторожностью.",
         "restrictFreeDisableConfirmTitle": "Разрешить Free-аккаунты",
-        "restrictFreeDisableConfirmMessage": "Прокси Free-аккаунтов может быть нестабильным. Вы уверены, что хотите их использовать?"
+        "restrictFreeDisableConfirmMessage": "Прокси Free-аккаунтов может быть нестабильным. Вы уверены, что хотите их использовать?",
+        "manageMembers": "Управление участниками"
       },
       "entryAction": "Добавить в API-сервис",
       "testAction": "Проверить API-сервис",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "URL API-порта",
       "modelId": "ID модели",
       "modelIdPlaceholder": "Выберите ID модели",
-      "modelIdViewOnly": "Только просмотр"
+      "modelIdViewOnly": "Только просмотр",
+      "quotaPool": {
+        "title": "Пул квот",
+        "hourlyShort": "5h",
+        "weeklyShort": "Неделя",
+        "viewFull": "Показать полную статистику",
+        "modalTitle": "Пул квот сервиса API",
+        "empty": "Статистики квот пока нет"
+      }
     },
     "local": {
       "desc": "Импортировать текущий аккаунт из ~/.codex/auth.json",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "Квота 5 часов",
       "weekly": "Недельная квота",
-      "reset": "Сброс"
+      "reset": "Сброс",
+      "weeklyBlocksHourly": "Недельная квота равна 0, поэтому 5-часовая квота недоступна"
     },
     "quotaError": {
       "badge": "Ошибка квоты",
+      "refreshFailedBadge": "Сбой обновления",
       "generic": "Не удалось обновить квоту, попробуйте позже",
       "deactivatedWorkspace": "Рабочее пространство деактивировано, переключите аккаунт или авторизуйтесь заново",
-      "requestFailedManualRetry": "Не удалось выполнить запрос, повторите вручную: {{error}}"
+      "requestFailedManualRetry": "Проверьте сеть. Не удалось получить актуальную квоту. Обновите, чтобы повторить попытку."
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "Провайдер",
+        "inlineLabel": "Провайдер: {{provider}}",
         "custom": "Пользовательский",
         "endpoint": "Конечная точка провайдера",
         "hint": "Совместимый Base URL был заполнен автоматически. При необходимости вы можете отредактировать его вручную.",
@@ -2309,6 +2374,17 @@
         "apiService": "Сервис API",
         "account": "Аккаунт"
       }
+    },
+    "accountNote": {
+      "title": "Заметка аккаунта",
+      "label": "Заметка аккаунта",
+      "desc": "Добавьте отдельную заметку для {{account}}.",
+      "placeholder": "Почта, пароль, резервная почта или заметки к выдаче",
+      "emptyTitle": "Добавить заметку аккаунта",
+      "short": "Заметка",
+      "addShort": "Добавить",
+      "saved": "Заметка аккаунта сохранена",
+      "saveFailed": "Не удалось сохранить заметку аккаунта: {{error}}"
     }
   },
   "githubCopilot": {

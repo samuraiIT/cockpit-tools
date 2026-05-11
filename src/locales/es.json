@@ -70,6 +70,39 @@
           "statusPending": "Pendiente de importación"
         }
       },
+      "externalImport": {
+        "bundleInvalidJson": "El paquete de importación no es JSON válido",
+        "bundleEmpty": "El paquete de importación está vacío",
+        "bundleProviderMismatch": "El proveedor del paquete de importación no coincide",
+        "bundleNoItems": "El paquete de importación no tiene elementos importables",
+        "titleCodex": "Importación por lotes de Codex",
+        "statusReceiving": "Recibiendo solicitud de importación...",
+        "statusFetching": "Obteniendo paquete de importación...",
+        "statusParsing": "Analizando el contenido de importación de Codex...",
+        "statusImporting": "Importando cuenta {{current}} / {{total}}",
+        "statusRefreshing": "Actualizando lista de cuentas...",
+        "statusSuccess": "Importación completada",
+        "statusPartial": "Importación parcial completada",
+        "statusFailed": "Error al importar",
+        "total": "En total",
+        "success": "Correctas",
+        "failed": "Fallidas",
+        "stepReceive": "Recibir solicitud",
+        "stepFetch": "Obtener paquete",
+        "stepParse": "Analizar contenido",
+        "stepImport": "Importar cuentas",
+        "stepRefresh": "Actualizar lista",
+        "errorsTitle": "Elementos fallidos",
+        "viewAccounts": "Ver cuentas de Codex",
+        "copyErrors": "Copiar errores",
+        "copied": "Copiado",
+        "unknownItem": "Elemento n.º {{index}}",
+        "versionUnsupportedTitle": "La versión de la app es demasiado antigua",
+        "versionUnsupportedDesc": "Este método aún no es compatible. Descarga la versión más reciente.",
+        "checkUpdate": "Buscar actualizaciones",
+        "rawLineNoRefreshToken": "La línea {{line}} no contiene refresh_token",
+        "rawLineMultipleRefreshTokens": "La línea {{line}} contiene varios refresh_tokens. Deja solo uno."
+      },
       "instances": {
         "unsupported": {
           "title": "No soportado en este sistema"
@@ -107,7 +140,10 @@
         "descTooltip": "Descendente (clic para Ascendente)",
         "toggleDirection": "Cambiar dirección",
         "credits": "Por créditos restantes",
-        "planEnd": "Por hora de finalización del ciclo"
+        "planEnd": "Por hora de finalización del ciclo",
+        "recommended": "Recomendado",
+        "recommendedAscTooltip": "Recomendado (menos conveniente primero)",
+        "recommendedDescTooltip": "Recomendado (más conveniente primero)"
       },
       "sortLabel": "Ordenar",
       "token": {
@@ -823,11 +859,23 @@
           "saveSettingsFailed": "No se pudieron guardar los ajustes de copia: {{error}}",
           "cleanupDone": "Se limpiaron {{count}} copias caducadas",
           "cleanupFailed": "No se pudieron limpiar las copias caducadas: {{error}}",
-          "openFolderFailed": "No se pudo abrir la carpeta de copias: {{error}}"
+          "openFolderFailed": "No se pudo abrir la carpeta de copias: {{error}}",
+          "downloadSuccess": "Copia descargada en {{path}}",
+          "downloadFailed": "Error al descargar la copia: {{error}}"
         },
         "errors": {
           "invalidRetention": "La retención debe estar entre 1 y 365 días"
-        }
+        },
+        "platformFilterLabel": "Plataforma",
+        "platformFilterAll": "Todas las plataformas",
+        "platformEmptyTitle": "Sin copias coincidentes",
+        "platformEmptyDesc": "Esta plataforma no tiene una copia de cuentas descargable.",
+        "archiveTag": "Archivo",
+        "archiveSize": "Archivo: {{size}}",
+        "platformsTitle": "Cuentas de plataforma",
+        "platformDownloadAction": "Descargar JSON de plataforma",
+        "downloadJsonAction": "Archivo JSON",
+        "downloadZipAction": "Archivo ZIP"
       },
       "exportTitle": "Exportación de datos",
       "exportDesc": "Exporta datos de cuentas, datos de configuración o un paquete completo de migración según lo necesites.",
@@ -1631,8 +1679,13 @@
       "timeoutRetry": "Actualizar enlace de autenticación"
     },
     "token": {
-      "desc": "Pega el contenido de auth.json o datos JSON de cuentas",
-      "placeholder": "Ejemplo: {\"tokens\":{\"id_token\":\"eyJ...\",\"access_token\":\"eyJ...\"}}"
+      "desc": "Pega auth.json, JSON de cuenta o refresh_token.",
+      "placeholder": "Ejemplo: un refresh_token por línea o {\"refresh_token\":\"rt_...\"}",
+      "formatSummary": "Campos requeridos y ejemplos",
+      "formatRequired": "Admite tokens completos (id_token + access_token), un refresh_token único o un refresh_token por línea. Si importas solo refresh_token, primero se intercambia en línea por credenciales completas.",
+      "formatSingleLabel": "Tokens completos",
+      "formatRefreshOnlyLabel": "Solo refresh_token",
+      "formatBatchLabel": "Ejemplo por lotes"
     },
     "exportFormat": {
       "label": "Formato de exportación",
@@ -1681,7 +1734,8 @@
         "freeNoticeRestricted": "Las cuentas Free están limitadas. Desactiva esto para seleccionarlas.",
         "freeNoticeUnstable": "El proxy de cuentas Free puede ser inestable. Úsalo con cuidado.",
         "restrictFreeDisableConfirmTitle": "Permitir cuentas Free",
-        "restrictFreeDisableConfirmMessage": "El proxy de cuentas Free puede ser inestable. ¿Seguro que quieres usarlas?"
+        "restrictFreeDisableConfirmMessage": "El proxy de cuentas Free puede ser inestable. ¿Seguro que quieres usarlas?",
+        "manageMembers": "Gestionar miembros"
       },
       "entryAction": "Agregar al servicio API",
       "testAction": "Probar servicio API",
@@ -1774,7 +1828,15 @@
       "apiPortUrl": "URL del puerto API",
       "modelId": "ID del modelo",
       "modelIdPlaceholder": "Selecciona ID de modelo",
-      "modelIdViewOnly": "Solo ver"
+      "modelIdViewOnly": "Solo ver",
+      "quotaPool": {
+        "title": "Bolsa de cuota",
+        "hourlyShort": "5h",
+        "weeklyShort": "Semana",
+        "viewFull": "Ver estadísticas completas",
+        "modalTitle": "Bolsa de cuota del servicio API",
+        "empty": "Aún no hay estadísticas de cuota"
+      }
     },
     "local": {
       "desc": "Importa la cuenta actual desde ~/.codex/auth.json",
@@ -1788,13 +1850,15 @@
     "quota": {
       "hourly": "Cuota de 5 horas",
       "weekly": "Cuota semanal",
-      "reset": "Reinicio"
+      "reset": "Reinicio",
+      "weeklyBlocksHourly": "La cuota semanal es 0, por eso la cuota de 5 horas no está disponible"
     },
     "quotaError": {
       "badge": "Error de cuota",
+      "refreshFailedBadge": "Actualización fallida",
       "generic": "No se pudo actualizar la cuota, inténtalo más tarde",
       "deactivatedWorkspace": "El espacio de trabajo está desactivado, cambia de cuenta o vuelve a autorizar",
-      "requestFailedManualRetry": "La solicitud falló, inténtalo manualmente: {{error}}"
+      "requestFailedManualRetry": "Comprueba la red. No se obtuvo la cuota más reciente. Actualiza para reintentarlo."
     },
     "plan": {
       "free": "FREE",
@@ -2094,6 +2158,7 @@
       },
       "provider": {
         "label": "Proveedor",
+        "inlineLabel": "Proveedor: {{provider}}",
         "custom": "Personalizado",
         "endpoint": "Punto final del proveedor",
         "hint": "Se ha completado automáticamente una Base URL compatible. Aún puedes editarla manualmente.",
@@ -2309,6 +2374,17 @@
         "apiService": "Servicio API",
         "account": "Cuenta"
       }
+    },
+    "accountNote": {
+      "title": "Nota de cuenta",
+      "label": "Nota de cuenta",
+      "desc": "Agrega una nota independiente para {{account}}.",
+      "placeholder": "Correo, contraseña, correo de recuperación o notas de entrega",
+      "emptyTitle": "Agregar nota de cuenta",
+      "short": "Nota",
+      "addShort": "Añadir",
+      "saved": "Nota de cuenta guardada",
+      "saveFailed": "No se pudo guardar la nota de cuenta: {{error}}"
     }
   },
   "githubCopilot": {
